@@ -1,0 +1,14 @@
+[
+	{
+		"name": "first_name",
+		"type": "text"
+	},
+	{
+		"name": "last_name",
+		"type": "text"
+	},
+	{
+		"name": "age",
+		"type": "integer"
+	}
+]

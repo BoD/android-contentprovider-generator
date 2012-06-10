@@ -1,0 +1,10 @@
+[
+	{
+		"name": "name",
+		"type": "text"
+	},
+	{
+		"name": "address",
+		"type": "text"
+	}
+]
