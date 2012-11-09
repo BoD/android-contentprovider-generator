@@ -1,8 +1,5 @@
-<project
-	xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jraf</groupId>
@@ -11,16 +8,14 @@
 	<packaging>jar</packaging>
 
 	<name>GenerateAndroidProvider</name>
-	<url>http://www.JRAF.org/code</url>
+	<url>http://JRAF.org/code</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
 	<dependencies>
-		<!--
-			Test scope.
-		-->
+		<!-- Test scope. -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -29,9 +24,7 @@
 		</dependency>
 
 
-		<!--
-			Compile scope.
-		-->
+		<!-- Compile scope. -->
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
@@ -71,8 +64,23 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-				<source>1.6</source>
-				<target>1.6</target>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+
+			<!-- Use mvn assembly:single to generate the jar -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.jraf.generateandroidprovider.Main</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>with-deps</descriptorRef>
+					</descriptorRefs>
 				</configuration>
 			</plugin>
 
