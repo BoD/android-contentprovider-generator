@@ -74,3 +74,5 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+*Just to be absolutely clear, this license applies to this program itself,
+not to the source it will generate!*
