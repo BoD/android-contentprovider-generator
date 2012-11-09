@@ -44,6 +44,8 @@ Here is a `person.json` file as an example:
 		}
 	]
 
+There is a working example in the `etc` folder.
+
 ### Run the app
 
 `java -jar android_contentprovider_generator-1.00-bundle.jar -i <input folder> -o <output folder>`
