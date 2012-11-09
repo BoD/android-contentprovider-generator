@@ -25,7 +25,7 @@ These are self-explanatory so here is an example:
 
 ### Entity files
 
-Create one file per entity, naming it <entity name>`.json`.
+Create one file per entity, naming it `<entity name>.json`.
 Inside each file, declare your columns with a name and a type. Currently the type has to be `text` or `integer`.
 Here is a `person.json` file as an example:
 
@@ -56,6 +56,7 @@ Building
 --------
 
 You need maven to build this app.
+
 `mvn assembly:single`
 
 Licence
