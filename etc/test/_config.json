@@ -1,7 +1,7 @@
 {
-	"package": "org.jraf.generateandroidprovider.example.provider",
+	"package": "com.example.myapp.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
-	"authority": "org.jraf.generateandroidprovider.example.provider",
-	"databaseName": "example",
+	"authority": "com.example.myapp.provider",
+	"databaseName": "example.db",
 }
