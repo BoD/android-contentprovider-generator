@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jraf</groupId>
-	<artifactId>GenerateAndroidProvider</artifactId>
+	<artifactId>android_contentprovider_generator</artifactId>
 	<version>1.00</version>
 	<packaging>jar</packaging>
 
@@ -75,11 +75,11 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.jraf.generateandroidprovider.Main</mainClass>
+							<mainClass>org.jraf.androidcontentprovidergenerate.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
-						<descriptorRef>with-deps</descriptorRef>
+						<descriptorRef>bundle</descriptorRef>
 					</descriptorRefs>
 				</configuration>
 			</plugin>

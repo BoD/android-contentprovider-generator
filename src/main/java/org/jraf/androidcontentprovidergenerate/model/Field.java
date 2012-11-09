@@ -22,15 +22,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.generateandroidprovider;
+package org.jraf.androidcontentprovidergenerate.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+public class Field {
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
 
-public class Log {
-    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    public static enum Type {
+        TEXT, INTEGER;
 
-    public static void d(String tag, String string) {
-        System.out.println(FORMAT.format(new Date()) + " D/" + tag + " " + string);
+        public static Type fromString(String s) {
+            return valueOf(s.toUpperCase());
+        }
+    }
+
+    private final String mName;
+    private final Type mType;
+
+    public Field(String name, String type) {
+        mName = name.toLowerCase();
+        mType = Type.fromString(type);
+    }
+
+    public String getNameUpperCase() {
+        return mName.toUpperCase();
+    }
+
+    public String getNameLowerCase() {
+        return mName;
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getNameLowerCase() + ": " + mType + "]";
     }
 }

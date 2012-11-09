@@ -22,23 +22,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.generateandroidprovider;
+package org.jraf.androidcontentprovidergenerate;
 
-import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+public class Log {
+    private static final SimpleDateFormat FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-@Parameters(separators = " =")
-public class Arguments {
-    public static String DEFAULT_TITLE = "GenerateAndroidProvider";
-
-    @Parameter(names = { "-h", "--help" }, description = "Display this help and exit")
-    public boolean help;
-
-    @Parameter(names = { "-i", "--input" }, description = "Input folder, where to find _config.json and your entity json files")
-    public File inputDir = new File(".");
-
-    @Parameter(names = { "-o", "--output" }, description = "Output folder, where the resulting files will be generated")
-    public File outputDir = new File("generated");
+    public static void d(String tag, String string) {
+        System.out.println(FORMAT.format(new Date()) + " D/" + tag + " " + string);
+    }
 }
