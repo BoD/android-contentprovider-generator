@@ -22,23 +22,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerate;
+package org.jraf.androidcontentprovidergenerator.model;
 
-import java.io.File;
+public class Field {
+    public static final String NAME = "name";
+    public static final String TYPE = "type";
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+    public static enum Type {
+        TEXT, INTEGER;
 
-@Parameters(separators = " =")
-public class Arguments {
-    public static String DEFAULT_TITLE = "GenerateAndroidProvider";
+        public static Type fromString(String s) {
+            return valueOf(s.toUpperCase());
+        }
+    }
 
-    @Parameter(names = { "-h", "--help" }, description = "Display this help and exit")
-    public boolean help;
+    private final String mName;
+    private final Type mType;
 
-    @Parameter(names = { "-i", "--input" }, description = "Input folder, where to find _config.json and your entity json files")
-    public File inputDir = new File(".");
+    public Field(String name, String type) {
+        mName = name.toLowerCase();
+        mType = Type.fromString(type);
+    }
 
-    @Parameter(names = { "-o", "--output" }, description = "Output folder, where the resulting files will be generated")
-    public File outputDir = new File("generated");
+    public String getNameUpperCase() {
+        return mName.toUpperCase();
+    }
+
+    public String getNameLowerCase() {
+        return mName;
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getNameLowerCase() + ": " + mType + "]";
+    }
 }

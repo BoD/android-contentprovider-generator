@@ -22,36 +22,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerate.model;
+package org.jraf.androidcontentprovidergenerator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+public class Config {
 
-public class Model {
-    private static Model sModel;
+    public static final boolean LOGD = true;
 
-    public synchronized static Model get() {
-        if (sModel == null) {
-            sModel = new Model();
-        }
-        return sModel;
-    }
-
-    private Model() {}
-
-    private final List<Entity> mEntities = new ArrayList<Entity>();
-
-    public void addEntity(Entity entity) {
-        mEntities.add(entity);
-    }
-
-    public List<Entity> getEntities() {
-        return Collections.unmodifiableList(mEntities);
-    }
-
-    @Override
-    public String toString() {
-        return mEntities.toString();
-    }
 }

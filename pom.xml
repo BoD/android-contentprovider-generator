@@ -75,7 +75,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.jraf.androidcontentprovidergenerate.Main</mainClass>
+							<mainClass>org.jraf.androidcontentprovidergenerator.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

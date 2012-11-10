@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerate;
+package org.jraf.androidcontentprovidergenerator;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -36,9 +36,9 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.jraf.androidcontentprovidergenerate.model.Entity;
-import org.jraf.androidcontentprovidergenerate.model.Field;
-import org.jraf.androidcontentprovidergenerate.model.Model;
+import org.jraf.androidcontentprovidergenerator.model.Entity;
+import org.jraf.androidcontentprovidergenerator.model.Field;
+import org.jraf.androidcontentprovidergenerator.model.Model;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
