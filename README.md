@@ -13,6 +13,7 @@ How to use
 ### The `_config.json` file
 
 This is where you declare a few parameters that will be used to generate the code.
+
 These are self-explanatory so here is an example:
 
 	{
