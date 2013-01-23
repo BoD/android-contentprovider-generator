@@ -15,35 +15,37 @@ How to use
 This is where you declare a few parameters that will be used to generate the code.
 
 These are self-explanatory so here is an example:
-
-	{
-		"package": "com.example.myapp.provider",
-		"providerClassName": "ExampleProvider",
-		"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
-		"authority": "com.example.myapp.provider",
-		"databaseName": "example.db",
-	}
+```json
+{
+	"package": "com.example.myapp.provider",
+	"providerClassName": "ExampleProvider",
+	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
+	"authority": "com.example.myapp.provider",
+	"databaseName": "example.db",
+}
+```
 
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
 Inside each file, declare your columns with a name and a type. Currently the type has to be `text` or `integer`.
 Here is a `person.json` file as an example:
-
-	[
-		{
-			"name": "first_name",
-			"type": "text"
-		},
-		{
-			"name": "last_name",
-			"type": "text"
-		},
-		{
-			"name": "age",
-			"type": "integer"
-		}
-	]
+```json
+[
+	{
+		"name": "first_name",
+		"type": "text"
+	},
+	{
+		"name": "last_name",
+		"type": "text"
+	},
+	{
+		"name": "age",
+		"type": "integer"
+	}
+]
+```
 
 There is a working example in the `etc` folder.
 
