@@ -1,10 +1,12 @@
-[
-	{
-		"name": "name",
-		"type": "text"
-	},
-	{
-		"name": "address",
-		"type": "text"
-	}
-]
+{
+	"fields": [
+		{
+			"name": "name",
+			"type": "text"
+		},
+		{
+			"name": "address",
+			"type": "text"
+		}
+	]
+}

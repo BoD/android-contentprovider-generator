@@ -17,7 +17,8 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 
 	{
-		"package": "com.example.myapp.provider",
+		"projectPackage": "com.example.myapp",
+		"providerPackage": "com.example.myapp.provider",
 		"providerClassName": "ExampleProvider",
 		"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
 		"authority": "com.example.myapp.provider",
@@ -27,23 +28,33 @@ These are self-explanatory so here is an example:
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
-Inside each file, declare your columns with a name and a type. Currently the type has to be `text` or `integer`.
+Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer` or `blob`.
+You can also declare table contraints.
 Here is a `person.json` file as an example:
 
-	[
-		{
-			"name": "first_name",
-			"type": "text"
-		},
-		{
-			"name": "last_name",
-			"type": "text"
-		},
-		{
-			"name": "age",
-			"type": "integer"
-		}
-	]
+	{
+		"fields": [
+			{
+				"name": "first_name",
+				"type": "text"
+			},
+			{
+				"name": "last_name",
+				"type": "text"
+			},
+			{
+				"name": "age",
+				"type": "integer"
+			}
+		],
+		
+		"constraints": [
+			{
+				"name": "unique_name",
+				"definition": "unique ( family_id, wall_message_id ) on conflict replace"
+			},
+		]
+	}
 
 There is a working example in the `etc` folder.
 

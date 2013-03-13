@@ -1,5 +1,6 @@
 {
-	"package": "com.example.myapp.provider",
+	"projectPackage": "com.example.myapp",
+	"providerPackage": "com.example.myapp.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
 	"authority": "com.example.myapp.provider",
