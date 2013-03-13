@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  * 
- * Copyright 2012 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,40 +24,28 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
-public class Field {
+public class Constraint {
     public static final String NAME = "name";
-    public static final String TYPE = "type";
-
-    public static enum Type {
-        TEXT, INTEGER, BLOB;
-
-        public static Type fromString(String s) {
-            return valueOf(s.toUpperCase());
-        }
-    }
+    public static final String DEFINITION = "definition";
 
     private final String mName;
-    private final Type mType;
+    private final String mDefinition;
 
-    public Field(String name, String type) {
+    public Constraint(String name, String definition) {
         mName = name.toLowerCase();
-        mType = Type.fromString(type);
+        mDefinition = definition.toLowerCase();
     }
 
     public String getNameUpperCase() {
         return mName.toUpperCase();
     }
 
-    public String getNameLowerCase() {
-        return mName;
-    }
-
-    public Type getType() {
-        return mType;
+    public String getDefinitionUpperCase() {
+        return mDefinition.toUpperCase();
     }
 
     @Override
     public String toString() {
-        return "Field [mName=" + mName + ", mType=" + mType + "]";
+        return "Constraint [mName=" + mName + ", mDefinition=" + mDefinition + "]";
     }
 }

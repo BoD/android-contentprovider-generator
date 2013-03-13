@@ -1,4 +1,4 @@
-package ${config.package};
+package ${config.providerPackage};
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
+
+import ${config.projectPackage}.Config;
+import ${config.projectPackage}.Constants;
 
 public class ${config.providerClassName} extends ContentProvider {
     private static final String TAG = Constants.TAG + ${config.providerClassName}.class.getSimpleName();

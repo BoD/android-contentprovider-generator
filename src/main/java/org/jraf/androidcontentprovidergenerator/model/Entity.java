@@ -33,6 +33,7 @@ import org.apache.commons.lang.WordUtils;
 public class Entity {
     private final String mName;
     private final List<Field> mFields = new ArrayList<Field>();
+    private final List<Constraint> mConstraints = new ArrayList<Constraint>();
 
     public Entity(String name) {
         mName = name.toLowerCase();
@@ -44,6 +45,14 @@ public class Entity {
 
     public List<Field> getFields() {
         return Collections.unmodifiableList(mFields);
+    }
+
+    public void addConstraint(Constraint constraint) {
+        mConstraints.add(constraint);
+    }
+
+    public List<Constraint> getConstraints() {
+        return Collections.unmodifiableList(mConstraints);
     }
 
     public String getNameCamelCase() {
@@ -58,10 +67,8 @@ public class Entity {
         return mName.toUpperCase();
     }
 
-
-
     @Override
     public String toString() {
-        return "[" + getNameLowerCase() + ": " + mFields.toString() + "]";
+        return "Entity [mName=" + mName + ", mFields=" + mFields + ", mConstraints=" + mConstraints + "]";
     }
 }

@@ -29,13 +29,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class Model {
-    private static Model sModel;
+    private static final Model INSTANCE = new Model();
 
-    public synchronized static Model get() {
-        if (sModel == null) {
-            sModel = new Model();
-        }
-        return sModel;
+    public static Model get() {
+        return INSTANCE;
     }
 
     private Model() {}

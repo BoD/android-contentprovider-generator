@@ -1,7 +1,10 @@
-package ${config.package};
+package ${config.providerPackage};
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+
+import ${config.projectPackage}.Config;
+import ${config.projectPackage}.Constants;
 
 public class ${entity.nameCamelCase}Columns implements BaseColumns {
     public static final String TABLE_NAME = "${entity.nameLowerCase}";

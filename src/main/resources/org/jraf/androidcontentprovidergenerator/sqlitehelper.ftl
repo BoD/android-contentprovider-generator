@@ -1,9 +1,12 @@
-package ${config.package};
+package ${config.providerPackage};
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import ${config.projectPackage}.Config;
+import ${config.projectPackage}.Constants;
 
 public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     private static final String TAG = Constants.TAG + ${config.sqliteHelperClassName}.class.getSimpleName();
@@ -18,6 +21,9 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
             + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             <#list entity.fields as field>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type}<#if field_has_next>,</#if> "
+            </#list>
+            <#list entity.constraints as constraint>
+            + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"
             </#list>
             + " );";
 
