@@ -53,7 +53,7 @@ Here is a `person.json` file as an example:
 	"constraints": [
 		{
 			"name": "unique_name",
-			"definition": "unique ( family_id, wall_message_id ) on conflict replace"
+			"definition": "unique ( first_name, last_name ) on conflict replace"
 		},
 	]
 }
