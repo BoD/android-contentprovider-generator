@@ -111,8 +111,8 @@ public class ${config.providerClassName} extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (Config.LOGD_PROVIDER) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection);
-        final QueryParams queryParams = getQueryParams(uri, selection, false);
-        final int res = m${config.sqliteHelperClassName}.getWritableDatabase().update(queryParams.table, values, queryParams.whereClause, selectionArgs);
+        final QueryParams queryParams = getQueryParams(uri, selection);
+        final int res = m${config.sqliteHelperClassName}.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -123,8 +123,8 @@ public class ${config.providerClassName} extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (Config.LOGD_PROVIDER) Log.d(TAG, "delete uri=" + uri + " selection=" + selection);
-        final QueryParams queryParams = getQueryParams(uri, selection, false);
-        final int res = m${config.sqliteHelperClassName}.getWritableDatabase().delete(queryParams.table, queryParams.whereClause, selectionArgs);
+        final QueryParams queryParams = getQueryParams(uri, selection);
+        final int res = m${config.sqliteHelperClassName}.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -136,29 +136,28 @@ public class ${config.providerClassName} extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
         if (Config.LOGD_PROVIDER) Log.d(TAG, "query uri=" + uri + " selection=" + selection + " sortOrder=" + sortOrder + " groupBy=" + groupBy);
-        final QueryParams queryParams = getQueryParams(uri, selection, true);
-        final Cursor res = m${config.sqliteHelperClassName}.getReadableDatabase().query(queryParams.tableWithJoins, projection, queryParams.whereClause, selectionArgs,
-                groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        final QueryParams queryParams = getQueryParams(uri, selection);
+        final Cursor res = m${config.sqliteHelperClassName}.getReadableDatabase().query(queryParams.table, projection, queryParams.selection, selectionArgs, groupBy,
+                null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
 
     private static class QueryParams {
         public String table;
-        public String tableWithJoins;
-        public String whereClause;
+        public String selection;
         public String orderBy;
     }
 
-    private QueryParams getQueryParams(Uri uri, String selection, boolean isQuery) {
-        final QueryParams res = new QueryParams();
+    private QueryParams getQueryParams(Uri uri, String selection) {
+        QueryParams res = new QueryParams();
         String id = null;
-        final int matchedId = URI_MATCHER.match(uri);
+        int matchedId = URI_MATCHER.match(uri);
         switch (matchedId) {
             <#list model.entities as entity>
             case URI_TYPE_${entity.nameUpperCase}:
             case URI_TYPE_${entity.nameUpperCase}_ID:
-                res.table = res.tableWithJoins = ${entity.nameCamelCase}Columns.TABLE_NAME;
+                res.table = ${entity.nameCamelCase}Columns.TABLE_NAME;
                 res.orderBy = ${entity.nameCamelCase}Columns.DEFAULT_ORDER;
                 break;
 
@@ -175,12 +174,12 @@ public class ${config.providerClassName} extends ContentProvider {
         }
         if (id != null) {
             if (selection != null) {
-                res.whereClause = BaseColumns._ID + "=" + id + " and (" + selection + ")";
+                res.selection = BaseColumns._ID + "=" + id + " and (" + selection + ")";
             } else {
-                res.whereClause = BaseColumns._ID + "=" + id;
+                res.selection = BaseColumns._ID + "=" + id;
             }
         } else {
-            res.whereClause = selection;
+            res.selection = selection;
         }
         return res;
     }
