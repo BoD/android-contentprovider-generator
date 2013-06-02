@@ -24,15 +24,27 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
+import org.apache.commons.lang.WordUtils;
+
 public class Field {
     public static final String NAME = "name";
     public static final String TYPE = "type";
 
     public static enum Type {
-        TEXT, INTEGER, BLOB;
+        TEXT(String.class), INTEGER(Long.class), BLOB(byte[].class);
+
+        private Class<?> mJavaType;
+
+        private Type(Class<?> javaType) {
+            mJavaType = javaType;
+        }
 
         public static Type fromString(String s) {
             return valueOf(s.toUpperCase());
+        }
+
+        public Class<?> getJavaType() {
+            return mJavaType;
         }
     }
 
@@ -50,6 +62,10 @@ public class Field {
 
     public String getNameLowerCase() {
         return mName;
+    }
+
+    public String getNameCamelCase() {
+        return /*StringUtils.uncapitalize(*/WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "")/*)*/;
     }
 
     public Type getType() {

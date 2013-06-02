@@ -6,6 +6,7 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
 - one `BaseColumns` class per entity 
+- one `CursorWrapper` class per entity
 
 How to use
 ----------
@@ -60,6 +61,11 @@ Here is a `person.json` file as an example:
 ```
 
 There is a working example in the `etc` folder.
+
+### The `header.txt` file (optional)
+
+If a `header.txt` file is present, its contents will be inserted at the top of every generated java file.
+
 
 ### Run the app
 

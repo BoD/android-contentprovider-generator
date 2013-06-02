@@ -38,6 +38,7 @@ public class Model {
     private Model() {}
 
     private final List<Entity> mEntities = new ArrayList<Entity>();
+    private String mHeader;
 
     public void addEntity(Entity entity) {
         mEntities.add(entity);
@@ -45,6 +46,14 @@ public class Model {
 
     public List<Entity> getEntities() {
         return Collections.unmodifiableList(mEntities);
+    }
+
+    public void setHeader(String header) {
+        mHeader = header;
+    }
+
+    public String getHeader() {
+        return mHeader;
     }
 
     @Override

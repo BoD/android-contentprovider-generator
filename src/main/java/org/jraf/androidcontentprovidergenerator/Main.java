@@ -112,6 +112,12 @@ public class Main {
 
             Model.get().addEntity(entity);
         }
+        // Header (optional)
+        File headerFile = new File(inputDir, "header.txt");
+        if (headerFile.exists()) {
+            String header = FileUtils.readFileToString(headerFile);
+            Model.get().setHeader(header);
+        }
         if (Config.LOGD) Log.d(TAG, Model.get().toString());
     }
 
@@ -124,7 +130,7 @@ public class Main {
         return mConfig;
     }
 
-    private void generateColumnsFiles(Arguments arguments) throws IOException, JSONException, TemplateException {
+    private void generateColumns(Arguments arguments) throws IOException, JSONException, TemplateException {
         Template columnsTemplate = getFreeMarkerConfig().getTemplate("columns.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
@@ -138,6 +144,28 @@ public class Main {
             Map<String, Object> root = new HashMap<String, Object>();
             root.put("config", getConfig(arguments.inputDir));
             root.put("entity", entity);
+            root.put("header", Model.get().getHeader());
+
+            columnsTemplate.process(root, out);
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    private void generateCursorWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template columnsTemplate = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        String providerPackageName = config.getString("providerPackage");
+
+        for (Entity entity : Model.get().getEntities()) {
+            File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
+            providerPackageDir.mkdirs();
+            File outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "CursorWrapper.java");
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+            Map<String, Object> root = new HashMap<String, Object>();
+            root.put("config", getConfig(arguments.inputDir));
+            root.put("entity", entity);
+            root.put("header", Model.get().getHeader());
 
             columnsTemplate.process(root, out);
             IOUtils.closeQuietly(out);
@@ -156,6 +184,7 @@ public class Main {
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("config", config);
         root.put("model", Model.get());
+        root.put("header", Model.get().getHeader());
 
         columnsTemplate.process(root, out);
     }
@@ -172,6 +201,7 @@ public class Main {
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("config", config);
         root.put("model", Model.get());
+        root.put("header", Model.get().getHeader());
 
         columnsTemplate.process(root, out);
     }
@@ -187,7 +217,8 @@ public class Main {
         }
 
         loadModel(arguments.inputDir);
-        generateColumnsFiles(arguments);
+        generateColumns(arguments);
+        generateCursorWrappers(arguments);
         generateContentProvider(arguments);
         generateSqliteHelper(arguments);
     }

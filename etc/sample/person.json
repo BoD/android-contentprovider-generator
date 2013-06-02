@@ -11,6 +11,12 @@
 		{
 			"name": "age",
 			"type": "integer"
-		}
+		},
+	
+	"constraints": [
+		{
+			"name": "unique_name",
+			"definition": "unique ( first_name, last_name ) on conflict replace"
+		},
 	]
 }

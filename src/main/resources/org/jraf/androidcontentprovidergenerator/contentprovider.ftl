@@ -1,3 +1,6 @@
+<#if header??>
+${header}
+</#if>
 package ${config.providerPackage};
 
 import android.content.ContentProvider;
