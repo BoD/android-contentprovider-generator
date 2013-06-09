@@ -16,10 +16,10 @@ public class ${entity.nameCamelCase}CursorWrapper extends CursorWrapper {
     }
 
     public Long getId() {
-        Integer index = mColumnIndexes.get("_id");
+        Integer index = mColumnIndexes.get(${entity.nameCamelCase}Columns._ID);
         if (index == null) {
-        	index = getColumnIndexOrThrow("_id");
-        	mColumnIndexes.put("type", index);
+        	index = getColumnIndexOrThrow(${entity.nameCamelCase}Columns._ID);
+        	mColumnIndexes.put(${entity.nameCamelCase}Columns._ID, index);
         }
         if (isNull(index)) return null;
         return getLong(index);
@@ -27,10 +27,10 @@ public class ${entity.nameCamelCase}CursorWrapper extends CursorWrapper {
     <#list entity.fields as field>
 
     public ${field.type.javaType.simpleName} get${field.nameCamelCase}() {
-        Integer index = mColumnIndexes.get("${field.nameLowerCase}");
+        Integer index = mColumnIndexes.get(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         if (index == null) {
-        	index = getColumnIndexOrThrow("${field.nameLowerCase}");
-        	mColumnIndexes.put("${field.nameLowerCase}", index);
+        	index = getColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+        	mColumnIndexes.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, index);
         }
         <#switch field.type.name()>
         <#case "TEXT">
