@@ -55,7 +55,7 @@ Here is a `person.json` file as an example:
 		{
 			"name": "unique_name",
 			"definition": "unique ( first_name, last_name ) on conflict replace"
-		},
+		}
 	]
 }
 ```
