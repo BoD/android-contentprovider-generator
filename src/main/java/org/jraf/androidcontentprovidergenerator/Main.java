@@ -131,49 +131,61 @@ public class Main {
     }
 
     private void generateColumns(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template columnsTemplate = getFreeMarkerConfig().getTemplate("columns.ftl");
+        Template template = getFreeMarkerConfig().getTemplate("columns.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
 
+        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
+        providerPackageDir.mkdirs();
+        Map<String, Object> root = new HashMap<String, Object>();
+        root.put("config", getConfig(arguments.inputDir));
+        root.put("header", Model.get().getHeader());
+
+        // Entities
         for (Entity entity : Model.get().getEntities()) {
-            File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
-            providerPackageDir.mkdirs();
             File outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "Columns.java");
             Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
-            Map<String, Object> root = new HashMap<String, Object>();
-            root.put("config", getConfig(arguments.inputDir));
             root.put("entity", entity);
-            root.put("header", Model.get().getHeader());
 
-            columnsTemplate.process(root, out);
+            template.process(root, out);
             IOUtils.closeQuietly(out);
         }
     }
 
     private void generateCursorWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template columnsTemplate = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
+        Template template = getFreeMarkerConfig().getTemplate("abstractcursorwrapper.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
 
+        // Abstract class
+        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
+        providerPackageDir.mkdirs();
+        File outputFile = new File(providerPackageDir, "AbstractCursorWrapper.java");
+        Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+        Map<String, Object> root = new HashMap<String, Object>();
+        root.put("config", getConfig(arguments.inputDir));
+        root.put("header", Model.get().getHeader());
+
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // Entities
+        template = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
         for (Entity entity : Model.get().getEntities()) {
-            File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
-            providerPackageDir.mkdirs();
-            File outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "CursorWrapper.java");
-            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+            outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "CursorWrapper.java");
+            out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
-            Map<String, Object> root = new HashMap<String, Object>();
-            root.put("config", getConfig(arguments.inputDir));
             root.put("entity", entity);
-            root.put("header", Model.get().getHeader());
 
-            columnsTemplate.process(root, out);
+            template.process(root, out);
             IOUtils.closeQuietly(out);
         }
     }
 
     private void generateContentProvider(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template columnsTemplate = getFreeMarkerConfig().getTemplate("contentprovider.ftl");
+        Template template = getFreeMarkerConfig().getTemplate("contentprovider.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
         File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
@@ -186,11 +198,11 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        columnsTemplate.process(root, out);
+        template.process(root, out);
     }
 
     private void generateSqliteHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template columnsTemplate = getFreeMarkerConfig().getTemplate("sqlitehelper.ftl");
+        Template template = getFreeMarkerConfig().getTemplate("sqlitehelper.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
         File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
@@ -203,7 +215,7 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        columnsTemplate.process(root, out);
+        template.process(root, out);
     }
 
     private void go(String[] args) throws IOException, JSONException, TemplateException {

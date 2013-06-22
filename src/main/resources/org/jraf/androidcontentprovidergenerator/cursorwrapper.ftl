@@ -3,45 +3,33 @@ ${header}
 </#if>
 package ${config.providerPackage};
 
-import java.util.HashMap;
-
 import android.database.Cursor;
-import android.database.CursorWrapper;
 
-public class ${entity.nameCamelCase}CursorWrapper extends CursorWrapper {
-	private HashMap<String, Integer> mColumnIndexes = new HashMap<String, Integer>();
-	
+/**
+ * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.
+ */
+public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper {
     public ${entity.nameCamelCase}CursorWrapper(Cursor cursor) {
         super(cursor);
     }
 
     public Long getId() {
-        Integer index = mColumnIndexes.get(${entity.nameCamelCase}Columns._ID);
-        if (index == null) {
-        	index = getColumnIndexOrThrow(${entity.nameCamelCase}Columns._ID);
-        	mColumnIndexes.put(${entity.nameCamelCase}Columns._ID, index);
-        }
-        if (isNull(index)) return null;
-        return getLong(index);
+        return getLongOrNull(${entity.nameCamelCase}Columns._ID);
     }
     <#list entity.fields as field>
 
     public ${field.type.javaType.simpleName} get${field.nameCamelCase}() {
-        Integer index = mColumnIndexes.get(${entity.nameCamelCase}Columns.${field.nameUpperCase});
-        if (index == null) {
-        	index = getColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
-        	mColumnIndexes.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, index);
-        }
         <#switch field.type.name()>
         <#case "TEXT">
+        Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getString(index);
         <#break>
         <#case "BLOB">
+        Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getBlob(index);
         <#break>
         <#case "INTEGER">
-        if (isNull(index)) return null;
-        return getLong(index);
+        return getLongOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
         </#switch>
     }
