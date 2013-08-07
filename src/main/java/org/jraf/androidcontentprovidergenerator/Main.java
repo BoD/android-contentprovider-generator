@@ -115,7 +115,7 @@ public class Main {
         // Header (optional)
         File headerFile = new File(inputDir, "header.txt");
         if (headerFile.exists()) {
-            String header = FileUtils.readFileToString(headerFile);
+            String header = FileUtils.readFileToString(headerFile).trim();
             Model.get().setHeader(header);
         }
         if (Config.LOGD) Log.d(TAG, Model.get().toString());
