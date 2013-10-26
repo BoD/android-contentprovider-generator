@@ -29,4 +29,10 @@ public abstract class AbstractCursorWrapper extends CursorWrapper {
         if (isNull(index)) return null;
         return getLong(index);
     }
+
+    public Double getDoubleOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getDouble(index);
+    }
 }

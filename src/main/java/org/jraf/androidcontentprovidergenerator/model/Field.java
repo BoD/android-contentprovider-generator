@@ -31,7 +31,7 @@ public class Field {
     public static final String TYPE = "type";
 
     public static enum Type {
-        TEXT(String.class), INTEGER(Long.class), BLOB(byte[].class);
+        TEXT(String.class), INTEGER(Long.class), FLOAT(Double.class), BLOB(byte[].class);
 
         private Class<?> mJavaType;
 

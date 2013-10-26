@@ -31,6 +31,9 @@ public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper 
         <#case "INTEGER">
         return getLongOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
+        <#case "FLOAT">
+        return getDoubleOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
         </#switch>
     }
     </#list>
