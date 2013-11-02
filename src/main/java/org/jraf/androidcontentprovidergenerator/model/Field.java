@@ -24,6 +24,8 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang.WordUtils;
 
 public class Field {
@@ -31,16 +33,22 @@ public class Field {
     public static final String TYPE = "type";
 
     public static enum Type {
-        TEXT(String.class), INTEGER(Long.class), FLOAT(Double.class), BLOB(byte[].class);
+        TEXT("TEXT", String.class), INTEGER("INTEGER", Long.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class), ;
 
+        private String mSqlType;
         private Class<?> mJavaType;
 
-        private Type(Class<?> javaType) {
+        private Type(String sqlType, Class<?> javaType) {
+            mSqlType = sqlType;
             mJavaType = javaType;
         }
 
         public static Type fromString(String s) {
             return valueOf(s.toUpperCase());
+        }
+
+        public String getSqlType() {
+            return mSqlType;
         }
 
         public Class<?> getJavaType() {

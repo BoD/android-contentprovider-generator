@@ -23,7 +23,7 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
             + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             <#list entity.fields as field>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type}<#if field_has_next>,</#if> "
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
             </#list>
             <#list entity.constraints as constraint>
             + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"

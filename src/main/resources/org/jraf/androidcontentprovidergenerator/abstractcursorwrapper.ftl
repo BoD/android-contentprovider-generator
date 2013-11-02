@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerPackage};
 
+import java.util.Date;
 import java.util.HashMap;
 
 import android.database.Cursor;
@@ -34,5 +35,11 @@ public abstract class AbstractCursorWrapper extends CursorWrapper {
         Integer index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getDouble(index);
+    }
+    
+    public Date getDateOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return new Date(getLong(index));
     }
 }
