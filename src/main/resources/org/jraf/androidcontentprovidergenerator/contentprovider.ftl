@@ -7,6 +7,8 @@ import java.util.Arrays;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,7 +47,6 @@ public class ${config.providerClassName} extends ContentProvider {
         <#list model.entities as entity>
         URI_MATCHER.addURI(AUTHORITY, ${entity.nameCamelCase}Columns.TABLE_NAME, URI_TYPE_${entity.nameUpperCase});
         URI_MATCHER.addURI(AUTHORITY, ${entity.nameCamelCase}Columns.TABLE_NAME + "/#", URI_TYPE_${entity.nameUpperCase}_ID);
-
         </#list>
     }
 
@@ -74,7 +75,9 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (Config.LOGD_PROVIDER) Log.d(TAG, "insert uri=" + uri + " values=" + values);
+        if (Config.LOGD_PROVIDER){
+            Log.d(TAG, "insert uri=" + uri + " values=" + values);
+        }
         final String table = uri.getLastPathSegment();
         final long rowId = m${config.sqliteHelperClassName}.getWritableDatabase().insert(table, null, values);
         String notify;
@@ -86,7 +89,9 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        if (Config.LOGD_PROVIDER) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
+        if (Config.LOGD_PROVIDER) {
+            Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
+        }
         final String table = uri.getLastPathSegment();
         final SQLiteDatabase db = m${config.sqliteHelperClassName}.getWritableDatabase();
         int res = 0;
@@ -94,6 +99,7 @@ public class ${config.providerClassName} extends ContentProvider {
         try {
             for (final ContentValues v : values) {
                 final long id = db.insert(table, null, v);
+                db.yieldIfContendedSafely();
                 if (id != -1) {
                     res++;
                 }
@@ -112,8 +118,9 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (Config.LOGD_PROVIDER)
+        if (Config.LOGD_PROVIDER) {
             Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        }
         final QueryParams queryParams = getQueryParams(uri, selection);
         final int res = m${config.sqliteHelperClassName}.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
@@ -125,7 +132,9 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (Config.LOGD_PROVIDER) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        if (Config.LOGD_PROVIDER) {
+            Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        }
         final QueryParams queryParams = getQueryParams(uri, selection);
         final int res = m${config.sqliteHelperClassName}.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
@@ -138,14 +147,36 @@ public class ${config.providerClassName} extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
-        if (Config.LOGD_PROVIDER)
+        if (Config.LOGD_PROVIDER) {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
+        }
         final QueryParams queryParams = getQueryParams(uri, selection);
         final Cursor res = m${config.sqliteHelperClassName}.getReadableDatabase().query(queryParams.table, projection, queryParams.selection, selectionArgs, groupBy,
                 null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
+    }
+
+     @Override
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        SQLiteDatabase db = m${config.sqliteHelperClassName}.getWritableDatabase();
+        db.beginTransaction();
+        try {
+            final int numOperations = operations.size();
+            final ContentProviderResult[] results = new ContentProviderResult[numOperations];
+            for (int i = 0; i < numOperations; i++) {
+                final ContentProviderOperation lOperation = operations.get(i);
+                results[i] = lOperation.apply(this, results, i);
+                if (lOperation.isYieldAllowed()) {
+                    db.yieldIfContendedSafely();
+                }
+            }
+            db.setTransactionSuccessful();
+            return results;
+        } finally {
+            db.endTransaction();
+        }
     }
 
     private static class QueryParams {
