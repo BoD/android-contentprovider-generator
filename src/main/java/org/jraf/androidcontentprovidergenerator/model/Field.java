@@ -24,16 +24,19 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
-import java.util.Date;
-
 import org.apache.commons.lang.WordUtils;
+
+import java.util.Date;
 
 public class Field {
     public static final String NAME = "name";
     public static final String TYPE = "type";
+    public static final String INDEX = "index";
+    public static final String NULLABLE = "nullable";
+    public static final String DEFAULT_VALUE = "default_value";
 
     public static enum Type {
-        TEXT("TEXT", String.class), INTEGER("INTEGER", Long.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class), ;
+        LONG("LONG", Long.class), TEXT("TEXT", String.class), INTEGER("INTEGER", Integer.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class),;
 
         private String mSqlType;
         private Class<?> mJavaType;
@@ -58,10 +61,28 @@ public class Field {
 
     private final String mName;
     private final Type mType;
+    private boolean mIsIndex = false;
+    private boolean mIsNullable = true;
+    private String mDefaultValue;
 
     public Field(String name, String type) {
+        this(name, type, false, true, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex) {
+        this(name, type, pIsIndex, true, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable) {
+        this(name, type, pIsIndex, pIsNullable, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable, String pDefaultValue) {
         mName = name.toLowerCase();
         mType = Type.fromString(type);
+        mIsIndex = pIsIndex;
+        mIsNullable = pIsNullable;
+        mDefaultValue = pDefaultValue;
     }
 
     public String getNameUpperCase() {
@@ -73,15 +94,31 @@ public class Field {
     }
 
     public String getNameCamelCase() {
-        return /*StringUtils.uncapitalize(*/WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "")/*)*/;
+        return /*StringUtils.uncapitalize(*/WordUtils.capitalizeFully(mName, new char[]{'_'}).replaceAll("_", "")/*)*/;
     }
 
     public Type getType() {
         return mType;
     }
 
+    public boolean getIsIndex() {
+        return mIsIndex;
+    }
+
+    public boolean getIsNullable() {
+        return mIsNullable;
+    }
+
+    public String getDefaultValue() {
+        return mDefaultValue;
+    }
+
+    public boolean getHasDefaultValue() {
+        return mDefaultValue != null && mDefaultValue.length() > 0;
+    }
+
     @Override
     public String toString() {
-        return "Field [mName=" + mName + ", mType=" + mType + "]";
+        return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable + "]";
     }
 }
