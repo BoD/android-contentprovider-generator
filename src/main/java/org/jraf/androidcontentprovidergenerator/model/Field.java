@@ -36,7 +36,7 @@ public class Field {
     public static final String DEFAULT_VALUE = "default_value";
 
     public static enum Type {
-        LONG("LONG", Long.class), TEXT("TEXT", String.class), INTEGER("INTEGER", Integer.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class),;
+        LONG("INTEGER", Long.class), TEXT("TEXT", String.class), INTEGER("INTEGER", Integer.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class),;
 
         private String mSqlType;
         private Class<?> mJavaType;
