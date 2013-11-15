@@ -24,14 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.HashMap;
-import java.util.Map;
+import com.beust.jcommander.JCommander;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -44,7 +37,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.beust.jcommander.JCommander;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -92,7 +92,10 @@ public class Main {
                 if (Config.LOGD) Log.d(TAG, "fieldJson=" + fieldJson);
                 String name = fieldJson.getString(Field.NAME);
                 String type = fieldJson.getString(Field.TYPE);
-                Field field = new Field(name, type);
+                boolean isIndex = fieldJson.optBoolean(Field.INDEX, false);
+                boolean isNullable = fieldJson.optBoolean(Field.NULLABLE, true);
+                String defaultValue = fieldJson.optString(Field.DEFAULT_VALUE);
+                Field field = new Field(name, type, isIndex, isNullable, defaultValue);
                 entity.addField(field);
             }
 
