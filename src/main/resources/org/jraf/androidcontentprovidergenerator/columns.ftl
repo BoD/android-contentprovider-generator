@@ -9,15 +9,20 @@ import android.provider.BaseColumns;
 /**
  * Columns for the {@code ${entity.nameLowerCase}} table.
  */
-public class ${entity.nameCamelCase}Columns implements BaseColumns {
-    public static final String TABLE_NAME = "${entity.nameLowerCase}";
-    public static final Uri CONTENT_URI = Uri.parse(${config.providerClassName}.CONTENT_URI_BASE + "/" + TABLE_NAME);
-
-    public static final String _ID = BaseColumns._ID;
+public interface ${entity.nameCamelCase}Columns implements BaseColumns {
+    String TABLE_NAME = "${entity.nameLowerCase}";
+    Uri CONTENT_URI = Uri.parse(${config.providerClassName}.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     <#list entity.fields as field>
-    public static final String ${field.nameUpperCase} = "${field.nameLowerCase}";
+    String ${field.nameUpperCase} = "${field.nameLowerCase}";
     </#list>
 
     public static final String DEFAULT_ORDER = _ID;
+
+    String[] DEFAULT_PROJECTION = new String[]{
+        _ID,
+        <#list entity.fields as field>
+        ${field.nameUpperCase}<#if field_has_next>,</#if>
+        </#list>
+    }
 }
