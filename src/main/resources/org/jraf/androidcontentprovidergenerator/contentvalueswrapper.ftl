@@ -20,9 +20,18 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         </#switch>
     }
-    
+
     public void put${field.nameCamelCase}Null() {
         mContentValues.putNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
     }
+
+    <#switch field.type.name()>
+    <#case "DATE">
+    public void put${field.nameCamelCase}(Long value) {
+        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+    }
+
+    <#break>
+    </#switch>
     </#list>
 }
