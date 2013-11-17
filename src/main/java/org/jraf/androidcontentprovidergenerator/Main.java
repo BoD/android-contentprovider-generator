@@ -177,6 +177,13 @@ public class Main {
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
+        // AbstractSelection
+        template = getFreeMarkerConfig().getTemplate("abstractselection.ftl");
+        outputFile = new File(providerPackageDir, "AbstractSelection.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
         // Entities
         for (Entity entity : Model.get().getEntities()) {
             // Cursor wrapper
@@ -192,6 +199,14 @@ public class Main {
             out = new OutputStreamWriter(new FileOutputStream(outputFile));
             root.put("entity", entity);
             template = getFreeMarkerConfig().getTemplate("contentvalueswrapper.ftl");
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
+
+            // Selection builder
+            outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "Selection.java");
+            out = new OutputStreamWriter(new FileOutputStream(outputFile));
+            root.put("entity", entity);
+            template = getFreeMarkerConfig().getTemplate("selection.ftl");
             template.process(root, out);
             IOUtils.closeQuietly(out);
         }

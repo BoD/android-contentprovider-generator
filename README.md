@@ -8,6 +8,7 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - one `BaseColumns` class per entity 
 - one `CursorWrapper` class per entity
 - one `ContentValues` class per entity
+- one `Selection` class per entity
 
 How to use
 ----------
@@ -67,12 +68,34 @@ There is a working example in the `etc` folder.
 
 If a `header.txt` file is present, its contents will be inserted at the top of every generated java file.
 
-
 ### Run the app
 
 `java -jar android_contentprovider_generator-1.00-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find _config.json and your entity json files
 - Output folder: where the resulting files will be generated
+
+### Use the generated files
+
+- When querying a table, use the corresponding `Selection` class as shown in this example:
+```java
+PersonSelection where = new PersonSelection();
+where.firstName("John").or().age(42);
+Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, projection, where.sel(), where.args(), null);
+```
+- When using the results of a query, wrap the resulting `Cursor` in the corresponding `CursorWrapper`.  You can then use
+the generated getters directly as shown in this example:
+```java
+PersonCursorWrapper person = new PersonCursorWrapper(c);
+String lastName = person.getLastName();
+Long age = person.getAge();
+```
+- When updating or inserting into a table, use the corresponding `ContentValues` class as shown in this example:
+```java
+PersonContentValues values = new PersonContentValues();
+values.putFirstName("John");
+values.putAge(42l);
+context.getContentResolver().update(personUri, values.getContentValues(), null, null);
+```
 
 Building
 --------
