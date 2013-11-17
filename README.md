@@ -77,6 +77,7 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 ### Use the generated files
 
 - When querying a table, use the corresponding `Selection` class as shown in this example:
+
 ```java
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42);
@@ -84,12 +85,14 @@ Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, project
 ```
 - When using the results of a query, wrap the resulting `Cursor` in the corresponding `CursorWrapper`.  You can then use
 the generated getters directly as shown in this example:
+
 ```java
 PersonCursorWrapper person = new PersonCursorWrapper(c);
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
 - When updating or inserting into a table, use the corresponding `ContentValues` class as shown in this example:
+
 ```java
 PersonContentValues values = new PersonContentValues();
 values.putFirstName("John");
