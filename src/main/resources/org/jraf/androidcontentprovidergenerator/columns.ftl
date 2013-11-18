@@ -19,7 +19,7 @@ public interface ${entity.nameCamelCase}Columns extends BaseColumns {
 
     public static final String DEFAULT_ORDER = _ID;
 
-    String[] DEFAULT_PROJECTION = new String[]{
+    String[] FULL_PROJECTION = new String[]{
         _ID,
         <#list entity.fields as field>
         ${field.nameUpperCase}<#if field_has_next>,</#if>
