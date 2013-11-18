@@ -6,6 +6,7 @@ package ${config.providerPackage};
 import java.util.Date;
 
 import android.database.Cursor;
+import ${config.projectPackage}.BuildConfig;
 
 /**
  * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.
@@ -19,8 +20,7 @@ public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper 
     public ${field.type.javaType.simpleName} get${field.nameCamelCase}() {
         <#switch field.type.name()>
         <#case "TEXT">
-        Integer index = getStringOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
-        return getString(index);
+        return getStringOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
         <#case "BLOB">
         Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});

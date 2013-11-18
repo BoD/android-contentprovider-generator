@@ -16,11 +16,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ${config.projectPackage}.Config;
+import ${config.projectPackage}.BuildConfig;
 import ${config.projectPackage}.Constants;
 
 public class ${config.providerClassName} extends ContentProvider {
-    private static final String TAG = Constants.TAG + ${config.providerClassName}.class.getSimpleName();
+    private static final String TAG = ${config.providerClassName}.class.getSimpleName();
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
@@ -75,7 +75,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (Config.LOGD_PROVIDER){
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "insert uri=" + uri + " values=" + values);
         }
         final String table = uri.getLastPathSegment();
@@ -89,7 +89,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        if (Config.LOGD_PROVIDER) {
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         }
         final String table = uri.getLastPathSegment();
@@ -118,7 +118,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (Config.LOGD_PROVIDER) {
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         }
         final QueryParams queryParams = getQueryParams(uri, selection);
@@ -132,7 +132,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (Config.LOGD_PROVIDER) {
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         }
         final QueryParams queryParams = getQueryParams(uri, selection);
@@ -147,7 +147,7 @@ public class ${config.providerClassName} extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
-        if (Config.LOGD_PROVIDER) {
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         }

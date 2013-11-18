@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.os.Build;
 
-import ${config.projectPackage}.Config;
+import ${config.projectPackage}.BuildConfig;
 import ${config.projectPackage}.Constants;
 
 public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
@@ -55,7 +55,7 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (Config.LOGD_PROVIDER){
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "onCreate");
         }
         <#list model.entities as entity>
@@ -80,7 +80,7 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (Config.LOGD_PROVIDER){
+        if (BuildConfig.DEBUG){
             Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
         }
     }
