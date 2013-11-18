@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 /**
  * Columns for the {@code ${entity.nameLowerCase}} table.
  */
-public interface ${entity.nameCamelCase}Columns implements BaseColumns {
+public interface ${entity.nameCamelCase}Columns extends BaseColumns {
     String TABLE_NAME = "${entity.nameLowerCase}";
     Uri CONTENT_URI = Uri.parse(${config.providerClassName}.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
