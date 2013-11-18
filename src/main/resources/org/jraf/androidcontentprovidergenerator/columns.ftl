@@ -24,5 +24,5 @@ public interface ${entity.nameCamelCase}Columns extends BaseColumns {
         <#list entity.fields as field>
         ${field.nameUpperCase}<#if field_has_next>,</#if>
         </#list>
-    }
+    };
 }
