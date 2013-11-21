@@ -6,7 +6,8 @@
 		},
 		{
 			"name": "address",
-			"type": "text"
+			"type": "text",
+			"index": true
 		}
 	]
 }
