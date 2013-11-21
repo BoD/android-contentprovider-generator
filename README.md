@@ -70,7 +70,7 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 
 ### Run the app
 
-`java -jar android_contentprovider_generator-1.00-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.2-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find _config.json and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -106,6 +106,9 @@ Building
 You need maven to build this app.
 
 `mvn assembly:single`
+
+This will produce `android-contentprovider-generator-1.2-bundle.jar` in the `target` folder.
+
 
 Licence
 -------
