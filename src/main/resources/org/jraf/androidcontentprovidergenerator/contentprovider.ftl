@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerPackage};
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import android.content.ContentProvider;
@@ -17,7 +18,6 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ${config.projectPackage}.BuildConfig;
-import ${config.projectPackage}.Constants;
 
 public class ${config.providerClassName} extends ContentProvider {
     private static final String TAG = ${config.providerClassName}.class.getSimpleName();
