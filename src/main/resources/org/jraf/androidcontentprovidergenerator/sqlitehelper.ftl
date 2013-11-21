@@ -12,7 +12,6 @@ import android.util.Log;
 import android.os.Build;
 
 import ${config.projectPackage}.BuildConfig;
-import ${config.projectPackage}.Constants;
 
 public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     private static final String TAG = ${config.sqliteHelperClassName}.class.getSimpleName();
@@ -28,12 +27,12 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
             <#list entity.fields as field>
                 <#if field.isNullable>
                     <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT ${field.getDefaultValue}<#if field_has_next>,</#if> "
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
                     <#else>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
                     </#if>
                 <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} not null<#if field_has_next>,</#if> "
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
                 </#if>
             </#list>
             <#list entity.constraints as constraint>
