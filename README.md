@@ -105,7 +105,7 @@ Building
 
 You need maven to build this app.
 
-`mvn assembly:single`
+`mvn package`
 
 This will produce `android-contentprovider-generator-1.2-bundle.jar` in the `target` folder.
 

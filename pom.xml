@@ -80,7 +80,7 @@
                 <version>2.1</version>
             </plugin>
 
-            <!-- Use mvn assembly:single to generate the jar -->
+            <!-- Use mvn package to generate the jar -->
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
