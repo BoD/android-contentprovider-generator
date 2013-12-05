@@ -30,7 +30,7 @@ These are self-explanatory so here is an example:
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
-Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer`, `date` or `blob`.
+Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer`, `date`, `float`, `long`, `boolean`  or `blob`.
 You can also declare table contraints.
 Here is a `person.json` file as an example:
 
@@ -43,11 +43,13 @@ Here is a `person.json` file as an example:
 		},
 		{
 			"name": "last_name",
-			"type": "text"
+			"type": "text",
+			"nullable":true
 		},
 		{
 			"name": "age",
-			"type": "integer"
+			"type": "integer",
+			"index":true
 		}
 	],
 	
