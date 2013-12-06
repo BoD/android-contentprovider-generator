@@ -9,6 +9,7 @@ import java.util.Arrays;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.ContentProviderOperation;
+import android.content.OperationApplicationException;
 import android.content.ContentProviderResult;
 import android.content.UriMatcher;
 import android.database.Cursor;
