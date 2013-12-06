@@ -1,11 +1,12 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.wrapper.cursor;
 
 import java.util.Date;
 
 import android.database.Cursor;
+import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
 import ${config.projectPackage}.BuildConfig;
 
 /**
@@ -30,7 +31,10 @@ public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper 
         return getInt(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
         <#case "FLOAT">
-        return getDoubleOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+        return getFloat(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "DOUBLE">
+        return getDouble(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
         <#case "DATE">
         return getDateOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});

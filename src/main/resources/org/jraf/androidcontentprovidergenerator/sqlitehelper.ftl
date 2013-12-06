@@ -3,6 +3,11 @@ ${header}
 </#if>
 package ${config.providerPackage};
 
+import ${config.projectPackage}.BuildConfig;
+<#list model.entities as entity>
+import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
+</#list>
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
@@ -10,8 +15,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 import android.os.Build;
-
-import ${config.projectPackage}.BuildConfig;
 
 public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     private static final String TAG = ${config.sqliteHelperClassName}.class.getSimpleName();

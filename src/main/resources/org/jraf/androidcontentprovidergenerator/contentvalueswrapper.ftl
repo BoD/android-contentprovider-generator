@@ -1,9 +1,10 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.wrapper.contentvalues;
 
 import java.util.Date;
+import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
 
 /**
  * Content values wrapper for the {@code ${entity.nameLowerCase}} table.

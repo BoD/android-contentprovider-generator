@@ -1,55 +1,65 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.wrapper.select;
 
+import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
 import java.util.Date;
 
 /**
  * Selection for the {@code ${entity.nameLowerCase}} table.
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
-    public ${entity.nameCamelCase}Selection id(Long... value) {
-        addEquals(${entity.nameCamelCase}Columns._ID, (Object[]) value);
-        return this;
-    }
 
     <#list entity.fields as field>
 
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.type.javaType.simpleName}... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
+    <#if field.type.name() == "BOOLEAN">
+    public ${entity.nameCamelCase}Selection is${field.nameCamelCaseLowerCase}(${field.type.javaType.simpleName} value) {
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase},  value ? 1 : 0);
         return this;
     }
+    <#else>
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Eq(${field.type.javaType.simpleName}... value) {
+        <#switch field.type.name()>
+        <#case "LONG">
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (long[]) value);
+        <#break>
+        <#case "DOUBLE">
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (double[]) value);
+        <#break>
+        <#case "FLOAT">
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (float[]) value);
+        <#break>
+        <#case "INTEGER">
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (int[]) value);
+        <#break>
+        <#default>
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
+        </#switch>
+        return this;
+    }
+    </#if>
 
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(${field.type.javaType.simpleName} value) {
     <#switch field.type.name()>
     <#case "DATE">
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(Long... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
-        return this;
-    }
+        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value.getTime());
     <#break>
-    <#case "INTEGER">
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(long value) {
+    <#default>
         addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-        return this;
-    }
-
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(long value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-        return this;
-    }
-    <#break>
-    <#case "FLOAT">
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(double value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-        return this;
-    }
-
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(double value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-        return this;
-    }
-    <#break>
     </#switch>
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(${field.type.javaType.simpleName} value) {
+    <#switch field.type.name()>
+    <#case "DATE">
+            addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value.getTime());
+    <#break>
+    <#default>
+            addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+    </#switch>
+        return this;
+    }
     </#list>
 }

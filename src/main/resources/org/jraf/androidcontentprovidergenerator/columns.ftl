@@ -1,10 +1,11 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.table;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+import ${config.providerPackage}.${config.providerClassName};
 
 /**
  * Columns for the {@code ${entity.nameLowerCase}} table.

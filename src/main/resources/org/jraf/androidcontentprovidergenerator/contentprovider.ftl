@@ -3,6 +3,11 @@ ${header}
 </#if>
 package ${config.providerPackage};
 
+import ${config.projectPackage}.BuildConfig;
+ <#list model.entities as entity>
+import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
+</#list>
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,7 +23,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ${config.projectPackage}.BuildConfig;
 
 public class ${config.providerClassName} extends ContentProvider {
     private static final String TAG = ${config.providerClassName}.class.getSimpleName();

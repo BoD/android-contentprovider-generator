@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.wrapper.contentvalues;
 
 import android.content.ContentValues;
 
