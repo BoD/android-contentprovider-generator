@@ -22,7 +22,11 @@
             "name": "date_of_birth",
             "type": "date",
             "index": true
-        }
+        },
+         {
+             "name": "height",
+             "type": "float"
+         }
 	],
 	
 	"constraints": [
