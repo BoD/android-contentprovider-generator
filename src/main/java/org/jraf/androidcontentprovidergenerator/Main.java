@@ -156,32 +156,60 @@ public class Main {
         }
     }
 
-    private void generateCursorWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template template = getFreeMarkerConfig().getTemplate("abstractcursorwrapper.ftl");
+    private void generateWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
         JSONObject config = getConfig(arguments.inputDir);
         String providerPackageName = config.getString("providerPackage");
-
-        // Abstract class
         File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
         providerPackageDir.mkdirs();
-        File outputFile = new File(providerPackageDir, "AbstractCursorWrapper.java");
-        Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
 
+        // AbstractCursorWrapper
+        Template template = getFreeMarkerConfig().getTemplate("abstractcursorwrapper.ftl");
+        File outputFile = new File(providerPackageDir, "AbstractCursorWrapper.java");
+        Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // AbstractContentValuesWrapper
+        template = getFreeMarkerConfig().getTemplate("abstractcontentvalueswrapper.ftl");
+        outputFile = new File(providerPackageDir, "AbstractContentValuesWrapper.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // AbstractSelection
+        template = getFreeMarkerConfig().getTemplate("abstractselection.ftl");
+        outputFile = new File(providerPackageDir, "AbstractSelection.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
         // Entities
-        template = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
         for (Entity entity : Model.get().getEntities()) {
+            // Cursor wrapper
             outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "CursorWrapper.java");
             out = new OutputStreamWriter(new FileOutputStream(outputFile));
-
             root.put("entity", entity);
+            template = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
 
+            // ContentValues wrapper
+            outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "ContentValues.java");
+            out = new OutputStreamWriter(new FileOutputStream(outputFile));
+            root.put("entity", entity);
+            template = getFreeMarkerConfig().getTemplate("contentvalueswrapper.ftl");
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
+
+            // Selection builder
+            outputFile = new File(providerPackageDir, entity.getNameCamelCase() + "Selection.java");
+            out = new OutputStreamWriter(new FileOutputStream(outputFile));
+            root.put("entity", entity);
+            template = getFreeMarkerConfig().getTemplate("selection.ftl");
             template.process(root, out);
             IOUtils.closeQuietly(out);
         }
@@ -233,7 +261,7 @@ public class Main {
 
         loadModel(arguments.inputDir);
         generateColumns(arguments);
-        generateCursorWrappers(arguments);
+        generateWrappers(arguments);
         generateContentProvider(arguments);
         generateSqliteHelper(arguments);
     }

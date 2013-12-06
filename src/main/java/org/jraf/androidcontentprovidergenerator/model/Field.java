@@ -24,6 +24,8 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
+import java.util.Date;
+
 import org.apache.commons.lang.WordUtils;
 
 import java.util.Date;
@@ -100,7 +102,11 @@ public class Field {
     }
 
     public String getNameCamelCase() {
-        return /*StringUtils.uncapitalize(*/WordUtils.capitalizeFully(mName, new char[]{'_'}).replaceAll("_", "")/*)*/;
+        return WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "");
+    }
+
+    public String getNameCamelCaseLowerCase() {
+        return WordUtils.uncapitalize(getNameCamelCase());
     }
 
     public Type getType() {
