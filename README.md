@@ -41,12 +41,14 @@ Here is a `person.json` file as an example:
 	"fields": [
 		{
 			"name": "first_name",
-			"type": "text"
+			"type": "text",
+			"default_value": "John"
 		},
 		{
 			"name": "last_name",
 			"type": "text",
-			"nullable":true
+			"nullable":true,
+            "default_value": "Doe"
 		},
 		{
 			"name": "age",
