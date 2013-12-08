@@ -22,17 +22,11 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
         </#switch>
     }
 
+    <#if field.isNullable>
     public void put${field.nameCamelCase}Null() {
         mContentValues.putNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
     }
+    </#if>
 
-    <#switch field.type.name()>
-    <#case "DATE">
-    public void put${field.nameCamelCase}(Long value) {
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-    }
-
-    <#break>
-    </#switch>
     </#list>
 }
