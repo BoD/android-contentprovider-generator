@@ -24,18 +24,34 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
-import java.util.Date;
-
 import org.apache.commons.lang.WordUtils;
 
+import java.util.Date;
+
 public class Field {
+
     public static final String NAME = "name";
+
     public static final String TYPE = "type";
 
+    public static final String INDEX = "index";
+
+    public static final String NULLABLE = "nullable";
+
+    public static final String DEFAULT_VALUE = "default_value";
+
     public static enum Type {
-        TEXT("TEXT", String.class), INTEGER("INTEGER", Long.class), FLOAT("FLOAT", Double.class), BLOB("BLOB", byte[].class), DATE("INTEGER", Date.class), ;
+        TEXT("TEXT", String.class),
+        LONG("INTEGER", long.class),
+        INTEGER("INTEGER", int.class),
+        DOUBLE("REAL", double.class),
+        FLOAT("REAL", float.class),
+        BLOB("NONE", byte[].class),
+        DATE("NUMERIC", Date.class),
+        BOOLEAN("NUMERIC", boolean.class);
 
         private String mSqlType;
+
         private Class<?> mJavaType;
 
         private Type(String sqlType, Class<?> javaType) {
@@ -57,11 +73,34 @@ public class Field {
     }
 
     private final String mName;
+
     private final Type mType;
 
+    private boolean mIsIndex = false;
+
+    private boolean mIsNullable = true;
+
+    private String mDefaultValue;
+
     public Field(String name, String type) {
+        this(name, type, false, true, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex) {
+        this(name, type, pIsIndex, true, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable) {
+        this(name, type, pIsIndex, pIsNullable, null);
+    }
+
+    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable,
+            String pDefaultValue) {
         mName = name.toLowerCase();
         mType = Type.fromString(type);
+        mIsIndex = pIsIndex;
+        mIsNullable = pIsNullable;
+        mDefaultValue = pDefaultValue;
     }
 
     public String getNameUpperCase() {
@@ -73,7 +112,7 @@ public class Field {
     }
 
     public String getNameCamelCase() {
-        return WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "");
+        return WordUtils.capitalizeFully(mName, new char[]{'_'}).replaceAll("_", "");
     }
 
     public String getNameCamelCaseLowerCase() {
@@ -84,8 +123,30 @@ public class Field {
         return mType;
     }
 
+    public boolean getIsIndex() {
+        return mIsIndex;
+    }
+
+    public boolean getIsNullable() {
+        return mIsNullable;
+    }
+
+    public String getDefaultValue() {
+        return mDefaultValue;
+    }
+
+    public boolean getHasDefaultValue() {
+        return mDefaultValue != null && mDefaultValue.length() > 0;
+    }
+
     @Override
     public String toString() {
-        return "Field [mName=" + mName + ", mType=" + mType + "]";
+        if (getHasDefaultValue()) {
+            return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex
+                    + ", mIsNullable=" + mIsNullable + ", default value =" + mDefaultValue + "]";
+        } else {
+            return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex
+                    + ", mIsNullable=" + mIsNullable + "]";
+        }
     }
 }

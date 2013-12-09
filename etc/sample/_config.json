@@ -1,8 +1,9 @@
 {
-	"projectPackage": "com.example.myapp",
-	"providerPackage": "com.example.myapp.provider",
+	"projectPackage": "com.example.app",
+	"providerPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
-	"authority": "com.example.myapp.provider",
+	"authority": "com.example.app.provider",
 	"databaseName": "example.db",
+	"enableForeignKeys": true
 }

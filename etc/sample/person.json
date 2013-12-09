@@ -10,8 +10,23 @@
 		},
 		{
 			"name": "age",
-			"type": "integer"
-		}
+			"type": "integer",
+			"nullable": false
+		},
+		{
+            "name": "is_blue_eyes",
+            "type": "boolean",
+            "default_value": "1"
+        },
+        {
+            "name": "date_of_birth",
+            "type": "date",
+            "index": true
+        },
+         {
+             "name": "height",
+             "type": "float"
+         }
 	],
 	
 	"constraints": [

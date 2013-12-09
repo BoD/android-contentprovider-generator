@@ -1,8 +1,9 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerPackage}.wrapper.select;
 
+import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,9 +20,17 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String COMMA = ",";
     private static final String GT = ">?";
     private static final String LT = "<?";
+    private static final String GT_EQ = ">=?";
+    private static final String LT_EQ = "<=?";
+    private static final String NOT_EQ = "<>?";
 
     private StringBuilder mSelection = new StringBuilder();
     private List<String> mSelectionArgs = new ArrayList<String>(5);
+
+    public AbstractSelection<T> id(long... value) {
+        addEquals(BaseColumns._ID, (long[]) value);
+        return this;
+    }
 
     protected void addEquals(String column, Object... value) {
         mSelection.append(column);
@@ -46,6 +55,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         }
     }
 
+    protected void addGreaterOrEqualsThan(String column, Object value) {
+        mSelection.append(column);
+        mSelection.append(GT_EQ);
+        mSelectionArgs.add(valueOf(value));
+    }
+
     protected void addGreaterThan(String column, Object value) {
         mSelection.append(column);
         mSelection.append(GT);
@@ -55,6 +70,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     protected void addLessThan(String column, Object value) {
         mSelection.append(column);
         mSelection.append(LT);
+        mSelectionArgs.add(valueOf(value));
+    }
+
+    protected void addLessOrEqualsThan(String column, Object value) {
+        mSelection.append(column);
+        mSelection.append(LT_EQ);
         mSelectionArgs.add(valueOf(value));
     }
 

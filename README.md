@@ -32,7 +32,7 @@ These are self-explanatory so here is an example:
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
-Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer`, `double`, `date` or `blob`.
+Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer`, `date`, `float`, `long`, `boolean`  or `blob`.
 You can also declare table contraints.
 Here is a `person.json` file as an example:
 
@@ -41,15 +41,19 @@ Here is a `person.json` file as an example:
 	"fields": [
 		{
 			"name": "first_name",
-			"type": "text"
+			"type": "text",
+			"default_value": "John"
 		},
 		{
 			"name": "last_name",
-			"type": "text"
+			"type": "text",
+			"nullable":true,
+            "default_value": "Doe"
 		},
 		{
 			"name": "age",
-			"type": "integer"
+			"type": "integer",
+			"index":true
 		}
 	],
 	
@@ -67,6 +71,7 @@ There is a working example in the `etc` folder.
 ### The `header.txt` file (optional)
 
 If a `header.txt` file is present, its contents will be inserted at the top of every generated java file.
+
 
 ### Run the app
 
