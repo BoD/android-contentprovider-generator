@@ -1,10 +1,11 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.table;
+package ${config.providerPackage}.${entity.nameLowerCase};
 
 import android.net.Uri;
 import android.provider.BaseColumns;
+
 import ${config.providerPackage}.${config.providerClassName};
 
 /**
@@ -14,16 +15,19 @@ public interface ${entity.nameCamelCase}Columns extends BaseColumns {
     String TABLE_NAME = "${entity.nameLowerCase}";
     Uri CONTENT_URI = Uri.parse(${config.providerClassName}.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
+    String _ID = BaseColumns._ID;
     <#list entity.fields as field>
     String ${field.nameUpperCase} = "${field.nameLowerCase}";
     </#list>
 
-    public static final String DEFAULT_ORDER = _ID;
+    String DEFAULT_ORDER = _ID;
 
-    String[] FULL_PROJECTION = new String[]{
-        _ID,
-        <#list entity.fields as field>
-        ${field.nameUpperCase}<#if field_has_next>,</#if>
-        </#list>
+	// @formatter:off
+    String[] FULL_PROJECTION = new String[] {
+            _ID,
+            <#list entity.fields as field>
+            ${field.nameUpperCase}<#if field_has_next>,</#if>
+            </#list>
     };
+    // @formatter:on
 }

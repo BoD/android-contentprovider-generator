@@ -25,8 +25,10 @@
 package org.jraf.androidcontentprovidergenerator.model;
 
 public class Constraint {
-    public static final String NAME = "name";
-    public static final String DEFINITION = "definition";
+    public static class Json {
+        public static final String NAME = "name";
+        public static final String DEFINITION = "definition";
+    }
 
     private final String mName;
     private final String mDefinition;

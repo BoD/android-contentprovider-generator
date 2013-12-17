@@ -1,10 +1,11 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.wrapper.contentvalues;
+package ${config.providerPackage}.${entity.nameLowerCase};
 
 import java.util.Date;
-import ${config.providerPackage}.table.${entity.nameCamelCase}Columns;
+
+import ${config.providerPackage}.base.AbstractContentValuesWrapper;
 
 /**
  * Content values wrapper for the {@code ${entity.nameLowerCase}} table.
@@ -15,22 +16,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
     public void put${field.nameCamelCase}(${field.type.javaType.simpleName} value) {
         <#switch field.type.name()>
         <#case "DATE">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Long.valueOf(value.getTime()));
-        <#break>
-        <#case "LONG">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Long.valueOf(value));
-        <#break>
-        <#case "INTEGER">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Integer.valueOf(value));
-        <#break>
-        <#case "FLOAT">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Float.valueOf(value));
-        <#break>
-        <#case "DOUBLE">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Double.valueOf(value));
-        <#break>
-        <#case "BOOLEAN">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, Boolean.valueOf(value));
+        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value.getTime());
         <#break>
         <#default>
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
@@ -43,5 +29,13 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
     }
     </#if>
 
+    <#switch field.type.name()>
+    <#case "DATE">
+    public void put${field.nameCamelCase}(Long value) {
+        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+    }
+
+    <#break>
+    </#switch>
     </#list>
 }

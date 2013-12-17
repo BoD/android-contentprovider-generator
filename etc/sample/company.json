@@ -2,11 +2,11 @@
 	"fields": [
 		{
 			"name": "name",
-			"type": "text"
+			"type": "String"
 		},
 		{
 			"name": "address",
-			"type": "text",
+			"type": "String",
 			"index": true
 		}
 	]

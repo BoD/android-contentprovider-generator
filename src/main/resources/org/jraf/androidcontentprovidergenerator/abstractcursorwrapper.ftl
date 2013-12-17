@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.wrapper.cursor;
+package ${config.providerPackage}.base;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -18,59 +18,51 @@ public abstract class AbstractCursorWrapper extends CursorWrapper {
     }
 
     public long getId() {
-        return getLong(BaseColumns._ID);
+        return getLongOrNull(BaseColumns._ID);
     }
 
     protected int getCachedColumnIndexOrThrow(String colName) {
     	Integer index = mColumnIndexes.get(colName);
         if (index == null) {
         	index = getColumnIndexOrThrow(colName);
-        	mColumnIndexes.put(colName, Integer.valueOf(index));
+        	mColumnIndexes.put(colName, index);
         }
-        return index.intValue();
+        return index;
     }
 
-    public long getLong(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) return Long.MIN_VALUE;
+    public Integer getIntegerOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getInt(index);
+    }
+    
+    public Long getLongOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
         return getLong(index);
     }
     
-    public int getInt(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) return Integer.MIN_VALUE;
-        return getInt(index);
+    public Float getFloatOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getFloat(index);
     }
-
-    public boolean getBoolean(String colName) {
-        return (getInt(colName) == 1);
-    }
-
-    public double getDouble(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) {
-            return Double.MIN_VALUE;
-        }
+    
+    public Double getDoubleOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
         return getDouble(index);
     }
 
-    public float getFloat(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) {
-            return Float.MIN_VALUE;
-        }
-        return getFloat(index);
+    public Boolean getBoolean(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getInt(index) != 0;
     }
 
-    public Date getDateOrNull(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
+    public Date getDate(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return new Date(getLong(index));
-    }
-
-     public String getStringOrNull(String colName) {
-        int index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) return null;
-        return getString(index);
     }
 }

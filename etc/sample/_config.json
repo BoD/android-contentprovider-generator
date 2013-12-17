@@ -5,5 +5,5 @@
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
 	"authority": "com.example.app.provider",
 	"databaseName": "example.db",
-	"enableForeignKeys": true
+	"enableForeignKeys": true,
 }

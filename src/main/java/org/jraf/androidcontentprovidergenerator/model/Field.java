@@ -24,43 +24,55 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
+import java.util.Date;
+import java.util.HashMap;
+
 import org.apache.commons.lang.WordUtils;
 
-import java.util.Date;
-
 public class Field {
+    public static class Json {
+        public static final String NAME = "name";
+        public static final String TYPE = "type";
+        public static final String INDEX = "index";
+        public static final String NULLABLE = "nullable";
+        public static final String DEFAULT_VALUE = "default_value";
 
-    public static final String NAME = "name";
-
-    public static final String TYPE = "type";
-
-    public static final String INDEX = "index";
-
-    public static final String NULLABLE = "nullable";
-
-    public static final String DEFAULT_VALUE = "default_value";
+        private static final String TYPE_STRING = "String";
+        private static final String TYPE_INTEGER = "Integer";
+        private static final String TYPE_LONG = "Long";
+        private static final String TYPE_FLOAT = "Float";
+        private static final String TYPE_DOUBLE = "Double";
+        private static final String TYPE_BOOLEAN = "Boolean";
+        private static final String TYPE_DATE = "Date";
+        private static final String TYPE_BYTE_ARRAY = "byte[]";
+    }
 
     public static enum Type {
-        TEXT("TEXT", String.class),
-        LONG("INTEGER", long.class),
-        INTEGER("INTEGER", int.class),
-        DOUBLE("REAL", double.class),
-        FLOAT("REAL", float.class),
-        BLOB("NONE", byte[].class),
-        DATE("NUMERIC", Date.class),
-        BOOLEAN("NUMERIC", boolean.class);
+        // @formatter:off
+        STRING(Json.TYPE_STRING, "TEXT", String.class),
+        INTEGER(Json.TYPE_INTEGER, "INTEGER", Integer.class),
+        LONG(Json.TYPE_LONG, "INTEGER", Long.class),
+        FLOAT(Json.TYPE_FLOAT, "REAL", Float.class),
+        DOUBLE(Json.TYPE_DOUBLE, "REAL", Double.class),
+        BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class),
+        DATE(Json.TYPE_DATE, "INTEGER", Date.class),        
+        BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class),
+        // @formatter:on
+        ;
 
         private String mSqlType;
-
         private Class<?> mJavaType;
 
-        private Type(String sqlType, Class<?> javaType) {
+        private Type(String jsonName, String sqlType, Class<?> javaType) {
             mSqlType = sqlType;
             mJavaType = javaType;
+            sJsonNames.put(jsonName, this);
         }
 
-        public static Type fromString(String s) {
-            return valueOf(s.toUpperCase());
+        public static Type fromJsonName(String jsonName) {
+            Type res = sJsonNames.get(jsonName);
+            if (res == null) throw new IllegalArgumentException("The type '" + jsonName + "' is unknown");
+            return res;
         }
 
         public String getSqlType() {
@@ -72,35 +84,20 @@ public class Field {
         }
     }
 
+    private static HashMap<String, Type> sJsonNames = new HashMap<String, Type>();
+
     private final String mName;
-
     private final Type mType;
-
     private boolean mIsIndex = false;
-
     private boolean mIsNullable = true;
-
     private String mDefaultValue;
 
-    public Field(String name, String type) {
-        this(name, type, false, true, null);
-    }
-
-    public Field(String name, String type, boolean pIsIndex) {
-        this(name, type, pIsIndex, true, null);
-    }
-
-    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable) {
-        this(name, type, pIsIndex, pIsNullable, null);
-    }
-
-    public Field(String name, String type, boolean pIsIndex, boolean pIsNullable,
-            String pDefaultValue) {
+    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue) {
         mName = name.toLowerCase();
-        mType = Type.fromString(type);
-        mIsIndex = pIsIndex;
-        mIsNullable = pIsNullable;
-        mDefaultValue = pDefaultValue;
+        mType = Type.fromJsonName(type);
+        mIsIndex = isIndex;
+        mIsNullable = isNullable;
+        mDefaultValue = defaultValue;
     }
 
     public String getNameUpperCase() {
@@ -112,7 +109,7 @@ public class Field {
     }
 
     public String getNameCamelCase() {
-        return WordUtils.capitalizeFully(mName, new char[]{'_'}).replaceAll("_", "");
+        return WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "");
     }
 
     public String getNameCamelCaseLowerCase() {
@@ -141,12 +138,7 @@ public class Field {
 
     @Override
     public String toString() {
-        if (getHasDefaultValue()) {
-            return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex
-                    + ", mIsNullable=" + mIsNullable + ", default value =" + mDefaultValue + "]";
-        } else {
-            return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex
-                    + ", mIsNullable=" + mIsNullable + "]";
-        }
+        return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable + ", mDefaultValue=" + mDefaultValue
+                + "]";
     }
 }

@@ -20,20 +20,34 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"projectPackage": "com.example.myapp",
-	"providerPackage": "com.example.myapp.provider",
+	"projectPackage": "com.example.app",
+	"providerPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
-	"authority": "com.example.myapp.provider",
+	"authority": "com.example.app.provider",
 	"databaseName": "example.db",
+	"enableForeignKeys": true,
 }
 ```
 
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
-Inside each file, declare your fields (a.k.a "columns") with a name and a type. Currently the type has to be `text`, `integer`, `date`, `float`, `long`, `boolean`  or `blob`.
-You can also declare table contraints.
+Inside each file, declare your fields (a.k.a "columns") with a name, a type.
+You can also optionally declare a default value, an index flag and a nullable flag.
+
+Currently the type can be:
+- `String` (SQLite type: `TEXT`)
+- `Integer` (`INTEGER`)
+- `Long` (`INTEGER`)
+- `Float` (`REAL`)
+- `Double` (`REAL`) 
+- `Boolean` (`INTEGER`)
+- `Date` (`INTEGER`)
+- `byte[]` (`BLOB`).
+
+You can also optionally declare table contraints.
+
 Here is a `person.json` file as an example:
 
 ```json
@@ -41,32 +55,32 @@ Here is a `person.json` file as an example:
 	"fields": [
 		{
 			"name": "first_name",
-			"type": "text",
+			"type": "String",
 			"default_value": "John"
 		},
 		{
 			"name": "last_name",
-			"type": "text",
-			"nullable":true,
+			"type": "String",
+			"nullable": true,
             "default_value": "Doe"
 		},
 		{
 			"name": "age",
-			"type": "integer",
-			"index":true
+			"type": "Integer",
+			"index": true
 		}
 	],
 	
 	"constraints": [
 		{
 			"name": "unique_name",
-			"definition": "unique ( first_name, last_name ) on conflict replace"
+			"definition": "unique (first_name, last_name) on conflict replace"
 		}
 	]
 }
 ```
 
-There is a working example in the `etc` folder.
+A more complete example is available in the `etc` folder.
 
 ### The `header.txt` file (optional)
 
@@ -75,7 +89,7 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 
 ### Run the app
 
-`java -jar android-contentprovider-generator-1.2-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.3-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find _config.json and your entity json files
 - Output folder: where the resulting files will be generated
 
