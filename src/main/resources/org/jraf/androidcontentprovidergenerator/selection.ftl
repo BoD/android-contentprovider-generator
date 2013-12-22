@@ -11,26 +11,26 @@ import ${config.providerPackage}.base.AbstractSelection;
  * Selection for the {@code ${entity.nameLowerCase}} table.
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
-    public ${entity.nameCamelCase}Selection id(Long... value) {
-        addEquals(${entity.nameCamelCase}Columns._ID, (Object[]) value);
+    public ${entity.nameCamelCase}Selection id(long... value) {
+        addEquals(${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
     <#list entity.fields as field>
 
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.type.javaType.simpleName}... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaType.simpleName}... value) {
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
     
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.type.javaType.simpleName}... value) {
-        addNotEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.javaType.simpleName}... value) {
+        addNotEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
 
     <#switch field.type.name()>
     <#case "DATE">
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(Long... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, (Object[]) value);
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(<#if field.isNullable>Long<#else>long</#if>... value) {
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value<#else>toObjectArray(value)</#if>);
         return this;
     }
 

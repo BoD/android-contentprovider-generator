@@ -13,10 +13,13 @@ import ${config.providerPackage}.base.AbstractContentValuesWrapper;
 public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesWrapper {
     <#list entity.fields as field>
 
-    public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(${field.type.javaType.simpleName} value) {
+    public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(${field.javaType.simpleName} value) {
+        <#if !field.isNullable && !field.type.hasNotNullableJavaType()>
+        if (value == null) throw new IllegalArgumentException("value for ${field.nameCamelCaseLowerCase} must not be null");
+        </#if>        
         <#switch field.type.name()>
         <#case "DATE">
-        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value.getTime());
+        mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value == null ? null : </#if>value.getTime());
         <#break>
         <#default>
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
@@ -33,7 +36,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
 
     <#switch field.type.name()>
     <#case "DATE">
-    public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(Long value) {
+    public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(<#if field.isNullable>Long<#else>long</#if> value) {
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }

@@ -27,7 +27,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private StringBuilder mSelection = new StringBuilder();
     private List<String> mSelectionArgs = new ArrayList<String>(5);
 
-    protected void addEquals(String column, Object... value) {
+    protected void addEquals(String column, Object[] value) {
         mSelection.append(column);
 
         if (value == null) {
@@ -50,7 +50,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         }
     }
 
-    protected void addNotEquals(String column, Object... value) {
+    protected void addNotEquals(String column, Object[] value) {
         mSelection.append(column);
 
         if (value == null) {
@@ -129,6 +129,40 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelection.append(OR);
         return (T) this;
     }
+    
+    
+    protected Object[] toObjectArray(int... array) {
+        Object[] res = new Object[array.length];
+        for (int i = 0; i < array.length; i++) {
+            res[i] = array[i];
+        }
+        return res;
+    }
+
+    protected Object[] toObjectArray(long... array) {
+        Object[] res = new Object[array.length];
+        for (int i = 0; i < array.length; i++) {
+            res[i] = array[i];
+        }
+        return res;
+    }
+
+    protected Object[] toObjectArray(float... array) {
+        Object[] res = new Object[array.length];
+        for (int i = 0; i < array.length; i++) {
+            res[i] = array[i];
+        }
+        return res;
+    }
+
+    protected Object[] toObjectArray(double... array) {
+        Object[] res = new Object[array.length];
+        for (int i = 0; i < array.length; i++) {
+            res[i] = array[i];
+        }
+        return res;
+    }
+
 
     /**
      * Returns the selection produced by this object.

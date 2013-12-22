@@ -49,23 +49,25 @@ public class Field {
 
     public static enum Type {
         // @formatter:off
-        STRING(Json.TYPE_STRING, "TEXT", String.class),
-        INTEGER(Json.TYPE_INTEGER, "INTEGER", Integer.class),
-        LONG(Json.TYPE_LONG, "INTEGER", Long.class),
-        FLOAT(Json.TYPE_FLOAT, "REAL", Float.class),
-        DOUBLE(Json.TYPE_DOUBLE, "REAL", Double.class),
-        BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class),
-        DATE(Json.TYPE_DATE, "INTEGER", Date.class),        
-        BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class),
+        STRING(Json.TYPE_STRING, "TEXT", String.class, String.class),
+        INTEGER(Json.TYPE_INTEGER, "INTEGER", Integer.class, int.class),
+        LONG(Json.TYPE_LONG, "INTEGER", Long.class, long.class),
+        FLOAT(Json.TYPE_FLOAT, "REAL", Float.class, float.class),
+        DOUBLE(Json.TYPE_DOUBLE, "REAL", Double.class, double.class),
+        BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class, boolean.class),
+        DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),        
+        BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class, byte[].class),
         // @formatter:on
         ;
 
         private String mSqlType;
-        private Class<?> mJavaType;
+        private Class<?> mNullableJavaType;
+        private Class<?> mNotNullableJavaType;
 
-        private Type(String jsonName, String sqlType, Class<?> javaType) {
+        private Type(String jsonName, String sqlType, Class<?> nullableJavaType, Class<?> notNullableJavaType) {
             mSqlType = sqlType;
-            mJavaType = javaType;
+            mNullableJavaType = nullableJavaType;
+            mNotNullableJavaType = notNullableJavaType;
             sJsonNames.put(jsonName, this);
         }
 
@@ -79,8 +81,16 @@ public class Field {
             return mSqlType;
         }
 
-        public Class<?> getJavaType() {
-            return mJavaType;
+        public Class<?> getNullableJavaType() {
+            return mNullableJavaType;
+        }
+
+        public Class<?> getNotNullableJavaType() {
+            return mNotNullableJavaType;
+        }
+
+        public boolean hasNotNullableJavaType() {
+            return !mNullableJavaType.equals(mNotNullableJavaType);
         }
     }
 
@@ -134,6 +144,17 @@ public class Field {
 
     public boolean getHasDefaultValue() {
         return mDefaultValue != null && mDefaultValue.length() > 0;
+    }
+
+    public Class<?> getJavaType() {
+        if (mIsNullable) {
+            return mType.getNullableJavaType();
+        }
+        return mType.getNotNullableJavaType();
+    }
+
+    public boolean getIsConvertionNeeded() {
+        return !mIsNullable && mType.hasNotNullableJavaType();
     }
 
     @Override
