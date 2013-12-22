@@ -20,6 +20,7 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
+	"toolVersion": "1.4",
 	"projectPackage": "com.example.app",
 	"providerPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
