@@ -34,7 +34,7 @@ These are self-explanatory so here is an example:
 ### Entity files
 
 Create one file per entity, naming it `<entity name>.json`.
-Inside each file, declare your fields (a.k.a "columns") with a name, a type.
+Inside each file, declare your fields (a.k.a "columns") with a name and a type.
 You can also optionally declare a default value, an index flag and a nullable flag.
 
 Currently the type can be:
@@ -63,7 +63,7 @@ Here is a `person.json` file as an example:
 			"name": "last_name",
 			"type": "String",
 			"nullable": true,
-            "default_value": "Doe"
+			"default_value": "Doe"
 		},
 		{
 			"name": "age",
@@ -81,7 +81,7 @@ Here is a `person.json` file as an example:
 }
 ```
 
-A more complete example is available in the `etc` folder.
+A more complete example is available in the `etc/sample` folder.
 
 ### The `header.txt` file (optional)
 
@@ -90,7 +90,7 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 
 ### Run the app
 
-`java -jar android-contentprovider-generator-1.3-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.4-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find _config.json and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -115,8 +115,7 @@ Long age = person.getAge();
 
 ```java
 PersonContentValues values = new PersonContentValues();
-values.putFirstName("John");
-values.putAge(42l);
+values.putFirstName("John").putAge(42);
 context.getContentResolver().update(personUri, values.getContentValues(), null, null);
 ```
 
@@ -127,7 +126,7 @@ You need maven to build this app.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.2-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.4-bundle.jar` in the `target` folder.
 
 
 Licence
