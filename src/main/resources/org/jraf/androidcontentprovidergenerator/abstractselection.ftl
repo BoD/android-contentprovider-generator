@@ -37,10 +37,11 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             // Multiple values ('in' clause)
             mSelection.append(IN);
             for (int i = 0; i < value.length; i++) {
-                mSelection.append(valueOf(value[i]));
+                mSelection.append("?");
                 if (i < value.length - 1) {
                     mSelection.append(COMMA);
                 }
+                mSelectionArgs.add(valueOf(value[i]));
             }
             mSelection.append(PAREN_CLOSE);
         } else {
@@ -60,10 +61,11 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             // Multiple values ('in' clause)
             mSelection.append(NOT_IN);
             for (int i = 0; i < value.length; i++) {
-                mSelection.append(valueOf(value[i]));
+                mSelection.append("?");
                 if (i < value.length - 1) {
                     mSelection.append(COMMA);
                 }
+                mSelectionArgs.add(valueOf(value[i]));
             }
             mSelection.append(PAREN_CLOSE);
         } else {
