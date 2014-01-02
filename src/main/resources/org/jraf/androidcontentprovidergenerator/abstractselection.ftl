@@ -46,8 +46,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             mSelection.append(PAREN_CLOSE);
         } else {
             // Single value
-            mSelection.append(EQ);
-            mSelectionArgs.add(valueOf(value[0]));
+            if (value[0] == null) {
+                mSelection.append(IS_NULL);
+            } else {
+                mSelection.append(EQ);
+                mSelectionArgs.add(valueOf(value[0]));
+            }
         }
     }
 
