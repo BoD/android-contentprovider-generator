@@ -30,7 +30,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     protected void addEquals(String column, Object[] value) {
         mSelection.append(column);
 
-        if (value == null) {
+        if (value == null || value.length == 0) {
             // Single null value
             mSelection.append(IS_NULL);
         } else if (value.length > 1) {
@@ -58,7 +58,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     protected void addNotEquals(String column, Object[] value) {
         mSelection.append(column);
 
-        if (value == null) {
+        if (value == null || value.length == 0) {
             // Single null value
             mSelection.append(IS_NOT_NULL);
         } else if (value.length > 1) {
@@ -74,8 +74,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             mSelection.append(PAREN_CLOSE);
         } else {
             // Single value
-            mSelection.append(NOT_EQ);
-            mSelectionArgs.add(valueOf(value[0]));
+            if (value[0] == null) {
+                mSelection.append(IS_NOT_NULL);
+            } else {
+                mSelection.append(NOT_EQ);
+                mSelectionArgs.add(valueOf(value[0]));
+            }
         }
     }
 
