@@ -101,7 +101,8 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 ```java
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42);
-Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, projection, where.sel(), where.args(), null);
+Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, projection,
+        where.sel(), where.args(), null);
 ```
 - When using the results of a query, wrap the resulting `Cursor` in the corresponding `CursorWrapper`.  You can then use
 the generated getters directly as shown in this example:
