@@ -1,12 +1,12 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.${entity.nameLowerCase};
+package ${config.providerJavaPackage}.${entity.nameLowerCase};
 
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import ${config.providerPackage}.${config.providerClassName};
+import ${config.providerJavaPackage}.${config.providerClassName};
 
 /**
  * Columns for the {@code ${entity.nameLowerCase}} table.

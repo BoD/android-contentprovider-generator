@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.base;
+package ${config.providerJavaPackage}.base;
 
 import java.util.ArrayList;
 import java.util.Date;

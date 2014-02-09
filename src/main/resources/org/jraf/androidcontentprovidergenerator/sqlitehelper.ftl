@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerJavaPackage};
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -11,15 +11,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 
-import ${config.projectPackage}.BuildConfig;
+import ${config.projectPackageId}.BuildConfig;
 <#list model.entities as entity>
-import ${config.providerPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
+import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
 </#list>
 
 public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     private static final String TAG = ${config.sqliteHelperClassName}.class.getSimpleName();
 
-    public static final String DATABASE_NAME = "${config.databaseName}";
+    public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
     private static final int DATABASE_VERSION = 1;
 
     // @formatter:off
@@ -53,12 +53,12 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     // @formatter:on
 
     public ${config.sqliteHelperClassName}(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public ${config.sqliteHelperClassName}(Context context, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION, errorHandler);
+        super(context, DATABASE_FILE_NAME, factory, DATABASE_VERSION, errorHandler);
     }
 
     @Override

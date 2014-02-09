@@ -58,9 +58,13 @@ public class Main {
 
     public static class Json {
         public static final String TOOL_VERSION = "toolVersion";
-        public static final String PROVIDER_PACKAGE = "providerPackage";
+        public static final String PROJECT_PACKAGE_ID = "projectPackageId";
+        public static final String PROVIDER_JAVA_PACKAGE = "providerJavaPackage";
         public static final String PROVIDER_CLASS_NAME = "providerClassName";
         public static final String SQLITE_HELPER_CLASS_NAME = "sqliteHelperClassName";
+        public static final String AUTHORITY = "authority";
+        public static final String DATABASE_FILE_NAME = "databaseFileName";
+        public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
     }
 
     private Configuration mFreemarkerConfig;
@@ -136,34 +140,65 @@ public class Main {
             String fileContents = FileUtils.readFileToString(configFile);
             mConfig = new JSONObject(fileContents);
         }
+
+        validateConfig();
+
+        return mConfig;
+    }
+
+    private void validateConfig() {
         // Ensure the input files are compatible with this version of the tool
         String configVersion;
         try {
             configVersion = mConfig.getString(Json.TOOL_VERSION);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Could not find 'toolVersion' field in _config.json, which is mandatory and must be equals to '"
-                    + Constants.VERSION + "'");
+                    + Constants.VERSION + "'.");
         }
         if (!configVersion.equals(Constants.VERSION)) {
             throw new IllegalArgumentException("Invalid 'toolVersion' value in _config.json: found '" + configVersion + "' but expected '" + Constants.VERSION
-                    + "'");
+                    + "'.");
         }
-        return mConfig;
+
+        // Ensure mandatory fields are present
+        ensureString(Json.PROJECT_PACKAGE_ID);
+        ensureString(Json.PROVIDER_JAVA_PACKAGE);
+        ensureString(Json.PROVIDER_CLASS_NAME);
+        ensureString(Json.SQLITE_HELPER_CLASS_NAME);
+        ensureString(Json.AUTHORITY);
+        ensureString(Json.DATABASE_FILE_NAME);
+        ensureBoolean(Json.ENABLE_FOREIGN_KEY);
+    }
+
+    private void ensureString(String field) {
+        try {
+            mConfig.getString(field);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be a string.");
+        }
+    }
+
+    private void ensureBoolean(String field) {
+        try {
+            mConfig.getBoolean(field);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be a boolean.");
+        }
     }
 
     private void generateColumns(Arguments arguments) throws IOException, JSONException, TemplateException {
         Template template = getFreeMarkerConfig().getTemplate("columns.ftl");
         JSONObject config = getConfig(arguments.inputDir);
-        String providerPackageName = config.getString(Json.PROVIDER_PACKAGE);
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
 
-        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
         Map<String, Object> root = new HashMap<String, Object>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
-            File outputDir = new File(providerPackageDir, entity.getNameLowerCase());
+            File outputDir = new File(providerDir, entity.getNameLowerCase());
             outputDir.mkdirs();
             File outputFile = new File(outputDir, entity.getNameCamelCase() + "Columns.java");
             Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
@@ -177,9 +212,9 @@ public class Main {
 
     private void generateWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
         JSONObject config = getConfig(arguments.inputDir);
-        String providerPackageName = config.getString(Json.PROVIDER_PACKAGE);
-        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
-        File baseClassesDir = new File(providerPackageDir, "base");
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        File baseClassesDir = new File(providerDir, "base");
         baseClassesDir.mkdirs();
 
         Map<String, Object> root = new HashMap<String, Object>();
@@ -209,7 +244,7 @@ public class Main {
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
-            File entityDir = new File(providerPackageDir, entity.getNameLowerCase());
+            File entityDir = new File(providerDir, entity.getNameLowerCase());
             entityDir.mkdirs();
 
             // Cursor wrapper
@@ -241,10 +276,10 @@ public class Main {
     private void generateContentProvider(Arguments arguments) throws IOException, JSONException, TemplateException {
         Template template = getFreeMarkerConfig().getTemplate("contentprovider.ftl");
         JSONObject config = getConfig(arguments.inputDir);
-        String providerPackageName = config.getString(Json.PROVIDER_PACKAGE);
-        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
-        providerPackageDir.mkdirs();
-        File outputFile = new File(providerPackageDir, config.getString(Json.PROVIDER_CLASS_NAME) + ".java");
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        providerDir.mkdirs();
+        File outputFile = new File(providerDir, config.getString(Json.PROVIDER_CLASS_NAME) + ".java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
         Map<String, Object> root = new HashMap<String, Object>();
@@ -258,10 +293,10 @@ public class Main {
     private void generateSqliteHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
         Template template = getFreeMarkerConfig().getTemplate("sqlitehelper.ftl");
         JSONObject config = getConfig(arguments.inputDir);
-        String providerPackageName = config.getString(Json.PROVIDER_PACKAGE);
-        File providerPackageDir = new File(arguments.outputDir, providerPackageName.replace('.', '/'));
-        providerPackageDir.mkdirs();
-        File outputFile = new File(providerPackageDir, config.getString(Json.SQLITE_HELPER_CLASS_NAME) + ".java");
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        providerDir.mkdirs();
+        File outputFile = new File(providerDir, config.getString(Json.SQLITE_HELPER_CLASS_NAME) + ".java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
         Map<String, Object> root = new HashMap<String, Object>();

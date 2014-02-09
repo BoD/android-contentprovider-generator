@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage};
+package ${config.providerJavaPackage};
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +18,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ${config.projectPackage}.BuildConfig;
+import ${config.projectPackageId}.BuildConfig;
 <#list model.entities as entity>
-import ${config.providerPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
+import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
 </#list>
 
 public class ${config.providerClassName} extends ContentProvider {

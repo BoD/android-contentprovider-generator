@@ -1,11 +1,11 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.${entity.nameLowerCase};
+package ${config.providerJavaPackage}.${entity.nameLowerCase};
 
 import java.util.Date;
 
-import ${config.providerPackage}.base.AbstractSelection;
+import ${config.providerJavaPackage}.base.AbstractSelection;
 
 /**
  * Selection for the {@code ${entity.nameLowerCase}} table.

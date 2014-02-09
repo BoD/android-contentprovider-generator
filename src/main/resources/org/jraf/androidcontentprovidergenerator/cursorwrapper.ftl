@@ -1,13 +1,13 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerPackage}.${entity.nameLowerCase};
+package ${config.providerJavaPackage}.${entity.nameLowerCase};
 
 import java.util.Date;
 
 import android.database.Cursor;
 
-import ${config.providerPackage}.base.AbstractCursorWrapper;
+import ${config.providerJavaPackage}.base.AbstractCursorWrapper;
 
 /**
  * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.

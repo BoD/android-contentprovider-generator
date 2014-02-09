@@ -20,13 +20,13 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"toolVersion": "1.4",
-	"projectPackage": "com.example.app",
-	"providerPackage": "com.example.app.provider",
+	"toolVersion": "1.5",
+	"projectPackageId": "com.example.app",
+	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
 	"authority": "com.example.app.provider",
-	"databaseName": "example.db",
+	"databaseFileName": "example.db",
 	"enableForeignKeys": true,
 }
 ```
