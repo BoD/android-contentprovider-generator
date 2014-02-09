@@ -46,8 +46,14 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             mSelection.append(PAREN_CLOSE);
         } else {
             // Single value
-            mSelection.append(EQ);
-            mSelectionArgs.add(valueOf(value[0]));
+            if (value[0] == null) {
+                // Single null value
+                mSelection.append(IS_NULL);
+            } else {
+                // Single not null value
+                mSelection.append(EQ);
+                mSelectionArgs.add(valueOf(value[0]));
+            }
         }
     }
 
@@ -70,8 +76,14 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             mSelection.append(PAREN_CLOSE);
         } else {
             // Single value
-            mSelection.append(NOT_EQ);
-            mSelectionArgs.add(valueOf(value[0]));
+            if (value[0] == null) {
+                // Single null value
+                mSelection.append(IS_NOT_NULL);
+            } else {
+                // Single not null value
+                mSelection.append(NOT_EQ);
+                mSelectionArgs.add(valueOf(value[0]));
+            }
         }
     }
 
