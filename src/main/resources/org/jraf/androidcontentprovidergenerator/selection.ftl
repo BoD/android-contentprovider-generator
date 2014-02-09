@@ -5,12 +5,53 @@ package ${config.providerJavaPackage}.${entity.nameLowerCase};
 
 import java.util.Date;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.net.Uri;
+
 import ${config.providerJavaPackage}.base.AbstractSelection;
 
 /**
  * Selection for the {@code ${entity.nameLowerCase}} table.
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
+    /**
+     * Returns the {@code uri} argument to pass to the {@code ContentResolver.query()} method.
+     */
+    public Uri uri() {
+        return ${entity.nameCamelCase}Columns.CONTENT_URI;
+    }
+    
+    /**
+     * Query the given content resolver using this selection.
+     * 
+     * @param contentResolver The content resolver to query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
+     *            order, which may be unordered.
+     * @return A ${entity.nameCamelCase}CursorWrapper object, which is positioned before the first entry, or null.
+     */
+    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver, String[] projection, String sortOrder) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+        if (cursor == null) return null;
+        return new ${entity.nameCamelCase}CursorWrapper(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     */
+    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver, String[] projection) {
+        return query(contentResolver, projection, null);
+    }
+
+    /**
+     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     */
+    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver) {
+        return query(contentResolver, null, null);
+    }
+    
+    
     public ${entity.nameCamelCase}Selection id(long... value) {
         addEquals(${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
