@@ -93,7 +93,7 @@ Here is a `person.json` file as an example:
 }
 ```
 
-A more complete example is available in the `etc/sample` folder.
+A more comprehensive example is available in the `etc/sample` folder.
 
 ### The `header.txt` file (optional)
 
