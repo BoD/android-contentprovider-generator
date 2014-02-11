@@ -15,9 +15,7 @@ import ${config.providerJavaPackage}.base.AbstractSelection;
  * Selection for the {@code ${entity.nameLowerCase}} table.
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
-    /**
-     * Returns the {@code uri} argument to pass to the {@code ContentResolver.query()} method.
-     */
+    @Override
     public Uri uri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
     }
@@ -58,12 +56,12 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
     <#list entity.fields as field>
 
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaType.simpleName}... value) {
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName}... value) {
         addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
     
-    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.javaType.simpleName}... value) {
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.javaTypeSimpleName}... value) {
         addNotEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }

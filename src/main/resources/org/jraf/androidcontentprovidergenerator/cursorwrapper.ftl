@@ -28,7 +28,7 @@ public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper 
      </#if>
      </#if>
      */
-    public ${field.javaType.simpleName} get${field.nameCamelCase}() {
+    public ${field.javaTypeSimpleName} get${field.nameCamelCase}() {
         <#switch field.type.name()>
         <#case "STRING">
         Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
@@ -55,6 +55,11 @@ public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper 
         <#case "BLOB">
         Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getBlob(index);
+        <#break>
+        <#case "ENUM">
+        Integer intValue = getIntegerOrNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
+        if (intValue == null) return null;
+        return ${field.javaTypeSimpleName}.values()[intValue];
         <#break>
         </#switch>
     }

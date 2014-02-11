@@ -24,8 +24,10 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -36,6 +38,8 @@ public class Field {
         public static final String INDEX = "index";
         public static final String NULLABLE = "nullable";
         public static final String DEFAULT_VALUE = "default_value";
+        public static final String ENUM_NAME = "enumName";
+        public static final String ENUM_VALUES = "enumValues";
 
         private static final String TYPE_STRING = "String";
         private static final String TYPE_INTEGER = "Integer";
@@ -45,6 +49,7 @@ public class Field {
         private static final String TYPE_BOOLEAN = "Boolean";
         private static final String TYPE_DATE = "Date";
         private static final String TYPE_BYTE_ARRAY = "byte[]";
+        private static final String TYPE_ENUM = "enum";
     }
 
     public static enum Type {
@@ -57,6 +62,7 @@ public class Field {
         BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class, boolean.class),
         DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),        
         BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class, byte[].class),
+        ENUM(Json.TYPE_ENUM, "INTEGER", null, null),
         // @formatter:on
         ;
 
@@ -90,6 +96,7 @@ public class Field {
         }
 
         public boolean hasNotNullableJavaType() {
+            if (this == ENUM) return false;
             return !mNullableJavaType.equals(mNotNullableJavaType);
         }
     }
@@ -98,16 +105,20 @@ public class Field {
 
     private final String mName;
     private final Type mType;
-    private boolean mIsIndex = false;
-    private boolean mIsNullable = true;
-    private String mDefaultValue;
+    private final boolean mIsIndex;
+    private final boolean mIsNullable;
+    private final String mDefaultValue;
+    private final String mEnumName;
+    private final List<String> mEnumValues = new ArrayList<String>();
 
-    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue) {
+    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<String> enumValues) {
         mName = name.toLowerCase();
         mType = Type.fromJsonName(type);
         mIsIndex = isIndex;
         mIsNullable = isNullable;
         mDefaultValue = defaultValue;
+        mEnumName = enumName;
+        mEnumValues.addAll(enumValues);
     }
 
     public String getNameUpperCase() {
@@ -146,11 +157,14 @@ public class Field {
         return mDefaultValue != null && mDefaultValue.length() > 0;
     }
 
-    public Class<?> getJavaType() {
-        if (mIsNullable) {
-            return mType.getNullableJavaType();
+    public String getJavaTypeSimpleName() {
+        if (mType == Type.ENUM) {
+            return mEnumName;
         }
-        return mType.getNotNullableJavaType();
+        if (mIsNullable) {
+            return mType.getNullableJavaType().getSimpleName();
+        }
+        return mType.getNotNullableJavaType().getSimpleName();
     }
 
     public boolean getIsConvertionNeeded() {

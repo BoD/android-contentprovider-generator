@@ -118,6 +118,15 @@ PersonCursorWrapper person = new PersonCursorWrapper(c);
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
+- You can also conveniently combine these two facilities by using the `query` method:
+
+```java
+PersonSelection where = new PersonSelection();
+where.firstName("John").or().age(42);
+PersonCursorWrapper person = where.query(getContentResolver());
+String lastName = person.getLastName();
+Long age = person.getAge();
+```
 - When updating or inserting into a table, use the corresponding `ContentValues` class as shown in this example:
 
 ```java

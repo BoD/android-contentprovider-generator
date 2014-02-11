@@ -30,7 +30,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -105,7 +107,17 @@ public class Main {
                 boolean isIndex = fieldJson.optBoolean(Field.Json.INDEX, false);
                 boolean isNullable = fieldJson.optBoolean(Field.Json.NULLABLE, true);
                 String defaultValue = fieldJson.optString(Field.Json.DEFAULT_VALUE);
-                Field field = new Field(name, type, isIndex, isNullable, defaultValue);
+                String enumName = fieldJson.optString(Field.Json.ENUM_NAME);
+                JSONArray enumValuesJson = fieldJson.optJSONArray(Field.Json.ENUM_VALUES);
+                List<String> enumValues = new ArrayList<String>();
+                if (enumValuesJson != null) {
+                    int enumLen = enumValuesJson.length();
+                    for (int j = 0; j < enumLen; j++) {
+                        String valueName = enumValuesJson.getString(j);
+                        enumValues.add(valueName);
+                    }
+                }
+                Field field = new Field(name, type, isIndex, isNullable, defaultValue, enumName, enumValues);
                 entity.addField(field);
             }
 

@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.content.ContentResolver;
+import android.net.Uri;
+
 public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String EQ = "=?";
     private static final String PAREN_OPEN = "(";
@@ -116,6 +119,8 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             return String.valueOf(((Date) obj).getTime());
         } else if (obj instanceof Boolean) {
             return (Boolean) obj ? "1" : "0";
+        } else if (obj instanceof Enum) {
+            return String.valueOf(((Enum) obj).ordinal());
         }
         return String.valueOf(obj);
     }
@@ -192,5 +197,21 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         int size = mSelectionArgs.size();
         if (size == 0) return null;
         return mSelectionArgs.toArray(new String[size]);
+    }
+    
+    
+    /**
+     * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
+     */
+    public abstract Uri uri();
+    
+    /**
+     * Deletes row(s) specified by this selection.
+     * 
+     * @param contentResolver The content resolver to use.
+     * @return The number of rows deleted.
+     */
+    public int delete(ContentResolver contentResolver) {
+        return contentResolver.delete(uri(), sel(), args());
     }
 }
