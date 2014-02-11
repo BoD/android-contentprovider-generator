@@ -104,7 +104,6 @@ If a `header.txt` file is present, its contents will be inserted at the top of e
 Download the jar from here:
 https://github.com/BoD/android-contentprovider-generator/releases/latest
 
-
 ### Run the app
 
 `java -jar android-contentprovider-generator-1.4-bundle.jar -i <input folder> -o <output folder>`
@@ -145,6 +144,7 @@ PersonContentValues values = new PersonContentValues();
 values.putFirstName("John").putAge(42);
 context.getContentResolver().update(personUri, values.values(), null, null);
 ```
+
 
 Building
 --------
