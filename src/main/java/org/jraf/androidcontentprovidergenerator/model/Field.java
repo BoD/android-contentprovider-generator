@@ -137,6 +137,14 @@ public class Field {
         return WordUtils.uncapitalize(getNameCamelCase());
     }
 
+    public String getEnumName() {
+        return mEnumName;
+    }
+
+    public List<String> getEnumValues() {
+        return mEnumValues;
+    }
+
     public Type getType() {
         return mType;
     }
@@ -171,9 +179,14 @@ public class Field {
         return !mIsNullable && mType.hasNotNullableJavaType();
     }
 
+    public boolean isEnum() {
+        return mType == Type.ENUM;
+    }
+
+
     @Override
     public String toString() {
         return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable + ", mDefaultValue=" + mDefaultValue
-                + "]";
+                + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues + "]";
     }
 }

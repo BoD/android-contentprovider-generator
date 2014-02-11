@@ -7,13 +7,13 @@ import java.util.Date;
 
 import android.database.Cursor;
 
-import ${config.providerJavaPackage}.base.AbstractCursorWrapper;
+import ${config.providerJavaPackage}.base.AbstractCursor;
 
 /**
  * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.
  */
-public class ${entity.nameCamelCase}CursorWrapper extends AbstractCursorWrapper {
-    public ${entity.nameCamelCase}CursorWrapper(Cursor cursor) {
+public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
+    public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
     }
     <#list entity.fields as field>

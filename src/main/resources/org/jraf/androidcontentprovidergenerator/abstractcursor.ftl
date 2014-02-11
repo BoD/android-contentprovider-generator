@@ -10,10 +10,10 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
-public abstract class AbstractCursorWrapper extends CursorWrapper {
+public abstract class AbstractCursor extends CursorWrapper {
 	private HashMap<String, Integer> mColumnIndexes = new HashMap<String, Integer>();
 	
-    public AbstractCursorWrapper(Cursor cursor) {
+    public AbstractCursor(Cursor cursor) {
         super(cursor);
     }
 

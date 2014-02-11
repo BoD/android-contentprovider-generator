@@ -7,7 +7,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
-public abstract class AbstractContentValuesWrapper {
+public abstract class AbstractContentValues {
     protected ContentValues mContentValues = new ContentValues();
 
     /**
@@ -15,7 +15,10 @@ public abstract class AbstractContentValuesWrapper {
      */
     public abstract Uri uri();
 
-    public ContentValues getContentValues() {
+    /**
+     * Returns the {@code ContentValues} wrapped by this object.
+     */
+    public ContentValues values() {
         return mContentValues;
     }
 
@@ -25,6 +28,6 @@ public abstract class AbstractContentValuesWrapper {
      * @param contentResolver The content resolver to use.
      */
     public Uri insert(ContentResolver contentResolver) {
-        return contentResolver.insert(uri(), getContentValues());
+        return contentResolver.insert(uri(), values());
     }
 }

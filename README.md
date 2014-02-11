@@ -1,12 +1,12 @@
 Android ContentProvider Generator
 =================================
 
-A small tool to generate an Android ContentProvider.
+A tool to generate an Android ContentProvider.
 It takes a set of entity (a.k.a "table") definitions as the input, and generates:
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
 - one `BaseColumns` interface per entity 
-- one `CursorWrapper` class per entity
+- one `Cursor` class per entity
 - one `ContentValues` class per entity
 - one `Selection` class per entity
 
@@ -22,10 +22,10 @@ These are self-explanatory so here is an example:
 {
 	"toolVersion": "1.5",
 	"projectPackageId": "com.example.app",
+	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
-	"authority": "com.example.app.provider",
 	"databaseFileName": "example.db",
 	"enableForeignKeys": true,
 }
@@ -45,7 +45,8 @@ Currently the type can be:
 - `Double` (`REAL`) 
 - `Boolean` (`INTEGER`)
 - `Date` (`INTEGER`)
-- `byte[]` (`BLOB`).
+- `byte[]` (`BLOB`)
+- `enum` (`INTEGER`).
 
 You can also optionally declare table contraints.
 
@@ -69,7 +70,18 @@ Here is a `person.json` file as an example:
 			"name": "age",
 			"type": "Integer",
 			"index": true
-		}
+		},
+		{
+			"name": "gender",
+			"type": "enum",
+			"enumName": "Gender",
+			"enumValues": [
+				"MALE",
+				"FEMALE",
+				"OTHER",
+			],
+			"nullable": false,
+		},
 	],
 	
 	"constraints": [
@@ -85,8 +97,7 @@ A more complete example is available in the `etc/sample` folder.
 
 ### The `header.txt` file (optional)
 
-If a `header.txt` file is present, its contents will be inserted at the top of every generated java file.
-
+If a `header.txt` file is present, its contents will be inserted at the top of every generated file.
 
 ### Get the app
 
@@ -110,20 +121,20 @@ where.firstName("John").or().age(42);
 Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, projection,
         where.sel(), where.args(), null);
 ```
-- When using the results of a query, wrap the resulting `Cursor` in the corresponding `CursorWrapper`.  You can then use
+- When using the results of a query, wrap the resulting `Cursor` in the corresponding wrapper class.  You can then use
 the generated getters directly as shown in this example:
 
 ```java
-PersonCursorWrapper person = new PersonCursorWrapper(c);
+PersonCursor person = new PersonCursor(c);
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
-- You can also conveniently combine these two facilities by using the `query` method:
+- You can also conveniently combine these two facilities by using the `query` (or `delete`) method:
 
 ```java
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42);
-PersonCursorWrapper person = where.query(getContentResolver());
+PersonCursor person = where.query(getContentResolver());
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
@@ -132,7 +143,7 @@ Long age = person.getAge();
 ```java
 PersonContentValues values = new PersonContentValues();
 values.putFirstName("John").putAge(42);
-context.getContentResolver().update(personUri, values.getContentValues(), null, null);
+context.getContentResolver().update(personUri, values.values(), null, null);
 ```
 
 Building

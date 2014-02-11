@@ -8,12 +8,12 @@ import java.util.Date;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-import ${config.providerJavaPackage}.base.AbstractContentValuesWrapper;
+import ${config.providerJavaPackage}.base.AbstractContentValues;
 
 /**
  * Content values wrapper for the {@code ${entity.nameLowerCase}} table.
  */
-public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesWrapper {
+public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues {
     @Override
     public Uri uri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
@@ -26,7 +26,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValuesW
      * @param where The selection to use (can be {@code null}).
      */
     public int update(ContentResolver contentResolver, ${entity.nameCamelCase}Selection where) {
-        return contentResolver.update(uri(), getContentValues(), where == null ? null : where.sel(), where == null ? null : where.args());
+        return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     <#list entity.fields as field>
 

@@ -233,16 +233,16 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
 
-        // AbstractCursorWrapper
-        Template template = getFreeMarkerConfig().getTemplate("abstractcursorwrapper.ftl");
-        File outputFile = new File(baseClassesDir, "AbstractCursorWrapper.java");
+        // AbstractCursor
+        Template template = getFreeMarkerConfig().getTemplate("abstractcursor.ftl");
+        File outputFile = new File(baseClassesDir, "AbstractCursor.java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
         // AbstractContentValuesWrapper
-        template = getFreeMarkerConfig().getTemplate("abstractcontentvalueswrapper.ftl");
-        outputFile = new File(baseClassesDir, "AbstractContentValuesWrapper.java");
+        template = getFreeMarkerConfig().getTemplate("abstractcontentvalues.ftl");
+        outputFile = new File(baseClassesDir, "AbstractContentValues.java");
         out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
@@ -260,10 +260,10 @@ public class Main {
             entityDir.mkdirs();
 
             // Cursor wrapper
-            outputFile = new File(entityDir, entity.getNameCamelCase() + "CursorWrapper.java");
+            outputFile = new File(entityDir, entity.getNameCamelCase() + "Cursor.java");
             out = new OutputStreamWriter(new FileOutputStream(outputFile));
             root.put("entity", entity);
-            template = getFreeMarkerConfig().getTemplate("cursorwrapper.ftl");
+            template = getFreeMarkerConfig().getTemplate("cursor.ftl");
             template.process(root, out);
             IOUtils.closeQuietly(out);
 
@@ -271,7 +271,7 @@ public class Main {
             outputFile = new File(entityDir, entity.getNameCamelCase() + "ContentValues.java");
             out = new OutputStreamWriter(new FileOutputStream(outputFile));
             root.put("entity", entity);
-            template = getFreeMarkerConfig().getTemplate("contentvalueswrapper.ftl");
+            template = getFreeMarkerConfig().getTemplate("contentvalues.ftl");
             template.process(root, out);
             IOUtils.closeQuietly(out);
 
@@ -282,6 +282,19 @@ public class Main {
             template = getFreeMarkerConfig().getTemplate("selection.ftl");
             template.process(root, out);
             IOUtils.closeQuietly(out);
+
+            // Enums (if any)
+            for (Field field : entity.getFields()) {
+                if (field.isEnum()) {
+                    outputFile = new File(entityDir, field.getEnumName() + ".java");
+                    out = new OutputStreamWriter(new FileOutputStream(outputFile));
+                    root.put("entity", entity);
+                    root.put("field", field);
+                    template = getFreeMarkerConfig().getTemplate("enum.ftl");
+                    template.process(root, out);
+                    IOUtils.closeQuietly(out);
+                }
+            }
         }
     }
 

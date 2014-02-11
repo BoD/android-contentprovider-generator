@@ -27,25 +27,25 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
      * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
      *            order, which may be unordered.
-     * @return A ${entity.nameCamelCase}CursorWrapper object, which is positioned before the first entry, or null.
+     * @return A {@code ${entity.nameCamelCase}Cursor} object, which is positioned before the first entry, or null.
      */
-    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver, String[] projection, String sortOrder) {
+    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
         Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
         if (cursor == null) return null;
-        return new ${entity.nameCamelCase}CursorWrapper(cursor);
+        return new ${entity.nameCamelCase}Cursor(cursor);
     }
 
     /**
      * Equivalent of calling {@code query(contentResolver, projection, null}.
      */
-    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver, String[] projection) {
+    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
      * Equivalent of calling {@code query(contentResolver, projection, null, null}.
      */
-    public ${entity.nameCamelCase}CursorWrapper query(ContentResolver contentResolver) {
+    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
     }
     
