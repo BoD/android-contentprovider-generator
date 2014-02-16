@@ -6,7 +6,9 @@ package ${config.providerJavaPackage};
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
+import android.database.DefaultDatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
@@ -52,14 +54,41 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     </#list>
     // @formatter:on
 
-    public ${config.sqliteHelperClassName}(Context context) {
-        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+    public static ${config.sqliteHelperClassName} newInstance(Context context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            return newInstancePreHoneycomb(context);
+        }
+        return newInstancePostHoneycomb(context);
+    }
+
+
+    /*
+     * Pre Honeycomb.
+     */
+
+    private static ${config.sqliteHelperClassName} newInstancePreHoneycomb(Context context) {
+        return new ${config.sqliteHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+    }
+
+    private ${config.sqliteHelperClassName}(Context context, String name, CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+
+    /*
+     * Post Honeycomb.
+     */
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static ${config.sqliteHelperClassName} newInstancePostHoneycomb(Context context) {
+        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public ${config.sqliteHelperClassName}(Context context, SQLiteDatabase.CursorFactory factory, DatabaseErrorHandler errorHandler) {
-        super(context, DATABASE_FILE_NAME, factory, DATABASE_VERSION, errorHandler);
+    private ${config.sqliteHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+        super(context, name, factory, version, errorHandler);
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

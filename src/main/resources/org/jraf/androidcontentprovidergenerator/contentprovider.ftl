@@ -58,7 +58,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        m${config.sqliteHelperClassName} = new ${config.sqliteHelperClassName}(getContext());
+        m${config.sqliteHelperClassName} = ${config.sqliteHelperClassName}.newInstance(getContext());
         return true;
     }
 
