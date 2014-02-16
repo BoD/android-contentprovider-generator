@@ -81,7 +81,7 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static ${config.sqliteHelperClassName} newInstancePostHoneycomb(Context context) {
-        return new WorldtourSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+        return new ${config.sqliteHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
