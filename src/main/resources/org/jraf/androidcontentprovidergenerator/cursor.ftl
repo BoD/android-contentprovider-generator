@@ -52,7 +52,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
         <#case "DATE">
         return getDate(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         <#break>
-        <#case "BLOB">
+        <#case "BYTE_ARRAY">
         Integer index = getCachedColumnIndexOrThrow(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getBlob(index);
         <#break>
