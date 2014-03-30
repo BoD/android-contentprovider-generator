@@ -40,6 +40,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.jraf.androidcontentprovidergenerator.model.Constraint;
 import org.jraf.androidcontentprovidergenerator.model.Entity;
+import org.jraf.androidcontentprovidergenerator.model.EnumValue;
 import org.jraf.androidcontentprovidergenerator.model.Field;
 import org.jraf.androidcontentprovidergenerator.model.Model;
 import org.json.JSONArray;
@@ -63,9 +64,11 @@ public class Main {
         public static final String PROJECT_PACKAGE_ID = "projectPackageId";
         public static final String PROVIDER_JAVA_PACKAGE = "providerJavaPackage";
         public static final String PROVIDER_CLASS_NAME = "providerClassName";
-        public static final String SQLITE_HELPER_CLASS_NAME = "sqliteHelperClassName";
+        public static final String SQLITE_OPEN_HELPER_CLASS_NAME = "sqliteOpenHelperClassName";
+        public static final String SQLITE_UPGRADE_HELPER_CLASS_NAME = "sqliteUpgradeHelperClassName";
         public static final String AUTHORITY = "authority";
         public static final String DATABASE_FILE_NAME = "databaseFileName";
+        public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
     }
 
@@ -109,12 +112,21 @@ public class Main {
                 String defaultValue = fieldJson.optString(Field.Json.DEFAULT_VALUE);
                 String enumName = fieldJson.optString(Field.Json.ENUM_NAME);
                 JSONArray enumValuesJson = fieldJson.optJSONArray(Field.Json.ENUM_VALUES);
-                List<String> enumValues = new ArrayList<String>();
+                List<EnumValue> enumValues = new ArrayList<EnumValue>();
                 if (enumValuesJson != null) {
                     int enumLen = enumValuesJson.length();
                     for (int j = 0; j < enumLen; j++) {
-                        String valueName = enumValuesJson.getString(j);
-                        enumValues.add(valueName);
+                        Object enumValue = enumValuesJson.get(j);
+                        if (enumValue instanceof String) {
+                            // Name only
+                            enumValues.add(new EnumValue((String) enumValue, null));
+                        } else {
+                            // Name and Javadoc
+                            JSONObject enumValueJson = (JSONObject) enumValue;
+                            String enumValueName = (String) enumValueJson.keys().next();
+                            String enumValueJavadoc = enumValueJson.getString(enumValueName);
+                            enumValues.add(new EnumValue(enumValueName, enumValueJavadoc));
+                        }
                     }
                 }
                 Field field = new Field(name, type, isIndex, isNullable, defaultValue, enumName, enumValues);
@@ -176,9 +188,11 @@ public class Main {
         ensureString(Json.PROJECT_PACKAGE_ID);
         ensureString(Json.PROVIDER_JAVA_PACKAGE);
         ensureString(Json.PROVIDER_CLASS_NAME);
-        ensureString(Json.SQLITE_HELPER_CLASS_NAME);
+        ensureString(Json.SQLITE_OPEN_HELPER_CLASS_NAME);
+        ensureString(Json.SQLITE_UPGRADE_HELPER_CLASS_NAME);
         ensureString(Json.AUTHORITY);
         ensureString(Json.DATABASE_FILE_NAME);
+        ensureInt(Json.DATABASE_VERSION);
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
     }
 
@@ -195,6 +209,14 @@ public class Main {
             mConfig.getBoolean(field);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be a boolean.");
+        }
+    }
+
+    private void ensureInt(String field) {
+        try {
+            mConfig.getInt(field);
+        } catch (JSONException e) {
+            throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be an int.");
         }
     }
 
@@ -315,13 +337,34 @@ public class Main {
         template.process(root, out);
     }
 
-    private void generateSqliteHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template template = getFreeMarkerConfig().getTemplate("sqlitehelper.ftl");
+    private void generateSqliteOpenHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("sqliteopenhelper.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
         File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
         providerDir.mkdirs();
-        File outputFile = new File(providerDir, config.getString(Json.SQLITE_HELPER_CLASS_NAME) + ".java");
+        File outputFile = new File(providerDir, config.getString(Json.SQLITE_OPEN_HELPER_CLASS_NAME) + ".java");
+        Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+        Map<String, Object> root = new HashMap<String, Object>();
+        root.put("config", config);
+        root.put("model", Model.get());
+        root.put("header", Model.get().getHeader());
+
+        template.process(root, out);
+    }
+
+    private void generateSqliteUpgradeHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("sqliteupgradehelper.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        providerDir.mkdirs();
+        File outputFile = new File(providerDir, config.getString(Json.SQLITE_UPGRADE_HELPER_CLASS_NAME) + ".java");
+        if (outputFile.exists()) {
+            if (Config.LOGD) Log.d(TAG, "generateSqliteUpgradeHelper Upgrade helper class already exists: skip");
+            return;
+        }
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
         Map<String, Object> root = new HashMap<String, Object>();
@@ -348,7 +391,8 @@ public class Main {
         generateColumns(arguments);
         generateWrappers(arguments);
         generateContentProvider(arguments);
-        generateSqliteHelper(arguments);
+        generateSqliteOpenHelper(arguments);
+        generateSqliteUpgradeHelper(arguments);
     }
 
     public static void main(String[] args) throws Exception {

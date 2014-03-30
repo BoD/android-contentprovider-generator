@@ -1,10 +1,12 @@
 {
-	"toolVersion": "1.5",
+	"toolVersion": "1.6",
 	"projectPackageId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
-	"sqliteHelperClassName": "ExampleSQLiteOpenHelper",
+	"sqliteOpenHelperClassName": "ExampleSQLiteOpenHelper",
+	"sqliteUpgradeHelperClassName": "ExampleSQLiteUpgradeHelper",
 	"databaseFileName": "example.db",
+	"databaseVersion": 1,
 	"enableForeignKeys": true,
 }

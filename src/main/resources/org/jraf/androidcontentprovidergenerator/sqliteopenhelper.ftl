@@ -18,11 +18,11 @@ import ${config.projectPackageId}.BuildConfig;
 import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
 </#list>
 
-public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
-    private static final String TAG = ${config.sqliteHelperClassName}.class.getSimpleName();
+public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
+    private static final String TAG = ${config.sqliteOpenHelperClassName}.class.getSimpleName();
 
     public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = ${config.databaseVersion};
 
     // @formatter:off
     <#list model.entities as entity>
@@ -54,7 +54,7 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
     </#list>
     // @formatter:on
 
-    public static ${config.sqliteHelperClassName} newInstance(Context context) {
+    public static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
@@ -66,11 +66,11 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
      * Pre Honeycomb.
      */
 
-    private static ${config.sqliteHelperClassName} newInstancePreHoneycomb(Context context) {
-        return new ${config.sqliteHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+    private static ${config.sqliteOpenHelperClassName} newInstancePreHoneycomb(Context context) {
+        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
     }
 
-    private ${config.sqliteHelperClassName}(Context context, String name, CursorFactory factory, int version) {
+    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
@@ -80,12 +80,12 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
      */
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private static ${config.sqliteHelperClassName} newInstancePostHoneycomb(Context context) {
-        return new ${config.sqliteHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+    private static ${config.sqliteOpenHelperClassName} newInstancePostHoneycomb(Context context) {
+        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ${config.sqliteHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
+    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
     }
 
@@ -115,6 +115,6 @@ public class ${config.sqliteHelperClassName} extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        new ${config.sqliteUpgradeHelperClassName}().onUpgrade(db, oldVersion, newVersion);
     }
 }

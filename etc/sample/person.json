@@ -31,7 +31,18 @@
 			"name": "company_id",
 			"type": "Long",
 			"nullable": false,
-		}
+		},
+		{
+			"name": "gender",
+			"type": "enum",
+			"enumName": "Gender",
+			"enumValues": [
+				"MALE",
+				"FEMALE",
+				{"OTHER": "Value to use when neither male nor female"},
+			],
+			"nullable": false,
+		},
 	],
 	
 	"constraints": [

@@ -109,9 +109,9 @@ public class Field {
     private final boolean mIsNullable;
     private final String mDefaultValue;
     private final String mEnumName;
-    private final List<String> mEnumValues = new ArrayList<String>();
+    private final List<EnumValue> mEnumValues = new ArrayList<EnumValue>();
 
-    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<String> enumValues) {
+    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<EnumValue> enumValues) {
         mName = name.toLowerCase();
         mType = Type.fromJsonName(type);
         mIsIndex = isIndex;
@@ -141,7 +141,7 @@ public class Field {
         return mEnumName;
     }
 
-    public List<String> getEnumValues() {
+    public List<EnumValue> getEnumValues() {
         return mEnumValues;
     }
 
