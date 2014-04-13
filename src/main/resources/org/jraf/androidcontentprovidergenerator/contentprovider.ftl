@@ -5,6 +5,7 @@ package ${config.providerJavaPackage};
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -156,6 +157,10 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+        HashSet<Uri> urisToNotify = new HashSet<Uri>(operations.size());
+        for (ContentProviderOperation operation : operations) {
+            urisToNotify.add(operation.getUri());
+        }
         SQLiteDatabase db = m${config.sqliteOpenHelperClassName}.getWritableDatabase();
         db.beginTransaction();
         try {
@@ -170,6 +175,9 @@ public class ${config.providerClassName} extends ContentProvider {
                 i++;
             }
             db.setTransactionSuccessful();
+            for (Uri uri : urisToNotify) {
+                getContext().getContentResolver().notifyChange(uri, null);
+            }
             return results;
         } finally {
             db.endTransaction();
