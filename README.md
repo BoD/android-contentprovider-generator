@@ -96,6 +96,8 @@ Here is a `person.json` file as an example:
 }
 ```
 
+Note: `nullable` is optional (true by default).
+
 A more comprehensive example is available in the `etc/sample` folder.
 
 ### The `header.txt` file (optional)
