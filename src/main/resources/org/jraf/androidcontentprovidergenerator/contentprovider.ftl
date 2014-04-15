@@ -82,7 +82,7 @@ public class ${config.providerClassName} extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         if (BuildConfig.DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
         String table = uri.getLastPathSegment();
-        long rowId = m${config.sqliteOpenHelperClassName}.getWritableDatabase().insert(table, null, values);
+        long rowId = m${config.sqliteOpenHelperClassName}.getWritableDatabase().insertOrThrow(table, null, values);
         if (rowId == -1) return null;
         String notify;
         if (rowId != -1 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
