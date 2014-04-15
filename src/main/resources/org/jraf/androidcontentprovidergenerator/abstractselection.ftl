@@ -182,6 +182,13 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         return res;
     }
 
+    protected Object[] toObjectArray(boolean... array) {
+        Object[] res = new Object[array.length];
+        for (int i = 0; i < array.length; i++) {
+            res[i] = array[i];
+        }
+        return res;
+    }
 
     /**
      * Returns the selection produced by this object.
