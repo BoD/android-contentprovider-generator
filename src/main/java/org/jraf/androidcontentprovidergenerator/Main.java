@@ -179,7 +179,7 @@ public class Main {
             throw new IllegalArgumentException("Could not find 'toolVersion' field in _config.json, which is mandatory and must be equals to '"
                     + Constants.VERSION + "'.");
         }
-        if (!configVersion.equals(Constants.VERSION)) {
+        if (!Constants.VERSION.startsWith(configVersion)) {
             throw new IllegalArgumentException("Invalid 'toolVersion' value in _config.json: found '" + configVersion + "' but expected '" + Constants.VERSION
                     + "'.");
         }
@@ -375,6 +375,20 @@ public class Main {
         template.process(root, out);
     }
 
+    private void printManifest(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("manifest.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        Writer out = new OutputStreamWriter(System.out);
+
+        Map<String, Object> root = new HashMap<String, Object>();
+        root.put("config", config);
+        root.put("model", Model.get());
+        root.put("header", Model.get().getHeader());
+
+        System.out.println("\nProvider declaration to paste in the AndroidManifest.xml file: ");
+        template.process(root, out);
+    }
+
     private void go(String[] args) throws IOException, JSONException, TemplateException {
         Arguments arguments = new Arguments();
         JCommander jCommander = new JCommander(arguments, args);
@@ -393,6 +407,8 @@ public class Main {
         generateContentProvider(arguments);
         generateSqliteOpenHelper(arguments);
         generateSqliteUpgradeHelper(arguments);
+
+        printManifest(arguments);
     }
 
     public static void main(String[] args) throws Exception {
