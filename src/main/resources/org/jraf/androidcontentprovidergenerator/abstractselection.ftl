@@ -113,6 +113,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelection.append(LT_EQ);
         mSelectionArgs.add(valueOf(value));
     }
+    
+    public void addRaw(String raw) {
+        mSelection.append(" ");
+        mSelection.append(raw);
+        mSelection.append(" ");
+    }
 
     private String valueOf(Object obj) {
         if (obj instanceof Date) {
