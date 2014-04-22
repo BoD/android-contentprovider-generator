@@ -27,6 +27,7 @@ These are self-explanatory so here is an example:
 	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteOpenHelperClassName": "ExampleSQLiteOpenHelper",
+	"sqliteCreateeHelperClassName": "ExampleSQLiteCreateHelper",
 	"sqliteUpgradeHelperClassName": "ExampleSQLiteUpgradeHelper",
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,

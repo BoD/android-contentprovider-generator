@@ -23,6 +23,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
     private static final int DATABASE_VERSION = ${config.databaseVersion};
+    private final Context mContext;
 
     // @formatter:off
     <#list model.entities as entity>
@@ -72,6 +73,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
+        mContext = context;
     }
 
 
@@ -87,12 +89,15 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
+        mContext = context;
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
+        ${config.sqliteCreateHelperClassName} createHelper = new ${config.sqliteCreateHelperClassName}();
+        createHelper.onPreCreate(mContext, db);
         <#list model.entities as entity>
         db.execSQL(SQL_CREATE_TABLE_${entity.nameUpperCase});
         <#list entity.fields as field>
@@ -101,6 +106,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         </#if>
         </#list>
         </#list>
+        createHelper.onPostCreate(mContext, db);
     }
 
     <#if config.enableForeignKeys >
@@ -115,6 +121,6 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        new ${config.sqliteUpgradeHelperClassName}().onUpgrade(db, oldVersion, newVersion);
+        new ${config.sqliteUpgradeHelperClassName}().onUpgrade(mContext, db, oldVersion, newVersion);
     }
 }
