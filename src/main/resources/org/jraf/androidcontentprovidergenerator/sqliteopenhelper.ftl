@@ -24,6 +24,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
     private static final int DATABASE_VERSION = ${config.databaseVersion};
     private final Context mContext;
+    private final ${config.sqliteOpenHelperCallbacksClassName} mOpenHelperCallbacks;
 
     // @formatter:off
     <#list model.entities as entity>
@@ -74,6 +75,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
         super(context, name, factory, version);
         mContext = context;
+        mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
 
 
@@ -90,14 +92,14 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
         super(context, name, factory, version, errorHandler);
         mContext = context;
+        mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
-        ${config.sqliteCreateHelperClassName} createHelper = new ${config.sqliteCreateHelperClassName}();
-        createHelper.onPreCreate(mContext, db);
+        mOpenHelperCallbacks.onPreCreate(mContext, db);
         <#list model.entities as entity>
         db.execSQL(SQL_CREATE_TABLE_${entity.nameUpperCase});
         <#list entity.fields as field>
@@ -106,7 +108,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         </#if>
         </#list>
         </#list>
-        createHelper.onPostCreate(mContext, db);
+        mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 
     <#if config.enableForeignKeys >
@@ -121,6 +123,6 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        new ${config.sqliteUpgradeHelperClassName}().onUpgrade(mContext, db, oldVersion, newVersion);
+        mOpenHelperCallbacks.onUpgrade(mContext, db, oldVersion, newVersion);
     }
 }
