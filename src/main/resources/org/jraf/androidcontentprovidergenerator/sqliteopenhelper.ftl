@@ -118,6 +118,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         if (!db.isReadOnly()) {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
+        mOpenHelperCallbacks.onOpen(mContext, db);
     }
     </#if>
 
