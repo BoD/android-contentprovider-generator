@@ -96,6 +96,8 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
+        ${config.sqliteCreateHelperClassName} createHelper = new ${config.sqliteCreateHelperClassName}();
+        createHelper.onPreCreate(mContext, db);
         <#list model.entities as entity>
         db.execSQL(SQL_CREATE_TABLE_${entity.nameUpperCase});
         <#list entity.fields as field>
@@ -104,7 +106,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         </#if>
         </#list>
         </#list>
-        new ${config.sqliteCreateHelperClassName}().onCreate(mContext, db);
+        createHelper.onPostCreate(mContext, db);
     }
 
     <#if config.enableForeignKeys >
