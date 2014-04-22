@@ -104,6 +104,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         </#if>
         </#list>
         </#list>
+        new ${config.sqliteCreateHelperClassName}().onCreate(mContext, db);
     }
 
     <#if config.enableForeignKeys >
