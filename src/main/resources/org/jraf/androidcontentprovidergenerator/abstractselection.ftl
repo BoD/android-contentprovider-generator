@@ -26,6 +26,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String GT_EQ = ">=?";
     private static final String LT_EQ = "<=?";
     private static final String NOT_EQ = "<>?";
+    private static final String LIKE = " LIKE ?";
 
     private StringBuilder mSelection = new StringBuilder();
     private List<String> mSelectionArgs = new ArrayList<String>(5);
@@ -90,6 +91,19 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         }
     }
 
+    protected void addLikes(String column, String... values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(LIKE);
+            mSelectionArgs.add("%" + values[i] + "%");
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
     protected void addGreaterThan(String column, Object value) {
         mSelection.append(column);
         mSelection.append(GT);
@@ -113,7 +127,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelection.append(LT_EQ);
         mSelectionArgs.add(valueOf(value));
     }
-    
+
     public void addRaw(String raw) {
         mSelection.append(" ");
         mSelection.append(raw);
@@ -154,8 +168,8 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelection.append(OR);
         return (T) this;
     }
-    
-    
+
+
     protected Object[] toObjectArray(int... array) {
         Object[] res = new Object[array.length];
         for (int i = 0; i < array.length; i++) {
@@ -204,16 +218,16 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         if (size == 0) return null;
         return mSelectionArgs.toArray(new String[size]);
     }
-    
-    
+
+
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
     public abstract Uri uri();
-    
+
     /**
      * Deletes row(s) specified by this selection.
-     * 
+     *
      * @param contentResolver The content resolver to use.
      * @return The number of rows deleted.
      */
