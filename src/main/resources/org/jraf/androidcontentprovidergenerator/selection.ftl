@@ -19,10 +19,10 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     public Uri uri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
     }
-    
+
     /**
      * Query the given content resolver using this selection.
-     * 
+     *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
      * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
@@ -48,8 +48,8 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
     }
-    
-    
+
+
     public ${entity.nameCamelCase}Selection id(long... value) {
         addEquals(${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
@@ -60,7 +60,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
-    
+
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.javaTypeSimpleName}... value) {
         addNotEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
@@ -174,6 +174,12 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}LtEq(double value) {
         addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        return this;
+    }
+    <#break>
+    <#case "STRING">
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Like(String... value) {
+        addLikes(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
