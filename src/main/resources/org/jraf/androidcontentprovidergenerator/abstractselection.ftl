@@ -254,6 +254,10 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         return res;
     }
 
+    protected Object[] toObjectArray(Boolean value) {
+        return new Object[] { value };
+    }
+
 
     /**
      * Returns the selection produced by this object.
