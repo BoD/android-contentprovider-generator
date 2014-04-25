@@ -54,6 +54,12 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         addEquals(${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
+
+    public ${entity.nameCamelCase}Selection multiLikes(String[] columns, String... values) {
+        addMultiLikes(columns, values);
+        return this;
+    }
+
     <#list entity.fields as field>
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName}... value) {
@@ -179,7 +185,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     <#break>
     <#case "STRING">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Like(String... value) {
-        addLikes(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLike(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
