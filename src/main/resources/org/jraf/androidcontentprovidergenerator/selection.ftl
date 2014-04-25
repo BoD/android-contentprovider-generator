@@ -55,6 +55,15 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         return this;
     }
     <#list entity.fields as field>
+    <#switch field.type.name()>
+    <#case "BOOLEAN">
+
+    public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName} value) {
+        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, toObjectArray(value));
+        return this;
+    }
+    <#break>
+    <#default>
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName}... value) {
         addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
@@ -66,6 +75,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         return this;
     }
 
+    </#switch>
     <#switch field.type.name()>
     <#case "DATE">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(<#if field.isNullable>Long<#else>long</#if>... value) {
