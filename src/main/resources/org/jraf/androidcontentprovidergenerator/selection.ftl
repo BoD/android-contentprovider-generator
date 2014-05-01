@@ -55,11 +55,6 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection multiLikes(String[] columns, String... values) {
-        addMultiLikes(columns, values);
-        return this;
-    }
-
     <#list entity.fields as field>
     <#switch field.type.name()>
     <#case "BOOLEAN">
