@@ -65,7 +65,7 @@ public class Main {
         public static final String PROVIDER_JAVA_PACKAGE = "providerJavaPackage";
         public static final String PROVIDER_CLASS_NAME = "providerClassName";
         public static final String SQLITE_OPEN_HELPER_CLASS_NAME = "sqliteOpenHelperClassName";
-        public static final String SQLITE_UPGRADE_HELPER_CLASS_NAME = "sqliteUpgradeHelperClassName";
+        public static final String SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME = "sqliteOpenHelperCallbacksClassName";
         public static final String AUTHORITY = "authority";
         public static final String DATABASE_FILE_NAME = "databaseFileName";
         public static final String DATABASE_VERSION = "databaseVersion";
@@ -189,7 +189,7 @@ public class Main {
         ensureString(Json.PROVIDER_JAVA_PACKAGE);
         ensureString(Json.PROVIDER_CLASS_NAME);
         ensureString(Json.SQLITE_OPEN_HELPER_CLASS_NAME);
-        ensureString(Json.SQLITE_UPGRADE_HELPER_CLASS_NAME);
+        ensureString(Json.SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME);
         ensureString(Json.AUTHORITY);
         ensureString(Json.DATABASE_FILE_NAME);
         ensureInt(Json.DATABASE_VERSION);
@@ -354,15 +354,15 @@ public class Main {
         template.process(root, out);
     }
 
-    private void generateSqliteUpgradeHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
-        Template template = getFreeMarkerConfig().getTemplate("sqliteupgradehelper.ftl");
+    private void generateSqliteOpenHelperCallbacks(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("sqliteopenhelpercallbacks.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
         File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
         providerDir.mkdirs();
-        File outputFile = new File(providerDir, config.getString(Json.SQLITE_UPGRADE_HELPER_CLASS_NAME) + ".java");
+        File outputFile = new File(providerDir, config.getString(Json.SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME) + ".java");
         if (outputFile.exists()) {
-            if (Config.LOGD) Log.d(TAG, "generateSqliteUpgradeHelper Upgrade helper class already exists: skip");
+            if (Config.LOGD) Log.d(TAG, "generateSqliteOpenHelperCallbacks Open helper callbacks class already exists: skip");
             return;
         }
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
@@ -406,7 +406,7 @@ public class Main {
         generateWrappers(arguments);
         generateContentProvider(arguments);
         generateSqliteOpenHelper(arguments);
-        generateSqliteUpgradeHelper(arguments);
+        generateSqliteOpenHelperCallbacks(arguments);
 
         printManifest(arguments);
     }

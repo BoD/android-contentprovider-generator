@@ -27,7 +27,7 @@ These are self-explanatory so here is an example:
 	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",
 	"sqliteOpenHelperClassName": "ExampleSQLiteOpenHelper",
-	"sqliteUpgradeHelperClassName": "ExampleSQLiteUpgradeHelper",
+	"sqliteOpenHelperCallbacksClassName": "ExampleSQLiteOpenHelperCallbacks",
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
