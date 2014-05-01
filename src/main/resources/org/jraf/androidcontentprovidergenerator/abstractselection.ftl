@@ -4,9 +4,7 @@ ${header}
 package ${config.providerJavaPackage}.base;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import android.content.ContentResolver;
@@ -29,8 +27,6 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String LT_EQ = "<=?";
     private static final String NOT_EQ = "<>?";
     private static final String LIKE = " LIKE ?";
-
-    private List<List<String>> permutations;
 
     private StringBuilder mSelection = new StringBuilder();
     private List<String> mSelectionArgs = new ArrayList<String>(5);
@@ -95,65 +91,17 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         }
     }
 
-    protected void addLike(String column, String... values) {
+    protected void addLike(String column, String[] values) {
         mSelection.append(PAREN_OPEN);
         for (int i = 0; i < values.length; i++) {
             mSelection.append(column);
             mSelection.append(LIKE);
-            mSelectionArgs.add("%" + values[i] + "%");
+            mSelectionArgs.add(values[i]);
             if (i < values.length - 1) {
                 mSelection.append(OR);
             }
         }
         mSelection.append(PAREN_CLOSE);
-    }
-
-    private void permute(List<String> array, int k){
-        for(int i = k; i < array.size(); i++){
-            java.util.Collections.swap(array, i, k);
-            List<String> tmp = new LinkedList<String>();
-            tmp.addAll(array);
-            permute(tmp, k+1);
-            java.util.Collections.swap(array, k, i);
-        }
-        if (k == array.size() -1){
-            permutations.add(array);
-        }
-    }
-
-    protected void addMultiLikes(String[] columns, String...values) {
-
-        int j = 0;
-        StringBuilder possibleValues = new StringBuilder();
-        for (String value : values) {
-            possibleValues.append("%" + value);
-            j++;
-            if (j == values.length) {
-                possibleValues.append("%");
-            }
-        }
-
-        permutations = new LinkedList<List<String>>();
-        permute(Arrays.asList(columns), 0);
-        int i = 0;
-        for (List<String> permutation : permutations) {
-            mSelection.append(PAREN_OPEN);
-            j = 0;
-            for (String col : permutation) {
-                mSelection.append(col + " || '--'");
-                j++;
-                if (j < permutation.size()) {
-                    mSelection.append(" || ");
-                }
-            }
-            mSelection.append(LIKE);
-            i++;
-            mSelection.append(PAREN_CLOSE);
-            if (i < permutations.size()) {
-                mSelection.append(OR);
-            }
-            mSelectionArgs.add(possibleValues.toString());
-        }
     }
 
     protected void addGreaterThan(String column, Object value) {
@@ -252,6 +200,10 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
             res[i] = array[i];
         }
         return res;
+    }
+
+    protected Object[] toObjectArray(Boolean value) {
+        return new Object[] { value };
     }
 
 
