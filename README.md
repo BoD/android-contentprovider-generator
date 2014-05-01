@@ -139,6 +139,7 @@ Long age = person.getAge();
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42);
 PersonCursor person = where.query(getContentResolver());
+person.moveToNext();
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
