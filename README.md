@@ -5,7 +5,7 @@ A tool to generate an Android ContentProvider.
 It takes a set of entity (a.k.a "table") definitions as the input, and generates:
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
-- a `SQLiteUpgradeHelper` class
+- a `SQLiteOpenHelperCallbacks` class
 - one `BaseColumns` interface per entity 
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
@@ -21,7 +21,7 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"toolVersion": "1.6",
+	"toolVersion": "1.7",
 	"projectPackageId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
@@ -111,7 +111,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the app
 
-`java -jar android-contentprovider-generator-1.6.3-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.7.0-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find _config.json and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -159,7 +159,7 @@ You need maven to build this app.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.6.3-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.7.0-bundle.jar` in the `target` folder.
 
 
 Licence
