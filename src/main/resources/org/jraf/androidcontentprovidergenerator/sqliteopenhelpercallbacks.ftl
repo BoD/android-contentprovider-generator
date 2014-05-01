@@ -36,6 +36,8 @@ public class ${config.sqliteOpenHelperCallbacksClassName} {
     public void onUpgrade(final Context context, final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         if (BuildConfig.DEBUG) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
         // Insert your upgrading code here.
+        <#if config.optString("sqliteUpgradeHelperClassName")?has_content>
+        new ${config.sqliteUpgradeHelperClassName}().onUpgrade(db, oldVersion, newVersion);
+        </#if>
     }
-
 }
