@@ -128,10 +128,13 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelectionArgs.add(valueOf(value));
     }
 
-    public void addRaw(String raw) {
+    public void addRaw(String raw, Object[] args) {
         mSelection.append(" ");
         mSelection.append(raw);
         mSelection.append(" ");
+        for (Object arg : args) {
+            mSelectionArgs.add(valueOf(arg));
+        }
     }
 
     private String valueOf(Object obj) {
