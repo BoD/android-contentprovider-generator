@@ -128,7 +128,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         mSelectionArgs.add(valueOf(value));
     }
 
-    public void addRaw(String raw, Object[] args) {
+    public void addRaw(String raw, Object... args) {
         mSelection.append(" ");
         mSelection.append(raw);
         mSelection.append(" ");
@@ -143,7 +143,7 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         } else if (obj instanceof Boolean) {
             return (Boolean) obj ? "1" : "0";
         } else if (obj instanceof Enum) {
-            return String.valueOf(((Enum) obj).ordinal());
+            return String.valueOf(((Enum<?>) obj).ordinal());
         }
         return String.valueOf(obj);
     }
