@@ -39,7 +39,11 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
                     </#if>
                 <#else>
+                    <#if field.hasDefaultValue>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
+                    <#else>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
+                    </#if>
                 </#if>
             </#list>
             <#list entity.constraints as constraint>
