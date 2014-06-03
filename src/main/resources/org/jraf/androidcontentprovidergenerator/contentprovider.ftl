@@ -56,7 +56,7 @@ public class ${config.providerClassName} extends ContentProvider {
         </#list>
     }
 
-    private ${config.sqliteOpenHelperClassName} m${config.sqliteOpenHelperClassName};
+    protected ${config.sqliteOpenHelperClassName} m${config.sqliteOpenHelperClassName};
 
     @Override
     public boolean onCreate() {
