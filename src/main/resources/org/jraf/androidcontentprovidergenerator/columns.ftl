@@ -20,6 +20,7 @@ public interface ${entity.nameCamelCase}Columns extends BaseColumns {
     String ${field.nameUpperCase} = "${field.nameLowerCase}";
     </#list>
 
+
     String DEFAULT_ORDER = _ID;
 
 	// @formatter:off
@@ -27,6 +28,16 @@ public interface ${entity.nameCamelCase}Columns extends BaseColumns {
             _ID,
             <#list entity.fields as field>
             ${field.nameUpperCase}<#if field_has_next>,</#if>
+            </#list>
+    };
+    // @formatter:on
+
+
+    // @formatter:off
+    String[] JOIN_FULL_PROJECTION = new String[] {
+            TABLE_NAME + "." + _ID,
+            <#list entity.fields as field>
+            TABLE_NAME + "." + ${field.nameUpperCase}<#if field_has_next>,</#if>
             </#list>
     };
     // @formatter:on
