@@ -57,6 +57,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_INDEX_COMPANY_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_COMPANY_NAME "
             + " ON " + CompanyColumns.TABLE_NAME + " ( " + CompanyColumns.COMPANY_NAME + " );";
+
     private static final String SQL_CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS "
             + PersonColumns.TABLE_NAME + " ( "
             + PersonColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -68,19 +69,20 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonColumns.HAS_BLUE_EYES + " INTEGER NOT NULL DEFAULT '0', "
             + PersonColumns.HEIGHT + " REAL, "
             + PersonColumns.GENDER + " INTEGER NOT NULL "
+            + ", CONSTRAINT FK_MAIN_TEAM_ID FOREIGN KEY (MAIN_TEAM_ID) REFERENCES TEAM (_ID) ON DELETE CASCADE"
             + ", CONSTRAINT UNIQUE_NAME UNIQUE (FIRST_NAME, LAST_NAME) ON CONFLICT REPLACE"
-            + ", CONSTRAINT FK_MAIN_TEAM FOREIGN KEY (MAIN_TEAM_ID) REFERENCES TEAM (_ID) ON DELETE CASCADE"
             + " );";
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
             + " ON " + PersonColumns.TABLE_NAME + " ( " + PersonColumns.LAST_NAME + " );";
+
     private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
             + TeamColumns.TABLE_NAME + " ( "
             + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
             + TeamColumns.TEAM_NAME + " TEXT NOT NULL "
+            + ", CONSTRAINT FK_COMPANY_ID FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY (_ID) ON DELETE CASCADE"
             + ", CONSTRAINT UNIQUE_NAME UNIQUE (TEAM_NAME) ON CONFLICT REPLACE"
-            + ", CONSTRAINT FK_COMPANY FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY (_ID) ON DELETE CASCADE"
             + " );";
 
     // @formatter:on

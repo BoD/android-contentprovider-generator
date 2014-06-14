@@ -59,9 +59,5 @@
 			"name": "unique_name",
 			"definition": "unique (first_name, last_name) on conflict replace"
 		},
-		{
-			"name": "fk_main_team",
-			"definition": "foreign key (main_team_id) references team (_id) on delete cascade",
-		},
 	],
 }

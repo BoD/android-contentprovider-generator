@@ -49,6 +49,11 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
                     </#if>
                 </#if>
             </#list>
+            <#list entity.fields as field>
+            	<#if field.foreignKey??>
+            + ", CONSTRAINT FK_${field.nameUpperCase} FOREIGN KEY (${field.nameUpperCase}) REFERENCES ${field.foreignKey.entity.nameUpperCase} (${field.foreignKey.field.nameUpperCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
+            	</#if>
+            </#list>
             <#list entity.constraints as constraint>
             + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"
             </#list>
@@ -58,6 +63,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     <#if field.isIndex>
     private static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
             + " ON " + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( " + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " );";
+
     </#if>
     </#list>
     </#list>

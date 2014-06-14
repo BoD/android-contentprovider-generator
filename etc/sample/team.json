@@ -21,9 +21,5 @@
 			"name": "unique_name",
 			"definition": "unique (team_name) on conflict replace"
 		},
-		{
-			"name": "fk_company",
-			"definition": "foreign key (company_id) references company (_id) on delete cascade",
-		},
 	],
 }
