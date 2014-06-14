@@ -22,3 +22,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.androidcontentprovidergenerator.sample.provider.company;
+
+import java.util.Date;
+
+import android.database.Cursor;
+
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
+
+/**
+ * Cursor wrapper for the {@code company} table.
+ */
+public class CompanyCursor extends AbstractCursor {
+    public CompanyCursor(Cursor cursor) {
+        super(cursor);
+    }
+
+    /**
+     * Get the {@code company_name} value.
+     * Cannot be {@code null}.
+     */
+    public String getCompanyName() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
+        return getString(index);
+    }
+
+    /**
+     * Get the {@code address} value.
+     * Can be {@code null}.
+     */
+    public String getAddress() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
+        return getString(index);
+    }
+}

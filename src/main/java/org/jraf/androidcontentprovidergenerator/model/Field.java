@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
+ *
  * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,9 +37,13 @@ public class Field {
         public static final String TYPE = "type";
         public static final String INDEX = "index";
         public static final String NULLABLE = "nullable";
-        public static final String DEFAULT_VALUE = "default_value";
+        public static final String DEFAULT_VALUE = "defaultValue";
+        public static final String DEFAULT_VALUE_LEGACY = "default_value";
         public static final String ENUM_NAME = "enumName";
         public static final String ENUM_VALUES = "enumValues";
+        public static final String FOREIGN_KEY = "foreignKey";
+        public static final String FOREIGN_KEY_TABLE = "table";
+        public static final String FOREIGN_KEY_ON_DELETE_ACTION = "onDelete";
 
         private static final String TYPE_STRING = "String";
         private static final String TYPE_INTEGER = "Integer";
@@ -50,6 +54,12 @@ public class Field {
         private static final String TYPE_DATE = "Date";
         private static final String TYPE_BYTE_ARRAY = "byte[]";
         private static final String TYPE_ENUM = "enum";
+
+        private static final String ON_DELETE_ACTION_NO_ACTION = "NO ACTION";
+        private static final String ON_DELETE_ACTION_RESTRICT = "RESTRICT";
+        private static final String ON_DELETE_ACTION_SET_NULL = "SET NULL";
+        private static final String ON_DELETE_ACTION_SET_DEFAULT = "SET DEFAULT";
+        private static final String ON_DELETE_ACTION_CASCADE = "CASCADE";
     }
 
     public static enum Type {
@@ -60,7 +70,7 @@ public class Field {
         FLOAT(Json.TYPE_FLOAT, "REAL", Float.class, float.class),
         DOUBLE(Json.TYPE_DOUBLE, "REAL", Double.class, double.class),
         BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class, boolean.class),
-        DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),        
+        DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),
         BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class, byte[].class),
         ENUM(Json.TYPE_ENUM, "INTEGER", null, null),
         // @formatter:on
@@ -74,11 +84,11 @@ public class Field {
             mSqlType = sqlType;
             mNullableJavaType = nullableJavaType;
             mNotNullableJavaType = notNullableJavaType;
-            sJsonNames.put(jsonName, this);
+            sTypeJsonNames.put(jsonName, this);
         }
 
         public static Type fromJsonName(String jsonName) {
-            Type res = sJsonNames.get(jsonName);
+            Type res = sTypeJsonNames.get(jsonName);
             if (res == null) throw new IllegalArgumentException("The type '" + jsonName + "' is unknown");
             return res;
         }
@@ -101,24 +111,82 @@ public class Field {
         }
     }
 
-    private static HashMap<String, Type> sJsonNames = new HashMap<String, Type>();
+    public static enum OnDeleteAction {
+        // @formatter:off
+        NO_ACTION(Json.ON_DELETE_ACTION_NO_ACTION),
+        RESTRICT(Json.ON_DELETE_ACTION_RESTRICT),
+        SET_NULL(Json.ON_DELETE_ACTION_SET_NULL),
+        SET_DEFAULT(Json.ON_DELETE_ACTION_SET_DEFAULT),
+        CASCADE(Json.ON_DELETE_ACTION_CASCADE),
+        // @formatter:on
+        ;
+
+        private OnDeleteAction(String jsonName) {
+            sOnDeleteActionJsonNames.put(jsonName, this);
+        }
+
+        public static OnDeleteAction fromJsonName(String jsonName) {
+            OnDeleteAction res = sOnDeleteActionJsonNames.get(jsonName);
+            if (res == null) throw new IllegalArgumentException("The onDelete value '" + jsonName + "' is unknown");
+            return res;
+        }
+    }
+
+    public static class ForeignKey {
+        private final String mEntityName;
+        private final OnDeleteAction mOnDeleteAction;
+
+        public ForeignKey(String entityName, OnDeleteAction onDeleteAction) {
+            mEntityName = entityName;
+            mOnDeleteAction = onDeleteAction;
+        }
+
+        public String getEntityName() {
+            return mEntityName;
+        }
+
+        public Entity getEntity() {
+            return Entity.getByName(mEntityName);
+        }
+
+        public Field getField() {
+            return getEntity().getFieldByName("_id");
+        }
+
+        public OnDeleteAction getOnDeleteAction() {
+            return mOnDeleteAction;
+        }
+
+        @Override
+        public String toString() {
+            return "ForeignKey [mEntityName=" + mEntityName + ", mOnDeleteAction=" + mOnDeleteAction + "]";
+        }
+    }
+
+    private static HashMap<String, Type> sTypeJsonNames = new HashMap<>();
+    private static HashMap<String, OnDeleteAction> sOnDeleteActionJsonNames = new HashMap<>();
 
     private final String mName;
     private final Type mType;
+    private final boolean mIsId;
     private final boolean mIsIndex;
     private final boolean mIsNullable;
     private final String mDefaultValue;
     private final String mEnumName;
-    private final List<EnumValue> mEnumValues = new ArrayList<EnumValue>();
+    private final List<EnumValue> mEnumValues = new ArrayList<>();
+    private final ForeignKey mForeignKey;
 
-    public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<EnumValue> enumValues) {
+    public Field(String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<EnumValue> enumValues,
+            ForeignKey foreignKey) {
         mName = name.toLowerCase();
         mType = Type.fromJsonName(type);
+        mIsId = isId;
         mIsIndex = isIndex;
         mIsNullable = isNullable;
         mDefaultValue = defaultValue;
         mEnumName = enumName;
-        mEnumValues.addAll(enumValues);
+        if (enumValues != null) mEnumValues.addAll(enumValues);
+        mForeignKey = foreignKey;
     }
 
     public String getNameUpperCase() {
@@ -147,6 +215,10 @@ public class Field {
 
     public Type getType() {
         return mType;
+    }
+
+    public boolean getIsId() {
+        return mIsId;
     }
 
     public boolean getIsIndex() {
@@ -183,10 +255,14 @@ public class Field {
         return mType == Type.ENUM;
     }
 
+    public ForeignKey getForeignKey() {
+        return mForeignKey;
+    }
+
 
     @Override
     public String toString() {
-        return "Field [mName=" + mName + ", mType=" + mType + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable + ", mDefaultValue=" + mDefaultValue
-                + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues + "]";
+        return "Field [mName=" + mName + ", mType=" + mType + ", mIsId=" + mIsId + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable
+                + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues + ", mForeignKey=" + mForeignKey + "]";
     }
 }

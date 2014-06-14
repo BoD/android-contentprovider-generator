@@ -1,0 +1,29 @@
+{
+	"fields": [
+		{
+			"name": "company_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "company",
+				"onDelete": "CASCADE",
+			},
+		},
+		{
+			"name": "team_name",
+			"type": "String",
+			"nullable": false,
+		},
+	],
+
+	"constraints": [
+		{
+			"name": "unique_name",
+			"definition": "unique (team_name) on conflict replace"
+		},
+		{
+			"name": "fk_company",
+			"definition": "foreign key (company_id) references company (_id) on delete cascade",
+		},
+	],
+}

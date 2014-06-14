@@ -1,36 +1,45 @@
 {
 	"fields": [
 		{
+			"name": "main_team_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "team",
+				"onDelete": "CASCADE",
+			},
+		},
+		{
 			"name": "first_name",
-			"type": "String"
+			"type": "String",
+			"nullable": false,
 		},
 		{
 			"name": "last_name",
-			"type": "String"
+			"type": "String",
+			"nullable": false,
+			"index": true,
 		},
 		{
 			"name": "age",
 			"type": "Integer",
-			"nullable": false
+			"nullable": false,
 		},
 		{
-			"name": "is_blue_eyes",
-			"type": "Boolean",
-			"default_value": "1"
-		},
-		{
-			"name": "date_of_birth",
+			"name": "birth_date",
 			"type": "Date",
-			"index": true
+			"nullable": true,
+		},
+		{
+			"name": "has_blue_eyes",
+			"type": "Boolean",
+			"nullable": false,
+			"defaultValue": "0",
 		},
 		{
 			"name": "height",
-			"type": "Float"
-		},
-		{
-			"name": "company_id",
-			"type": "Long",
-			"nullable": false,
+			"type": "Float",
+			"nullable": true,
 		},
 		{
 			"name": "gender",
@@ -44,15 +53,15 @@
 			"nullable": false,
 		},
 	],
-	
+
 	"constraints": [
 		{
 			"name": "unique_name",
 			"definition": "unique (first_name, last_name) on conflict replace"
 		},
 		{
-			"name": "fk_company",
-			"definition": "foreign key (company_id) references company (_id) on delete cascade",
+			"name": "fk_main_team",
+			"definition": "foreign key (main_team_id) references team (_id) on delete cascade",
 		},
 	],
 }

@@ -22,3 +22,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.androidcontentprovidergenerator.sample.provider.person;
+
+/**
+ * Possible values for the {@code gender} column of the {@code person} table.
+ */
+public enum Gender {
+    /**
+     * 
+     */
+    MALE,
+
+    /**
+     * 
+     */
+    FEMALE,
+
+    /**
+     * Value to use when neither male nor female
+     */
+    OTHER,
+
+}

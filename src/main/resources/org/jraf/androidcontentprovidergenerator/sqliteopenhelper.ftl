@@ -30,19 +30,22 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     <#list model.entities as entity>
     private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
-            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             <#list entity.fields as field>
-                <#if field.isNullable>
-                    <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
-                    </#if>
+                <#if field.isId>
+            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 <#else>
-                    <#if field.hasDefaultValue>
+                    <#if field.isNullable>
+                        <#if field.hasDefaultValue>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
+                        <#else>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
+                        </#if>
+                <#else>
+                        <#if field.hasDefaultValue>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
+                        <#else>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
+                        </#if>
                     </#if>
                 </#if>
             </#list>

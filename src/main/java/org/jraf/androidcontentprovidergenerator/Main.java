@@ -42,6 +42,8 @@ import org.jraf.androidcontentprovidergenerator.model.Constraint;
 import org.jraf.androidcontentprovidergenerator.model.Entity;
 import org.jraf.androidcontentprovidergenerator.model.EnumValue;
 import org.jraf.androidcontentprovidergenerator.model.Field;
+import org.jraf.androidcontentprovidergenerator.model.Field.ForeignKey;
+import org.jraf.androidcontentprovidergenerator.model.Field.OnDeleteAction;
 import org.jraf.androidcontentprovidergenerator.model.Model;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,6 +101,10 @@ public class Main {
             String fileContents = FileUtils.readFileToString(entityFile);
             JSONObject entityJson = new JSONObject(fileContents);
 
+            // Implicit _id field
+            Field field = new Field("_id", "Long", true, false, false, null, null, null, null);
+            entity.addField(field);
+
             // Fields
             JSONArray fieldsJson = entityJson.getJSONArray("fields");
             int len = fieldsJson.length();
@@ -110,9 +116,10 @@ public class Main {
                 boolean isIndex = fieldJson.optBoolean(Field.Json.INDEX, false);
                 boolean isNullable = fieldJson.optBoolean(Field.Json.NULLABLE, true);
                 String defaultValue = fieldJson.optString(Field.Json.DEFAULT_VALUE);
+                String defaultValueLegacy = fieldJson.optString(Field.Json.DEFAULT_VALUE_LEGACY);
                 String enumName = fieldJson.optString(Field.Json.ENUM_NAME);
                 JSONArray enumValuesJson = fieldJson.optJSONArray(Field.Json.ENUM_VALUES);
-                List<EnumValue> enumValues = new ArrayList<EnumValue>();
+                List<EnumValue> enumValues = new ArrayList<>();
                 if (enumValuesJson != null) {
                     int enumLen = enumValuesJson.length();
                     for (int j = 0; j < enumLen; j++) {
@@ -129,7 +136,15 @@ public class Main {
                         }
                     }
                 }
-                Field field = new Field(name, type, isIndex, isNullable, defaultValue, enumName, enumValues);
+                JSONObject foreignKeyJson = fieldJson.optJSONObject(Field.Json.FOREIGN_KEY);
+                ForeignKey foreignKey = null;
+                if (foreignKeyJson != null) {
+                    String table = foreignKeyJson.getString(Field.Json.FOREIGN_KEY_TABLE);
+                    OnDeleteAction onDeleteAction = OnDeleteAction.fromJsonName(foreignKeyJson.getString(Field.Json.FOREIGN_KEY_ON_DELETE_ACTION));
+                    foreignKey = new ForeignKey(table, onDeleteAction);
+                }
+                field = new Field(name, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy, enumName, enumValues,
+                        foreignKey);
                 entity.addField(field);
             }
 
@@ -226,7 +241,7 @@ public class Main {
         String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
 
         File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
 
@@ -251,7 +266,7 @@ public class Main {
         File baseClassesDir = new File(providerDir, "base");
         baseClassesDir.mkdirs();
 
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
 
@@ -329,7 +344,7 @@ public class Main {
         File outputFile = new File(providerDir, config.getString(Json.PROVIDER_CLASS_NAME) + ".java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
@@ -346,7 +361,7 @@ public class Main {
         File outputFile = new File(providerDir, config.getString(Json.SQLITE_OPEN_HELPER_CLASS_NAME) + ".java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
@@ -367,7 +382,7 @@ public class Main {
         }
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
@@ -380,7 +395,7 @@ public class Main {
         JSONObject config = getConfig(arguments.inputDir);
         Writer out = new OutputStreamWriter(System.out);
 
-        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> root = new HashMap<>();
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
