@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import org.jraf.androidcontentprovidergenerator.sample.R;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanySelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.Gender;
@@ -39,8 +40,8 @@ public class SampleActivity extends Activity {
         findViewById(R.id.btnPopulate).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnClear).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeople).setOnClickListener(mOnClickListener);
-        findViewById(R.id.btnQueryPeopleWithTeams).setOnClickListener(mOnClickListener);
-
+        findViewById(R.id.btnQueryPeopleWithTeam).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btnQueryPeopleWithCompany).setOnClickListener(mOnClickListener);
 
     }
 
@@ -60,8 +61,12 @@ public class SampleActivity extends Activity {
                     queryPeople();
                     break;
 
-                case R.id.btnQueryPeopleWithTeams:
-                    queryPeopleWithTeams();
+                case R.id.btnQueryPeopleWithTeam:
+                    queryPeopleWithTeam();
+                    break;
+
+                case R.id.btnQueryPeopleWithCompany:
+                    queryPeopleWithCompany();
                     break;
             }
         }
@@ -78,13 +83,24 @@ public class SampleActivity extends Activity {
         c.close();
     }
 
-    private void queryPeopleWithTeams() {
+    private void queryPeopleWithTeam() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
         String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.TEAM_NAME };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
-            Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getString(3));
+            Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName());
+        }
+        c.close();
+    }
+
+    private void queryPeopleWithCompany() {
+        PersonSelection personSelection = new PersonSelection();
+        personSelection.firstName("James", "John");
+        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, CompanyColumns.COMPANY_NAME };
+        PersonCursor c = personSelection.query(getContentResolver(), projection);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - company: " + c.getCompanyName());
         }
         c.close();
     }

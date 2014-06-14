@@ -29,6 +29,7 @@ import java.util.Date;
 import android.database.Cursor;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 
 /**
  * Cursor wrapper for the {@code team} table.
@@ -51,6 +52,24 @@ public class TeamCursor extends AbstractCursor {
      */
     public String getTeamName() {
         Integer index = getCachedColumnIndexOrThrow(TeamColumns.TEAM_NAME);
+        return getString(index);
+    }
+
+    /**
+     * Get the {@code company_name} value.
+     * Cannot be {@code null}.
+     */
+    public String getCompanyName() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
+        return getString(index);
+    }
+
+    /**
+     * Get the {@code address} value.
+     * Can be {@code null}.
+     */
+    public String getAddress() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
         return getString(index);
     }
 }

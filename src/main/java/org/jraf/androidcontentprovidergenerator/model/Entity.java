@@ -34,12 +34,11 @@ import org.apache.commons.lang.WordUtils;
 import org.jraf.androidcontentprovidergenerator.model.Field.ForeignKey;
 
 public class Entity {
-    /**
-     * 
-     */
     private static final String CONCAT = "res.tablesWithJoins += ";
-    private static final String HAS_COLUMNS = ".hasColumns(projection)) {\n";
+    private static final String HAS_COLUMNS = ".hasColumns(projection)";
+    private static final String OPEN_BRACE = ") {\n";
     private static final String IF = "if (";
+    private static final String OR = " || ";
     private static final String INDENT1 = "                ";
     private static final String INDENT2 = "                    ";
     private static final String PLUS = " + ";
@@ -69,6 +68,36 @@ public class Entity {
 
     public List<Field> getFields() {
         return Collections.unmodifiableList(mFields);
+    }
+
+    public List<Field> getFieldsIncludingJoins() {
+        List<Field> res = new ArrayList<>();
+        res.addAll(mFields);
+
+        for (Field field : getFields()) {
+            ForeignKey foreignKey = field.getForeignKey();
+            if (foreignKey == null) continue;
+
+            // Recurse
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins());
+        }
+
+        return res;
+    }
+
+    public List<Entity> getJoinedEntities() {
+        List<Entity> res = new ArrayList<>();
+
+        for (Field field : getFields()) {
+            ForeignKey foreignKey = field.getForeignKey();
+            if (foreignKey == null) continue;
+
+            // Recurse
+            res.add(foreignKey.getEntity());
+            res.addAll(foreignKey.getEntity().getJoinedEntities());
+        }
+
+        return res;
     }
 
     public Field getFieldByName(String fieldName) {
@@ -117,9 +146,10 @@ public class Entity {
             res.append("\n");
             res.append(INDENT1);
             res.append(IF);
-            res.append(foreignKey.getEntity().getNameCamelCase());
-            res.append(COLUMNS);
-            res.append(HAS_COLUMNS);
+
+            getHasColumnClauses(res, foreignKey.getEntity());
+
+            res.append(OPEN_BRACE);
             res.append(INDENT2);
             res.append(CONCAT);
             res.append(LEFT_OUTER_JOIN);
@@ -144,6 +174,21 @@ public class Entity {
 
             // Recurse
             addAllJoinedClauses(foreignKey.getEntity(), res);
+        }
+    }
+
+    private static void getHasColumnClauses(StringBuilder res, Entity entity) {
+        res.append(entity.getNameCamelCase());
+        res.append(COLUMNS);
+        res.append(HAS_COLUMNS);
+
+        for (Field field : entity.getFields()) {
+            ForeignKey foreignKey = field.getForeignKey();
+            if (foreignKey == null) continue;
+
+            res.append(OR);
+            // Recurse
+            getHasColumnClauses(res, foreignKey.getEntity());
         }
     }
 

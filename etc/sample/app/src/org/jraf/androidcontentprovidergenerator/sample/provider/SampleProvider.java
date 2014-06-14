@@ -258,7 +258,7 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_PERSON_ID:
                 res.table = PersonColumns.TABLE_NAME;
                 res.tablesWithJoins = PersonColumns.TABLE_NAME;
-                if (TeamColumns.hasColumns(projection)) {
+                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
                 }
                 if (CompanyColumns.hasColumns(projection)) {

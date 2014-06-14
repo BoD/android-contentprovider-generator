@@ -166,6 +166,7 @@ public class Field {
     private static HashMap<String, Type> sTypeJsonNames = new HashMap<>();
     private static HashMap<String, OnDeleteAction> sOnDeleteActionJsonNames = new HashMap<>();
 
+    private final Entity mEntity;
     private final String mName;
     private final Type mType;
     private final boolean mIsId;
@@ -176,8 +177,9 @@ public class Field {
     private final List<EnumValue> mEnumValues = new ArrayList<>();
     private final ForeignKey mForeignKey;
 
-    public Field(String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<EnumValue> enumValues,
-            ForeignKey foreignKey) {
+    public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
+            List<EnumValue> enumValues, ForeignKey foreignKey) {
+        mEntity = entity;
         mName = name.toLowerCase();
         mType = Type.fromJsonName(type);
         mIsId = isId;
@@ -187,6 +189,10 @@ public class Field {
         mEnumName = enumName;
         if (enumValues != null) mEnumValues.addAll(enumValues);
         mForeignKey = foreignKey;
+    }
+
+    public Entity getEntity() {
+        return mEntity;
     }
 
     public String getNameUpperCase() {
