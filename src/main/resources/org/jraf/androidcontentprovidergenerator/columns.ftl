@@ -40,7 +40,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
     };
     // @formatter:on
 
-    public static final Set<String> ALL_COLUMNS = new HashSet<String>();
+    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
     static {
         <#list entity.fields as field>
         ALL_COLUMNS.add(${field.nameUpperCase});

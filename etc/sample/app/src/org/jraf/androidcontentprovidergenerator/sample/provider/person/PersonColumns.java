@@ -65,7 +65,7 @@ public class PersonColumns implements BaseColumns {
     };
     // @formatter:on
 
-    public static final Set<String> ALL_COLUMNS = new HashSet<String>();
+    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
     static {
         ALL_COLUMNS.add(_ID);
         ALL_COLUMNS.add(MAIN_TEAM_ID);
