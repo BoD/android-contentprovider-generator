@@ -28,6 +28,8 @@ import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelC
 public class ${config.providerClassName} extends ContentProvider {
     private static final String TAG = ${config.providerClassName}.class.getSimpleName();
 
+    private static final boolean DEBUG = BuildConfig.DEBUG;
+
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
 
@@ -60,7 +62,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             // Enable logging of SQL statements as they are executed.
             try {
                 Class<?> sqliteDebugClass = Class.forName("android.database.sqlite.SQLiteDebug");
@@ -73,7 +75,7 @@ public class ${config.providerClassName} extends ContentProvider {
                 // field.setAccessible(true);
                 // field.set(null, true);
             } catch (Throwable t) {
-                if (BuildConfig.DEBUG) Log.w(TAG, "Could not enable SQLiteDebug logging", t);
+                if (DEBUG) Log.w(TAG, "Could not enable SQLiteDebug logging", t);
             }
         }
 
@@ -98,7 +100,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
+        if (DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
         String table = uri.getLastPathSegment();
         long rowId = m${config.sqliteOpenHelperClassName}.getWritableDatabase().insertOrThrow(table, null, values);
         if (rowId == -1) return null;
@@ -111,7 +113,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
+        if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         String table = uri.getLastPathSegment();
         SQLiteDatabase db = m${config.sqliteOpenHelperClassName}.getWritableDatabase();
         int res = 0;
@@ -138,8 +140,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        if (DEBUG) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
         int res = m${config.sqliteOpenHelperClassName}.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
@@ -151,7 +152,7 @@ public class ${config.providerClassName} extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        if (DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
         int res = m${config.sqliteOpenHelperClassName}.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
@@ -164,7 +165,7 @@ public class ${config.providerClassName} extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
-        if (BuildConfig.DEBUG)
+        if (DEBUG)
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);

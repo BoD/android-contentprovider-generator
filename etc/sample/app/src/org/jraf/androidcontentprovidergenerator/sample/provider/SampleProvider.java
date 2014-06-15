@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
+ *
  * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -48,6 +48,8 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 
 public class SampleProvider extends ContentProvider {
     private static final String TAG = SampleProvider.class.getSimpleName();
+
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
@@ -84,7 +86,7 @@ public class SampleProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        if (BuildConfig.DEBUG) {
+        if (DEBUG) {
             // Enable logging of SQL statements as they are executed.
             try {
                 Class<?> sqliteDebugClass = Class.forName("android.database.sqlite.SQLiteDebug");
@@ -97,7 +99,7 @@ public class SampleProvider extends ContentProvider {
                 // field.setAccessible(true);
                 // field.set(null, true);
             } catch (Throwable t) {
-                if (BuildConfig.DEBUG) Log.w(TAG, "Could not enable SQLiteDebug logging", t);
+                if (DEBUG) Log.w(TAG, "Could not enable SQLiteDebug logging", t);
             }
         }
 
@@ -130,7 +132,7 @@ public class SampleProvider extends ContentProvider {
 
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
+        if (DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
         String table = uri.getLastPathSegment();
         long rowId = mSampleSQLiteOpenHelper.getWritableDatabase().insertOrThrow(table, null, values);
         if (rowId == -1) return null;
@@ -143,7 +145,7 @@ public class SampleProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
+        if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         String table = uri.getLastPathSegment();
         SQLiteDatabase db = mSampleSQLiteOpenHelper.getWritableDatabase();
         int res = 0;
@@ -170,8 +172,7 @@ public class SampleProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        if (BuildConfig.DEBUG)
-            Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        if (DEBUG) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
         int res = mSampleSQLiteOpenHelper.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
@@ -183,7 +184,7 @@ public class SampleProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
+        if (DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
         int res = mSampleSQLiteOpenHelper.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
@@ -196,12 +197,12 @@ public class SampleProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
-        if (BuildConfig.DEBUG)
+        if (DEBUG)
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
-                null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs,
+                groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
@@ -259,10 +260,12 @@ public class SampleProvider extends ContentProvider {
                 res.table = PersonColumns.TABLE_NAME;
                 res.tablesWithJoins = PersonColumns.TABLE_NAME;
                 if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID
+                            + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
                 }
                 if (CompanyColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID
+                            + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
                 res.orderBy = PersonColumns.DEFAULT_ORDER;
                 break;
@@ -272,7 +275,8 @@ public class SampleProvider extends ContentProvider {
                 res.table = TeamColumns.TABLE_NAME;
                 res.tablesWithJoins = TeamColumns.TABLE_NAME;
                 if (CompanyColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID
+                            + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
                 res.orderBy = TeamColumns.DEFAULT_ORDER;
                 break;
