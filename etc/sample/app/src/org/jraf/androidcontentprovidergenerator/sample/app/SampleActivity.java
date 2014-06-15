@@ -74,7 +74,7 @@ public class SampleActivity extends Activity {
 
     private void queryPeople() {
         PersonSelection personSelection = new PersonSelection();
-        personSelection.firstName("James", "John");
+        personSelection.firstName("James", "John").and().hasBlueEyes(true);
         String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {

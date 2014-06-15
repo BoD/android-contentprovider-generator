@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.WordUtils;
-import org.jraf.androidcontentprovidergenerator.model.Field.ForeignKey;
 
 public class Entity {
     private static final String CONCAT = "res.tablesWithJoins += ";

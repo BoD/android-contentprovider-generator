@@ -49,13 +49,15 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
                     </#if>
                 </#if>
             </#list>
-            <#list entity.fields as field>
-            	<#if field.foreignKey??>
-            + ", CONSTRAINT FK_${field.nameUpperCase} FOREIGN KEY (${field.nameUpperCase}) REFERENCES ${field.foreignKey.entity.nameUpperCase} (${field.foreignKey.field.nameUpperCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
-            	</#if>
-            </#list>
+            <#if config.enableForeignKeys >
+                <#list entity.fields as field>
+                    <#if field.foreignKey??>
+            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (${field.nameLowerCase}) REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
+                    </#if>
+                </#list>
+            </#if>
             <#list entity.constraints as constraint>
-            + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"
+            + ", CONSTRAINT ${constraint.name} ${constraint.definition}"
             </#list>
             + " );";
 

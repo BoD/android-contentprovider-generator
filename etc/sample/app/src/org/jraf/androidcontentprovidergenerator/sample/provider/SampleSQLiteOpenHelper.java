@@ -69,8 +69,8 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonColumns.HAS_BLUE_EYES + " INTEGER NOT NULL DEFAULT '0', "
             + PersonColumns.HEIGHT + " REAL, "
             + PersonColumns.GENDER + " INTEGER NOT NULL "
-            + ", CONSTRAINT FK_MAIN_TEAM_ID FOREIGN KEY (MAIN_TEAM_ID) REFERENCES TEAM (_ID) ON DELETE CASCADE"
-            + ", CONSTRAINT UNIQUE_NAME UNIQUE (FIRST_NAME, LAST_NAME) ON CONFLICT REPLACE"
+            + ", CONSTRAINT fk_main_team_id FOREIGN KEY (main_team_id) REFERENCES team (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT unique_name UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
             + " );";
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
@@ -81,8 +81,8 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
             + TeamColumns.TEAM_NAME + " TEXT NOT NULL "
-            + ", CONSTRAINT FK_COMPANY_ID FOREIGN KEY (COMPANY_ID) REFERENCES COMPANY (_ID) ON DELETE CASCADE"
-            + ", CONSTRAINT UNIQUE_NAME UNIQUE (TEAM_NAME) ON CONFLICT REPLACE"
+            + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT unique_name UNIQUE (team_name) ON CONFLICT REPLACE"
             + " );";
 
     // @formatter:on

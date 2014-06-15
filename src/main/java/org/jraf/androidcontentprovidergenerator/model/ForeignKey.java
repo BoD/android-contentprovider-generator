@@ -24,30 +24,35 @@
  */
 package org.jraf.androidcontentprovidergenerator.model;
 
-public class Constraint {
-    public static class Json {
-        public static final String NAME = "name";
-        public static final String DEFINITION = "definition";
+import org.jraf.androidcontentprovidergenerator.model.Field.OnDeleteAction;
+
+public class ForeignKey {
+    private final String mEntityName;
+    private final OnDeleteAction mOnDeleteAction;
+
+    public ForeignKey(String entityName, OnDeleteAction onDeleteAction) {
+        mEntityName = entityName;
+        mOnDeleteAction = onDeleteAction;
     }
 
-    private final String mName;
-    private final String mDefinition;
-
-    public Constraint(String name, String definition) {
-        mName = name;
-        mDefinition = definition;
+    public String getEntityName() {
+        return mEntityName;
     }
 
-    public String getName() {
-        return mName;
+    public Entity getEntity() {
+        return Entity.getByName(mEntityName);
     }
 
-    public String getDefinition() {
-        return mDefinition;
+    public Field getField() {
+        return getEntity().getFieldByName("_id");
+    }
+
+    public OnDeleteAction getOnDeleteAction() {
+        return mOnDeleteAction;
     }
 
     @Override
     public String toString() {
-        return "Constraint [mName=" + mName + ", mDefinition=" + mDefinition + "]";
+        return "ForeignKey [mEntityName=" + mEntityName + ", mOnDeleteAction=" + mOnDeleteAction + "]";
     }
 }

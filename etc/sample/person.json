@@ -57,7 +57,7 @@
 	"constraints": [
 		{
 			"name": "unique_name",
-			"definition": "unique (first_name, last_name) on conflict replace"
+			"definition": "UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
 		},
 	],
 }

@@ -132,37 +132,6 @@ public class Field {
         }
     }
 
-    public static class ForeignKey {
-        private final String mEntityName;
-        private final OnDeleteAction mOnDeleteAction;
-
-        public ForeignKey(String entityName, OnDeleteAction onDeleteAction) {
-            mEntityName = entityName;
-            mOnDeleteAction = onDeleteAction;
-        }
-
-        public String getEntityName() {
-            return mEntityName;
-        }
-
-        public Entity getEntity() {
-            return Entity.getByName(mEntityName);
-        }
-
-        public Field getField() {
-            return getEntity().getFieldByName("_id");
-        }
-
-        public OnDeleteAction getOnDeleteAction() {
-            return mOnDeleteAction;
-        }
-
-        @Override
-        public String toString() {
-            return "ForeignKey [mEntityName=" + mEntityName + ", mOnDeleteAction=" + mOnDeleteAction + "]";
-        }
-    }
-
     private static HashMap<String, Type> sTypeJsonNames = new HashMap<>();
     private static HashMap<String, OnDeleteAction> sOnDeleteActionJsonNames = new HashMap<>();
 
