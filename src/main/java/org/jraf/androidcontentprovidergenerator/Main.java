@@ -62,7 +62,8 @@ public class Main {
     private static String FILE_CONFIG = "_config.json";
 
     public static class Json {
-        public static final String TOOL_VERSION = "toolVersion";
+        public static final String SYNTAX_VERSION = "syntaxVersion";
+        public static final String SYNTAX_VERSION_LEGACY = "toolVersion";
         public static final String PROJECT_PACKAGE_ID = "projectPackageId";
         public static final String PROVIDER_JAVA_PACKAGE = "providerJavaPackage";
         public static final String PROVIDER_CLASS_NAME = "providerClassName";
@@ -187,16 +188,21 @@ public class Main {
 
     private void validateConfig() {
         // Ensure the input files are compatible with this version of the tool
-        String configVersion;
+        String syntaxVersion;
         try {
-            configVersion = mConfig.getString(Json.TOOL_VERSION);
+            syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION);
         } catch (JSONException e) {
-            throw new IllegalArgumentException("Could not find 'toolVersion' field in _config.json, which is mandatory and must be equals to '"
-                    + Constants.VERSION + "'.");
+            try {
+                // Try the old name of this attribute
+                syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION_LEGACY);
+            } catch (JSONException e2) {
+                throw new IllegalArgumentException("Could not find '" + Json.SYNTAX_VERSION
+                        + "' field in _config.json, which is mandatory and must be equal to '" + Constants.SYNTAX_VERSION + "'.");
+            }
         }
-        if (!Constants.VERSION.startsWith(configVersion)) {
-            throw new IllegalArgumentException("Invalid 'toolVersion' value in _config.json: found '" + configVersion + "' but expected '" + Constants.VERSION
-                    + "'.");
+        if (!syntaxVersion.startsWith(Constants.SYNTAX_VERSION)) {
+            throw new IllegalArgumentException("Invalid '" + Json.SYNTAX_VERSION + "' value in _config.json: found '" + syntaxVersion + "' but expected '"
+                    + Constants.SYNTAX_VERSION + "'.");
         }
 
         // Ensure mandatory fields are present
