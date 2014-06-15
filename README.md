@@ -97,7 +97,9 @@ Here is a `person.json` file as an example:
 }
 ```
 
-Note: `nullable` is optional (true by default).
+Notes:
+- An `_id` primary key field is automatically (implicitly) declared for all entities. It must not be declared in the json file.
+- `nullable` is optional (true by default).
 
 A more comprehensive example is available in the `etc/sample` folder.
 You can also have a look at the corresponding generated code in the `etc/sample/app` folder.
