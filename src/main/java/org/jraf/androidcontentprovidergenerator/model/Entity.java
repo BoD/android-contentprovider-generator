@@ -27,6 +27,7 @@ package org.jraf.androidcontentprovidergenerator.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -59,12 +60,16 @@ public class Entity {
         return WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "");
     }
 
+    public String getPackageName() {
+        return getNameLowerCase().replace("_", "");
+    }
+
     public String getNameLowerCase() {
-        return mName;
+        return mName.toLowerCase(Locale.US);
     }
 
     public String getNameUpperCase() {
-        return mName.toUpperCase();
+        return mName.toUpperCase(Locale.US);
     }
 
     @Override
