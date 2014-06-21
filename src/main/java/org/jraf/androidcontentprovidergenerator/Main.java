@@ -232,7 +232,7 @@ public class Main {
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
-            File outputDir = new File(providerDir, entity.getNameLowerCase());
+            File outputDir = new File(providerDir, entity.getPackageName());
             outputDir.mkdirs();
             File outputFile = new File(outputDir, entity.getNameCamelCase() + "Columns.java");
             Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
@@ -278,7 +278,7 @@ public class Main {
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
-            File entityDir = new File(providerDir, entity.getNameLowerCase());
+            File entityDir = new File(providerDir, entity.getPackageName());
             entityDir.mkdirs();
 
             // Cursor wrapper
