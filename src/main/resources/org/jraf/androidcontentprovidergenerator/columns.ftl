@@ -1,7 +1,7 @@
 <#if header??>
 ${header}
 </#if>
-package ${config.providerJavaPackage}.${entity.nameLowerCase};
+package ${config.providerJavaPackage}.${entity.packageName};
 
 import android.net.Uri;
 import android.provider.BaseColumns;

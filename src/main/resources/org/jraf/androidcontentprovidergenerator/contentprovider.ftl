@@ -22,7 +22,7 @@ import android.util.Log;
 
 import ${config.projectPackageId}.BuildConfig;
 <#list model.entities as entity>
-import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
+import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
 
 public class ${config.providerClassName} extends ContentProvider {
