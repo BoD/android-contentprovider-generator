@@ -36,7 +36,7 @@ These are self-explanatory so here is an example:
 
 ### Entity files
 
-Create one file per entity, naming it `<entity name>.json`.
+Create one file per entity, naming it `<entity_name>.json`.
 Inside each file, declare your fields (a.k.a "columns") with a name and a type.
 You can also optionally declare a default value, an index flag and a nullable flag.
 
@@ -99,6 +99,8 @@ Here is a `person.json` file as an example:
 Note: `nullable` is optional (true by default).
 
 A more comprehensive example is available in the `etc/sample` folder.
+
+By convention, your should name your entities and fields in lower case with words separated by '_', like in the example above.
 
 ### The `header.txt` file (optional)
 

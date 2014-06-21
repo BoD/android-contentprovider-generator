@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
+ *
  * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.lang.WordUtils;
 
@@ -60,7 +61,7 @@ public class Field {
         FLOAT(Json.TYPE_FLOAT, "REAL", Float.class, float.class),
         DOUBLE(Json.TYPE_DOUBLE, "REAL", Double.class, double.class),
         BOOLEAN(Json.TYPE_BOOLEAN, "INTEGER", Boolean.class, boolean.class),
-        DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),        
+        DATE(Json.TYPE_DATE, "INTEGER", Date.class, Date.class),
         BYTE_ARRAY(Json.TYPE_BYTE_ARRAY, "BLOB", byte[].class, byte[].class),
         ENUM(Json.TYPE_ENUM, "INTEGER", null, null),
         // @formatter:on
@@ -112,7 +113,7 @@ public class Field {
     private final List<EnumValue> mEnumValues = new ArrayList<EnumValue>();
 
     public Field(String name, String type, boolean isIndex, boolean isNullable, String defaultValue, String enumName, List<EnumValue> enumValues) {
-        mName = name.toLowerCase();
+        mName = name;
         mType = Type.fromJsonName(type);
         mIsIndex = isIndex;
         mIsNullable = isNullable;
@@ -122,11 +123,11 @@ public class Field {
     }
 
     public String getNameUpperCase() {
-        return mName.toUpperCase();
+        return mName.toUpperCase(Locale.US);
     }
 
     public String getNameLowerCase() {
-        return mName;
+        return mName.toLowerCase(Locale.US);
     }
 
     public String getNameCamelCase() {
