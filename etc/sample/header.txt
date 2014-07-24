@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  * 
- * Copyright 2013 Benoit 'BoD' Lubek (BoD@JRAF.org).  All Rights Reserved.
+ * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

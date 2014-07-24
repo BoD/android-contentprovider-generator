@@ -1,7 +1,28 @@
-<#if header??>
-${header}
-</#if>
-package ${config.providerJavaPackage};
+/*
+ * This source is part of the
+ *      _____  ___   ____
+ *  __ / / _ \/ _ | / __/___  _______ _
+ * / // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+ * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+ *                              /___/
+ * repository.
+ * 
+ * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package org.jraf.androidcontentprovidergenerator.sample.provider;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -20,45 +41,48 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-import ${config.projectPackageId}.BuildConfig;
-<#list model.entities as entity>
-import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
-</#list>
+import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
-public class ${config.providerClassName} extends ContentProvider {
-    private static final String TAG = ${config.providerClassName}.class.getSimpleName();
+public class SampleProvider extends ContentProvider {
+    private static final String TAG = SampleProvider.class.getSimpleName();
 
     private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";
 
-    public static final String AUTHORITY = "${config.authority}";
+    public static final String AUTHORITY = "org.jraf.androidcontentprovidergenerator.sample.provider";
     public static final String CONTENT_URI_BASE = "content://" + AUTHORITY;
 
     public static final String QUERY_NOTIFY = "QUERY_NOTIFY";
     public static final String QUERY_GROUP_BY = "QUERY_GROUP_BY";
 
-	<#assign i=0>
-    <#list model.entities as entity>
-    private static final int URI_TYPE_${entity.nameUpperCase} = ${i};
-    <#assign i = i + 1>
-    private static final int URI_TYPE_${entity.nameUpperCase}_ID = ${i};
-    <#assign i = i + 1>
+    private static final int URI_TYPE_COMPANY = 0;
+    private static final int URI_TYPE_COMPANY_ID = 1;
 
-    </#list>
+    private static final int URI_TYPE_PERSON = 2;
+    private static final int URI_TYPE_PERSON_ID = 3;
+
+    private static final int URI_TYPE_TEAM = 4;
+    private static final int URI_TYPE_TEAM_ID = 5;
+
 
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        <#list model.entities as entity>
-        URI_MATCHER.addURI(AUTHORITY, ${entity.nameCamelCase}Columns.TABLE_NAME, URI_TYPE_${entity.nameUpperCase});
-        URI_MATCHER.addURI(AUTHORITY, ${entity.nameCamelCase}Columns.TABLE_NAME + "/#", URI_TYPE_${entity.nameUpperCase}_ID);
-        </#list>
+        URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME, URI_TYPE_COMPANY);
+        URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME + "/#", URI_TYPE_COMPANY_ID);
+        URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME, URI_TYPE_PERSON);
+        URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_ID);
+        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME, URI_TYPE_TEAM);
+        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME + "/#", URI_TYPE_TEAM_ID);
     }
 
-    protected ${config.sqliteOpenHelperClassName} m${config.sqliteOpenHelperClassName};
+    private SampleSQLiteOpenHelper mSampleSQLiteOpenHelper;
 
     @Override
     public boolean onCreate() {
@@ -79,7 +103,7 @@ public class ${config.providerClassName} extends ContentProvider {
             }
         }
 
-        m${config.sqliteOpenHelperClassName} = ${config.sqliteOpenHelperClassName}.getInstance(getContext());
+        mSampleSQLiteOpenHelper = SampleSQLiteOpenHelper.newInstance(getContext());
         return true;
     }
 
@@ -87,13 +111,21 @@ public class ${config.providerClassName} extends ContentProvider {
     public String getType(Uri uri) {
         int match = URI_MATCHER.match(uri);
         switch (match) {
-            <#list model.entities as entity>
-            case URI_TYPE_${entity.nameUpperCase}:
-                return TYPE_CURSOR_DIR + ${entity.nameCamelCase}Columns.TABLE_NAME;
-            case URI_TYPE_${entity.nameUpperCase}_ID:
-                return TYPE_CURSOR_ITEM + ${entity.nameCamelCase}Columns.TABLE_NAME;
+            case URI_TYPE_COMPANY:
+                return TYPE_CURSOR_DIR + CompanyColumns.TABLE_NAME;
+            case URI_TYPE_COMPANY_ID:
+                return TYPE_CURSOR_ITEM + CompanyColumns.TABLE_NAME;
 
-            </#list>
+            case URI_TYPE_PERSON:
+                return TYPE_CURSOR_DIR + PersonColumns.TABLE_NAME;
+            case URI_TYPE_PERSON_ID:
+                return TYPE_CURSOR_ITEM + PersonColumns.TABLE_NAME;
+
+            case URI_TYPE_TEAM:
+                return TYPE_CURSOR_DIR + TeamColumns.TABLE_NAME;
+            case URI_TYPE_TEAM_ID:
+                return TYPE_CURSOR_ITEM + TeamColumns.TABLE_NAME;
+
         }
         return null;
     }
@@ -102,7 +134,7 @@ public class ${config.providerClassName} extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         if (DEBUG) Log.d(TAG, "insert uri=" + uri + " values=" + values);
         String table = uri.getLastPathSegment();
-        long rowId = m${config.sqliteOpenHelperClassName}.getWritableDatabase().insertOrThrow(table, null, values);
+        long rowId = mSampleSQLiteOpenHelper.getWritableDatabase().insertOrThrow(table, null, values);
         if (rowId == -1) return null;
         String notify;
         if (rowId != -1 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
@@ -115,7 +147,7 @@ public class ${config.providerClassName} extends ContentProvider {
     public int bulkInsert(Uri uri, ContentValues[] values) {
         if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         String table = uri.getLastPathSegment();
-        SQLiteDatabase db = m${config.sqliteOpenHelperClassName}.getWritableDatabase();
+        SQLiteDatabase db = mSampleSQLiteOpenHelper.getWritableDatabase();
         int res = 0;
         db.beginTransaction();
         try {
@@ -142,7 +174,7 @@ public class ${config.providerClassName} extends ContentProvider {
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "update uri=" + uri + " values=" + values + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
-        int res = m${config.sqliteOpenHelperClassName}.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
+        int res = mSampleSQLiteOpenHelper.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -154,7 +186,7 @@ public class ${config.providerClassName} extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         if (DEBUG) Log.d(TAG, "delete uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs));
         QueryParams queryParams = getQueryParams(uri, selection, null);
-        int res = m${config.sqliteOpenHelperClassName}.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
+        int res = mSampleSQLiteOpenHelper.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -169,7 +201,7 @@ public class ${config.providerClassName} extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        Cursor res = m${config.sqliteOpenHelperClassName}.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
+        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
                 null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
@@ -181,7 +213,7 @@ public class ${config.providerClassName} extends ContentProvider {
         for (ContentProviderOperation operation : operations) {
             urisToNotify.add(operation.getUri());
         }
-        SQLiteDatabase db = m${config.sqliteOpenHelperClassName}.getWritableDatabase();
+        SQLiteDatabase db = mSampleSQLiteOpenHelper.getWritableDatabase();
         db.beginTransaction();
         try {
             int numOperations = operations.size();
@@ -216,23 +248,44 @@ public class ${config.providerClassName} extends ContentProvider {
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
         switch (matchedId) {
-            <#list model.entities as entity>
-            case URI_TYPE_${entity.nameUpperCase}:
-            case URI_TYPE_${entity.nameUpperCase}_ID:
-                res.table = ${entity.nameCamelCase}Columns.TABLE_NAME;
-                res.tablesWithJoins = ${entity.allJoinedTableNames}
-                res.orderBy = ${entity.nameCamelCase}Columns.DEFAULT_ORDER;
+            case URI_TYPE_COMPANY:
+            case URI_TYPE_COMPANY_ID:
+                res.table = CompanyColumns.TABLE_NAME;
+                res.tablesWithJoins = CompanyColumns.TABLE_NAME;
+                res.orderBy = CompanyColumns.DEFAULT_ORDER;
                 break;
 
-            </#list>
+            case URI_TYPE_PERSON:
+            case URI_TYPE_PERSON_ID:
+                res.table = PersonColumns.TABLE_NAME;
+                res.tablesWithJoins = PersonColumns.TABLE_NAME;
+                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
+                }
+                if (CompanyColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                }
+                res.orderBy = PersonColumns.DEFAULT_ORDER;
+                break;
+
+            case URI_TYPE_TEAM:
+            case URI_TYPE_TEAM_ID:
+                res.table = TeamColumns.TABLE_NAME;
+                res.tablesWithJoins = TeamColumns.TABLE_NAME;
+                if (CompanyColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                }
+                res.orderBy = TeamColumns.DEFAULT_ORDER;
+                break;
+
             default:
                 throw new IllegalArgumentException("The uri '" + uri + "' is not supported by this ContentProvider");
         }
 
         switch (matchedId) {
-            <#list model.entities as entity>
-            case URI_TYPE_${entity.nameUpperCase}_ID:
-            </#list>
+            case URI_TYPE_COMPANY_ID:
+            case URI_TYPE_PERSON_ID:
+            case URI_TYPE_TEAM_ID:
                 id = uri.getLastPathSegment();
         }
         if (id != null) {

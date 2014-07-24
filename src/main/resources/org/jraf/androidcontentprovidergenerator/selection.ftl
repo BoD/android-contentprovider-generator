@@ -56,6 +56,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
 
     <#list entity.fields as field>
+    <#if !field.isId>
     <#switch field.type.name()>
     <#case "BOOLEAN">
 
@@ -195,5 +196,6 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
     <#break>
     </#switch>
+    </#if>
     </#list>
 }

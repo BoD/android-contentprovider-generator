@@ -1,13 +1,15 @@
 {
 	"fields": [
 		{
-			"name": "name",
-			"type": "String"
+			"name": "company_name",
+			"type": "String",
+			"nullable": false,
+			"index": true,
 		},
 		{
 			"name": "address",
 			"type": "String",
-			"index": true
-		}
+			"nullable": true,
+		},
 	]
 }

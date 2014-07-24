@@ -21,7 +21,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
 
     /**
      * Update row(s) using the values stored by this object and the given selection.
-     * 
+     *
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
@@ -29,39 +29,41 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     <#list entity.fields as field>
+        <#if !field.isId>
 
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(${field.javaTypeSimpleName} value) {
-        <#if !field.isNullable && !field.type.hasNotNullableJavaType()>
+            <#if !field.isNullable && !field.type.hasNotNullableJavaType()>
         if (value == null) throw new IllegalArgumentException("value for ${field.nameCamelCaseLowerCase} must not be null");
-        </#if>        
-        <#switch field.type.name()>
-        <#case "DATE">
+            </#if>
+            <#switch field.type.name()>
+            <#case "DATE">
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value == null ? null : </#if>value.getTime());
-        <#break>
-        <#case "ENUM">
+            <#break>
+            <#case "ENUM">
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value == null ? null : </#if>value.ordinal());
-        <#break>
-        <#default>
+            <#break>
+            <#default>
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
-        </#switch>
+            </#switch>
         return this;
     }
 
-    <#if field.isNullable>
+            <#if field.isNullable>
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}Null() {
         mContentValues.putNull(${entity.nameCamelCase}Columns.${field.nameUpperCase});
         return this;
     }
-    </#if>
+            </#if>
 
-    <#switch field.type.name()>
-    <#case "DATE">
+            <#switch field.type.name()>
+            <#case "DATE">
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(<#if field.isNullable>Long<#else>long</#if> value) {
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    <#break>
-    </#switch>
+            <#break>
+            </#switch>
+        </#if>
     </#list>
 }

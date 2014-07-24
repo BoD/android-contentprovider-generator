@@ -31,24 +31,34 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     <#list model.entities as entity>
     private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
-            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             <#list entity.fields as field>
-                <#if field.isNullable>
-                    <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
-                    </#if>
+                <#if field.isId>
+            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 <#else>
-                    <#if field.hasDefaultValue>
+                    <#if field.isNullable>
+                        <#if field.hasDefaultValue>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
+                        <#else>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
+                        </#if>
+                <#else>
+                        <#if field.hasDefaultValue>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
+                        <#else>
             + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
+                        </#if>
                     </#if>
                 </#if>
             </#list>
+            <#if config.enableForeignKeys >
+                <#list entity.fields as field>
+                    <#if field.foreignKey??>
+            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (${field.nameLowerCase}) REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
+                    </#if>
+                </#list>
+            </#if>
             <#list entity.constraints as constraint>
-            + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"
+            + ", CONSTRAINT ${constraint.name} ${constraint.definition}"
             </#list>
             + " );";
 
@@ -56,6 +66,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     <#if field.isIndex>
     private static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
             + " ON " + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( " + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " );";
+
     </#if>
     </#list>
     </#list>
@@ -131,10 +142,28 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
         if (!db.isReadOnly()) {
-            db.execSQL("PRAGMA foreign_keys=ON;");
+            setForeignKeyConstraintsEnabled(db);
         }
         mOpenHelperCallbacks.onOpen(mContext, db);
     }
+
+    private void setForeignKeyConstraintsEnabled(SQLiteDatabase db) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            setForeignKeyConstraintsEnabledPreJellyBean(db);
+        } else {
+            setForeignKeyConstraintsEnabledPostJellyBean(db);
+        }
+    }
+
+    private void setForeignKeyConstraintsEnabledPreJellyBean(SQLiteDatabase db) {
+        db.execSQL("PRAGMA foreign_keys=ON;");
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setForeignKeyConstraintsEnabledPostJellyBean(SQLiteDatabase db) {
+        db.setForeignKeyConstraintsEnabled(true);
+    }
+
     </#if>
 
     @Override

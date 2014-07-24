@@ -1,0 +1,25 @@
+{
+	"fields": [
+		{
+			"name": "company_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "company",
+				"onDelete": "CASCADE",
+			},
+		},
+		{
+			"name": "team_name",
+			"type": "String",
+			"nullable": false,
+		},
+	],
+
+	"constraints": [
+		{
+			"name": "unique_name",
+			"definition": "UNIQUE (team_name) ON CONFLICT REPLACE"
+		},
+	],
+}

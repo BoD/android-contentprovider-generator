@@ -22,11 +22,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator;
+package org.jraf.androidcontentprovidergenerator.model;
 
-public class Constants {
-    // TODO: For the next version, use a single digit, instead of a version number with several parts
-    // TODO: which doesn't make sense for the version number of a syntax.
-    public static final String SYNTAX_VERSION = "1.7";
-    public static final String TAG = "";
+import org.jraf.androidcontentprovidergenerator.model.Field.OnDeleteAction;
+
+public class ForeignKey {
+    private final String mEntityName;
+    private final OnDeleteAction mOnDeleteAction;
+
+    public ForeignKey(String entityName, OnDeleteAction onDeleteAction) {
+        mEntityName = entityName;
+        mOnDeleteAction = onDeleteAction;
+    }
+
+    public String getEntityName() {
+        return mEntityName;
+    }
+
+    public Entity getEntity() {
+        return Entity.getByName(mEntityName);
+    }
+
+    public Field getField() {
+        return getEntity().getFieldByName("_id");
+    }
+
+    public OnDeleteAction getOnDeleteAction() {
+        return mOnDeleteAction;
+    }
+
+    @Override
+    public String toString() {
+        return "ForeignKey [mEntityName=" + mEntityName + ", mOnDeleteAction=" + mOnDeleteAction + "]";
+    }
 }
