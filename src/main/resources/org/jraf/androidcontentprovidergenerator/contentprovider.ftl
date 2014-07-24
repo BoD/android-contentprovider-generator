@@ -77,7 +77,7 @@ public class ${config.providerClassName} extends ContentProvider {
             }
         }
         
-        m${config.sqliteOpenHelperClassName} = ${config.sqliteOpenHelperClassName}.newInstance(getContext());
+        m${config.sqliteOpenHelperClassName} = ${config.sqliteOpenHelperClassName}.getInstance(getContext());
         return true;
     }
 

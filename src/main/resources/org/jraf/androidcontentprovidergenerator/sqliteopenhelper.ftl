@@ -23,6 +23,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
     private static final int DATABASE_VERSION = ${config.databaseVersion};
+    private static ${config.sqliteOpenHelperClassName} sInstance;
     private final Context mContext;
     private final ${config.sqliteOpenHelperCallbacksClassName} mOpenHelperCallbacks;
 
@@ -60,7 +61,17 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     </#list>
     // @formatter:on
 
-    public static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
+    public static ${config.sqliteOpenHelperClassName} getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = newInstance(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
