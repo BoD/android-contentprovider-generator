@@ -210,6 +210,21 @@ You need maven to build this tool.
 This will produce `android-contentprovider-generator-1.8.0-bundle.jar` in the `target` folder.
 
 
+Similar tools
+-------------
+Here is a list of other tools that try to solve the same problem.
+
+I did not have the chance to try them out.
+
+- https://github.com/SimonVT/schematic
+- https://github.com/TimotheeJeannin/ProviGen
+- http://triple-t.github.io/simpleprovider/
+- https://github.com/foxykeep/ContentProviderCodeGenerator
+- https://code.google.com/p/mdsd-android-content-provider/
+- https://github.com/hamsterksu/Android-AnnotatedSQL
+- http://robotoworks.com/mechanoid/doc/db/api.html
+
+
 Licence
 -------
 
