@@ -28,10 +28,12 @@ import org.jraf.androidcontentprovidergenerator.model.Field.OnDeleteAction;
 
 public class ForeignKey {
     private final String mEntityName;
+    private final String mEntityField;
     private final OnDeleteAction mOnDeleteAction;
 
-    public ForeignKey(String entityName, OnDeleteAction onDeleteAction) {
+    public ForeignKey(String entityName, String entityField, OnDeleteAction onDeleteAction) {
         mEntityName = entityName;
+        mEntityField = entityField;
         mOnDeleteAction = onDeleteAction;
     }
 
@@ -44,7 +46,7 @@ public class ForeignKey {
     }
 
     public Field getField() {
-        return getEntity().getFieldByName("_id");
+        return getEntity().getFieldByName(mEntityField);
     }
 
     public OnDeleteAction getOnDeleteAction() {

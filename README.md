@@ -175,6 +175,7 @@ Here is an example of the syntax:
 			"nullable": false,
 			"foreignKey": {
 				"table": "team",
+				"field": "_id",
 				"onDelete": "CASCADE",
 			},
 		},

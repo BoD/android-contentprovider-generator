@@ -44,6 +44,7 @@ public class Field {
         public static final String ENUM_VALUES = "enumValues";
         public static final String FOREIGN_KEY = "foreignKey";
         public static final String FOREIGN_KEY_TABLE = "table";
+        public static final String FOREIGN_KEY_FIELD = "field";
         public static final String FOREIGN_KEY_ON_DELETE_ACTION = "onDelete";
 
         private static final String TYPE_STRING = "String";
@@ -130,6 +131,11 @@ public class Field {
             OnDeleteAction res = sOnDeleteActionJsonNames.get(jsonName);
             if (res == null) throw new IllegalArgumentException("The onDelete value '" + jsonName + "' is unknown");
             return res;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString().replace("_", " ");
         }
     }
 
