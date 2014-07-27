@@ -137,16 +137,18 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 
-    <#if config.enableForeignKeys >
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
+        <#if config.enableForeignKeys >
         if (!db.isReadOnly()) {
             setForeignKeyConstraintsEnabled(db);
         }
+        </#if>
         mOpenHelperCallbacks.onOpen(mContext, db);
     }
 
+    <#if config.enableForeignKeys >
     private void setForeignKeyConstraintsEnabled(SQLiteDatabase db) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             setForeignKeyConstraintsEnabledPreJellyBean(db);
@@ -165,7 +167,6 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     }
 
     </#if>
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         mOpenHelperCallbacks.onUpgrade(mContext, db, oldVersion, newVersion);
