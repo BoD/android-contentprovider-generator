@@ -69,16 +69,19 @@ public class Entity {
         return Collections.unmodifiableList(mFields);
     }
 
-    public List<Field> getFieldsIncludingJoins() {
+    public List<Field> getFieldsIncludingJoins(boolean isForeign) {
         List<Field> res = new ArrayList<>();
-        res.addAll(mFields);
+        for (Field field : mFields) {
+			field.setForeign(isForeign);
+			res.add(field);
+		}
 
         for (Field field : getFields()) {
             ForeignKey foreignKey = field.getForeignKey();
             if (foreignKey == null) continue;
 
             // Recurse
-            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins());
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true));
         }
 
         return res;

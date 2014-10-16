@@ -146,6 +146,7 @@ public class Field {
     private final String mEnumName;
     private final List<EnumValue> mEnumValues = new ArrayList<>();
     private final ForeignKey mForeignKey;
+	private boolean foreign;
 
     public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
             List<EnumValue> enumValues, ForeignKey foreignKey) {
@@ -241,4 +242,19 @@ public class Field {
         return "Field [mName=" + mName + ", mType=" + mType + ", mIsId=" + mIsId + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable
                 + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues + ", mForeignKey=" + mForeignKey + "]";
     }
+
+	/**
+	 * @param isForeign
+	 */
+	public void setForeign(boolean isForeign) {
+		this.foreign = isForeign;
+		
+	}
+	
+	/**
+	 * @return the foreign
+	 */
+	public boolean getIsForeign() {
+		return foreign;
+	}
 }
