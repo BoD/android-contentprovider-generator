@@ -71,7 +71,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonColumns.HEIGHT + " REAL, "
             + PersonColumns.GENDER + " INTEGER NOT NULL "
             + ", CONSTRAINT fk_main_team_id FOREIGN KEY (main_team_id) REFERENCES team (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name unique (first_name, last_name) on conflict replace"
+            + ", CONSTRAINT unique_name UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
             + " );";
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
@@ -83,7 +83,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
             + TeamColumns.TEAM_NAME + " TEXT NOT NULL "
             + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name unique (team_name) on conflict replace"
+            + ", CONSTRAINT unique_name UNIQUE (team_name) ON CONFLICT REPLACE"
             + " );";
 
     // @formatter:on

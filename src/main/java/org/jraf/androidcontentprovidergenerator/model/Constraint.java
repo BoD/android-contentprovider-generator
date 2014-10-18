@@ -35,7 +35,7 @@ public class Constraint {
 
     public Constraint(String name, String definition) {
         mName = name;
-        mDefinition = definition.toLowerCase();
+        mDefinition = definition;
     }
 
     public String getName() {
