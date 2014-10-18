@@ -51,7 +51,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
 
 
     public ${entity.nameCamelCase}Selection id(long... value) {
-        addEquals(${entity.nameCamelCase}Columns._ID, toObjectArray(value));
+        addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
 

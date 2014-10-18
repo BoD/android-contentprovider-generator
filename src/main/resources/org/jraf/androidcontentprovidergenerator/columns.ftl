@@ -3,9 +3,6 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -20,7 +17,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
 
     <#list entity.fields as field>
     <#if field.isId>
-    public static final String ${field.nameUpperCase} = BaseColumns._ID;
+    public static final String ${field.nameUpperCase} = new String(BaseColumns._ID);
     <#else>
     public static final String ${field.nameUpperCase} = "${field.nameLowerCase}";
     </#if>
@@ -28,29 +25,12 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
-    public static final String[] FULL_PROJECTION = new String[] {
-            <#list entity.fields as field>
-                <#if field.isId>
-            TABLE_NAME + "." + _ID + " AS " + BaseColumns._ID<#if field_has_next>,</#if>
-                <#else>
-            TABLE_NAME + "." + ${field.nameUpperCase}<#if field_has_next>,</#if>
-                </#if>
-            </#list>
-    };
-    // @formatter:on
-
-    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
-    static {
-        <#list entity.fields as field>
-        ALL_COLUMNS.add(${field.nameUpperCase});
-        </#list>
-    }
-
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (ALL_COLUMNS.contains(c)) return true;
+        <#list entity.fields as field>
+	        if (c == ${field.nameUpperCase}) return true;
+        </#list>
         }
         return false;
     }

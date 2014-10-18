@@ -72,7 +72,7 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
 
     public CompanySelection id(long... value) {
-        addEquals(CompanyColumns._ID, toObjectArray(value));
+        addEquals("company." + CompanyColumns._ID, toObjectArray(value));
         return this;
     }
 

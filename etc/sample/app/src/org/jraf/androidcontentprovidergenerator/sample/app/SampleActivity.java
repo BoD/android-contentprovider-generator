@@ -6,6 +6,7 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,10 +76,28 @@ public class SampleActivity extends Activity {
     private void queryPeople() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John").and().hasBlueEyes(true);
-        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE };
+        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
+        }
+        c.close();
+
+        // Query one person
+        personSelection = new PersonSelection();
+        personSelection.id(2);
+        c = personSelection.query(getContentResolver(), projection);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
+        }
+        c.close();
+
+        // Another way to query one person
+        Uri uri = ContentUris.withAppendedId(PersonColumns.CONTENT_URI, 2l);
+        Cursor c2 = getContentResolver().query(uri, projection, null, null, null);
+        c = new PersonCursor(c2);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }
         c.close();
     }
@@ -86,7 +105,7 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeam() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
-        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.TEAM_NAME };
+        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.TEAM_NAME };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName());

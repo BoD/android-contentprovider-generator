@@ -72,7 +72,7 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
 
     public PersonSelection id(long... value) {
-        addEquals(PersonColumns._ID, toObjectArray(value));
+        addEquals("person." + PersonColumns._ID, toObjectArray(value));
         return this;
     }
 

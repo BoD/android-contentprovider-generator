@@ -24,9 +24,6 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.company;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -39,31 +36,18 @@ public class CompanyColumns implements BaseColumns {
     public static final String TABLE_NAME = "company";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
-    public static final String _ID = BaseColumns._ID;
+    public static final String _ID = new String(BaseColumns._ID);
     public static final String COMPANY_NAME = "company_name";
     public static final String ADDRESS = "address";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
-    public static final String[] FULL_PROJECTION = new String[] {
-            TABLE_NAME + "." + _ID + " AS " + BaseColumns._ID,
-            TABLE_NAME + "." + COMPANY_NAME,
-            TABLE_NAME + "." + ADDRESS
-    };
-    // @formatter:on
-
-    private static final Set<String> ALL_COLUMNS = new HashSet<String>();
-    static {
-        ALL_COLUMNS.add(_ID);
-        ALL_COLUMNS.add(COMPANY_NAME);
-        ALL_COLUMNS.add(ADDRESS);
-    }
-
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (ALL_COLUMNS.contains(c)) return true;
+	        if (c == _ID) return true;
+	        if (c == COMPANY_NAME) return true;
+	        if (c == ADDRESS) return true;
         }
         return false;
     }

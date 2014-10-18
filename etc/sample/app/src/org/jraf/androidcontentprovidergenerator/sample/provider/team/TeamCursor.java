@@ -29,7 +29,7 @@ import java.util.Date;
 import android.database.Cursor;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
-import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 
 /**
  * Cursor wrapper for the {@code team} table.

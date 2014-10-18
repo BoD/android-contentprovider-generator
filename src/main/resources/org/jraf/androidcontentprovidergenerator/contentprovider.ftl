@@ -169,10 +169,21 @@ public class ${config.providerClassName} extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
+        ensureIdIsFullyQualified(projection, queryParams.table);
         Cursor res = m${config.sqliteOpenHelperClassName}.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
                 null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
+    }
+
+    private void ensureIdIsFullyQualified(String[] projection, String tableName) {
+        if (projection != null) {
+            for (int i = 0; i < projection.length; ++i) {
+                if (projection[i].equals(BaseColumns._ID)) {
+                    projection[i] = tableName + "." + BaseColumns._ID + " AS " + BaseColumns._ID;
+                }
+            }
+        }
     }
 
     @Override
@@ -237,9 +248,9 @@ public class ${config.providerClassName} extends ContentProvider {
         }
         if (id != null) {
             if (selection != null) {
-                res.selection = BaseColumns._ID + "=" + id + " and (" + selection + ")";
+                res.selection = res.table + "." + BaseColumns._ID + "=" + id + " and (" + selection + ")";
             } else {
-                res.selection = BaseColumns._ID + "=" + id;
+                res.selection = res.table + "." + BaseColumns._ID + "=" + id;
             }
         } else {
             res.selection = selection;

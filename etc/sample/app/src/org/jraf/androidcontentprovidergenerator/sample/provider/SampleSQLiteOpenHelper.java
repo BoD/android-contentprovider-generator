@@ -44,6 +44,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_FILE_NAME = "sample.db";
     private static final int DATABASE_VERSION = 1;
+    private static SampleSQLiteOpenHelper sInstance;
     private final Context mContext;
     private final SampleSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
@@ -70,7 +71,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonColumns.HEIGHT + " REAL, "
             + PersonColumns.GENDER + " INTEGER NOT NULL "
             + ", CONSTRAINT fk_main_team_id FOREIGN KEY (main_team_id) REFERENCES team (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
+            + ", CONSTRAINT unique_name unique (first_name, last_name) on conflict replace"
             + " );";
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
@@ -82,12 +83,22 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
             + TeamColumns.TEAM_NAME + " TEXT NOT NULL "
             + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name UNIQUE (team_name) ON CONFLICT REPLACE"
+            + ", CONSTRAINT unique_name unique (team_name) on conflict replace"
             + " );";
 
     // @formatter:on
 
-    public static SampleSQLiteOpenHelper newInstance(Context context) {
+    public static SampleSQLiteOpenHelper getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = newInstance(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private static SampleSQLiteOpenHelper newInstance(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
@@ -164,7 +175,6 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private void setForeignKeyConstraintsEnabledPostJellyBean(SQLiteDatabase db) {
         db.setForeignKeyConstraintsEnabled(true);
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

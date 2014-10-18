@@ -72,7 +72,7 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
 
     public TeamSelection id(long... value) {
-        addEquals(TeamColumns._ID, toObjectArray(value));
+        addEquals("team." + TeamColumns._ID, toObjectArray(value));
         return this;
     }
 
