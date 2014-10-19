@@ -116,7 +116,8 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeamAndCompany() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
-        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME, CompanyColumns.NAME };
+        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME, CompanyColumns.NAME,
+                TeamColumns._ID, CompanyColumns._ID };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName() + " - company: " + c.getCompanyName());

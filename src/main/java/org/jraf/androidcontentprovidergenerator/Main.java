@@ -275,11 +275,19 @@ public class Main {
         Map<String, Object> root = new HashMap<>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
 
         // AbstractCursor
         Template template = getFreeMarkerConfig().getTemplate("abstractcursor.ftl");
         File outputFile = new File(baseClassesDir, "AbstractCursor.java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // AliasCursor
+        template = getFreeMarkerConfig().getTemplate("aliascursor.ftl");
+        outputFile = new File(baseClassesDir, "AliasCursor.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
 

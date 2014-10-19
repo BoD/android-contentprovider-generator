@@ -48,6 +48,9 @@ public class Entity {
     private static final String ON = "\" ON \"";
     private static final String EQUALS = "\"=\"";
     private static final String DOT = "\".\"";
+    private static final String QUALIFY_AMBIGUOUS = "res.projection = qualifyAmbiguousColumns(res.projection, ";
+    private static final String ALL_COLUMNS = "Columns.ALL_COLUMNS";
+    private static final String COMMA = ", ";
 
 
     private static final Map<String, Entity> ALL_ENTITIES = new HashMap<>();
@@ -178,6 +181,15 @@ public class Entity {
 
             res.append(getQualifiedColumnName(foreignKey.getEntity(), foreignKey.getField()));
             res.append(";\n");
+
+            res.append(INDENT2);
+            res.append(QUALIFY_AMBIGUOUS);
+            res.append(entity.getNameCamelCase());
+            res.append(ALL_COLUMNS);
+            res.append(COMMA);
+            res.append(foreignKey.getEntity().getNameCamelCase());
+            res.append(ALL_COLUMNS);
+            res.append(");\n");
             res.append(INDENT1);
             res.append("}");
 

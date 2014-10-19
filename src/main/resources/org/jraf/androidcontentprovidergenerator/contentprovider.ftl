@@ -21,6 +21,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ${config.projectPackageId}.BuildConfig;
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.AliasCursor;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
@@ -169,21 +170,10 @@ public class ${config.providerClassName} extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        ensureIdIsFullyQualified(projection, queryParams.table);
-        Cursor res = m${config.sqliteOpenHelperClassName}.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
-                null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        Cursor res = m${config.sqliteOpenHelperClassName}.getReadableDatabase().query(queryParams.tablesWithJoins, queryParams.projection, queryParams.selection,
+                selectionArgs, groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
-        return res;
-    }
-
-    private void ensureIdIsFullyQualified(String[] projection, String tableName) {
-        if (projection != null) {
-            for (int i = 0; i < projection.length; ++i) {
-                if (projection[i].equals(BaseColumns._ID)) {
-                    projection[i] = tableName + "." + BaseColumns._ID + " AS " + BaseColumns._ID;
-                }
-            }
-        }
+        return new AliasCursor(res);
     }
 
     @Override
@@ -220,12 +210,14 @@ public class ${config.providerClassName} extends ContentProvider {
         public String tablesWithJoins;
         public String selection;
         public String orderBy;
+        public String[] projection;
     }
 
     private QueryParams getQueryParams(Uri uri, String selection, String[] projection) {
         QueryParams res = new QueryParams();
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
+        res.projection = projection;
         switch (matchedId) {
             <#list model.entities as entity>
             case URI_TYPE_${entity.nameUpperCase}:
@@ -255,7 +247,48 @@ public class ${config.providerClassName} extends ContentProvider {
         } else {
             res.selection = selection;
         }
+
         return res;
+    }
+
+    private static String[] qualifyAmbiguousColumns(String[] projection, String[] columnsA, String[] columnsB) {
+        if (projection == null) return null;
+        String[] res = new String[projection.length];
+        for (int p = 0; p < projection.length; p++) {
+            String colP = projection[p];
+            if (isInBoth(colP, columnsA, columnsB)) {
+                // Ambiguous column names
+                res[p] = getQualifiedColumnName(colP);
+            } else {
+                res[p] = colP;
+            }
+        }
+        return res;
+    }
+
+    private static boolean isInBoth(String colP, String[] columnsA, String[] columnsB) {
+        for (String colA : columnsA) {
+            if (colP.equals(colA)) {
+                for (String colB : columnsB) {
+                    if (colP.equals(colB)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private static String getQualifiedColumnName(String columnName) {
+        String res = null;
+        <#list model.entities as entity>
+        //  ${entity.nameCamelCase}
+        res =  ${entity.nameCamelCase}Columns.getQualifiedColumnName(columnName);
+        if (res != null) return res;
+
+        </#list>
+        return null;
     }
 
     public static Uri notify(Uri uri, boolean notify) {
