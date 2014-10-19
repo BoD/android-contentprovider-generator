@@ -37,7 +37,7 @@ public class CompanyColumns implements BaseColumns {
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     public static final String _ID = new String(BaseColumns._ID);
-    public static final String COMPANY_NAME = "company_name";
+    public static final String NAME = "name";
     public static final String ADDRESS = "address";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
@@ -46,7 +46,7 @@ public class CompanyColumns implements BaseColumns {
         if (projection == null) return true;
         for (String c : projection) {
 	        if (c == _ID) return true;
-	        if (c == COMPANY_NAME) return true;
+	        if (c == NAME) return true;
 	        if (c == ADDRESS) return true;
         }
         return false;

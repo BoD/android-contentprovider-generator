@@ -50,9 +50,9 @@ public class CompanyContentValues extends AbstractContentValues {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
-    public CompanyContentValues putCompanyName(String value) {
-        if (value == null) throw new IllegalArgumentException("value for companyName must not be null");
-        mContentValues.put(CompanyColumns.COMPANY_NAME, value);
+    public CompanyContentValues putName(String value) {
+        if (value == null) throw new IllegalArgumentException("value for name must not be null");
+        mContentValues.put(CompanyColumns.NAME, value);
         return this;
     }
 

@@ -77,11 +77,13 @@ public class Field {
         // @formatter:on
         ;
 
+        private String mJsonName;
         private String mSqlType;
         private Class<?> mNullableJavaType;
         private Class<?> mNotNullableJavaType;
 
         private Type(String jsonName, String sqlType, Class<?> nullableJavaType, Class<?> notNullableJavaType) {
+            mJsonName = jsonName;
             mSqlType = sqlType;
             mNullableJavaType = nullableJavaType;
             mNotNullableJavaType = notNullableJavaType;
@@ -146,6 +148,7 @@ public class Field {
     private final String mEnumName;
     private final List<EnumValue> mEnumValues = new ArrayList<>();
     private final ForeignKey mForeignKey;
+    private boolean mIsForeign;
 
     public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
             List<EnumValue> enumValues, ForeignKey foreignKey) {
@@ -159,6 +162,12 @@ public class Field {
         mEnumName = enumName;
         if (enumValues != null) mEnumValues.addAll(enumValues);
         mForeignKey = foreignKey;
+    }
+
+    public Field asForeignField() {
+        Field res = new Field(mEntity, mName, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
+        res.mIsForeign = true;
+        return res;
     }
 
     public Entity getEntity() {
@@ -235,6 +244,9 @@ public class Field {
         return mForeignKey;
     }
 
+    public boolean getIsForeign() {
+        return mIsForeign;
+    }
 
     @Override
     public String toString() {

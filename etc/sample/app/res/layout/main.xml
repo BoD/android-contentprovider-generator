@@ -29,9 +29,9 @@
         android:text="Query people with team" />
 
     <Button
-        android:id="@+id/btnQueryPeopleWithCompany"
+        android:id="@+id/btnQueryPeopleWithTeamAndCompany"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Query people with company" />
+        android:text="Query people with team and company" />
 
 </LinearLayout>

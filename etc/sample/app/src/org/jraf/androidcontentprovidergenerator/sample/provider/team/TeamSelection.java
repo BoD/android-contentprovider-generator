@@ -107,18 +107,18 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
-    public TeamSelection teamName(String... value) {
-        addEquals(TeamColumns.TEAM_NAME, value);
+    public TeamSelection name(String... value) {
+        addEquals(TeamColumns.NAME, value);
         return this;
     }
 
-    public TeamSelection teamNameNot(String... value) {
-        addNotEquals(TeamColumns.TEAM_NAME, value);
+    public TeamSelection nameNot(String... value) {
+        addNotEquals(TeamColumns.NAME, value);
         return this;
     }
 
-    public TeamSelection teamNameLike(String... value) {
-        addLike(TeamColumns.TEAM_NAME, value);
+    public TeamSelection nameLike(String... value) {
+        addLike(TeamColumns.NAME, value);
         return this;
     }
 }

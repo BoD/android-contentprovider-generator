@@ -1,7 +1,7 @@
 {
 	"fields": [
 		{
-			"name": "company_name",
+			"name": "name",
 			"type": "String",
 			"nullable": false,
 			"index": true,

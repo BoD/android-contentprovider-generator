@@ -57,9 +57,9 @@ public class TeamContentValues extends AbstractContentValues {
 
 
 
-    public TeamContentValues putTeamName(String value) {
-        if (value == null) throw new IllegalArgumentException("value for teamName must not be null");
-        mContentValues.put(TeamColumns.TEAM_NAME, value);
+    public TeamContentValues putName(String value) {
+        if (value == null) throw new IllegalArgumentException("value for name must not be null");
+        mContentValues.put(TeamColumns.NAME, value);
         return this;
     }
 

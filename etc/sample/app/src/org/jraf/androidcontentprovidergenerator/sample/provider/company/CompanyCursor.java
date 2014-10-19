@@ -39,11 +39,11 @@ public class CompanyCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code company_name} value.
+     * Get the {@code name} value.
      * Cannot be {@code null}.
      */
-    public String getCompanyName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
+    public String getName() {
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
         return getString(index);
     }
 

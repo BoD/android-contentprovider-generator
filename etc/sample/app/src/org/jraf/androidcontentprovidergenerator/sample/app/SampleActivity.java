@@ -42,7 +42,7 @@ public class SampleActivity extends Activity {
         findViewById(R.id.btnClear).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeople).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeopleWithTeam).setOnClickListener(mOnClickListener);
-        findViewById(R.id.btnQueryPeopleWithCompany).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btnQueryPeopleWithTeamAndCompany).setOnClickListener(mOnClickListener);
 
     }
 
@@ -66,8 +66,8 @@ public class SampleActivity extends Activity {
                     queryPeopleWithTeam();
                     break;
 
-                case R.id.btnQueryPeopleWithCompany:
-                    queryPeopleWithCompany();
+                case R.id.btnQueryPeopleWithTeamAndCompany:
+                    queryPeopleWithTeamAndCompany();
                     break;
             }
         }
@@ -105,7 +105,7 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeam() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
-        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.TEAM_NAME };
+        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName());
@@ -113,13 +113,13 @@ public class SampleActivity extends Activity {
         c.close();
     }
 
-    private void queryPeopleWithCompany() {
+    private void queryPeopleWithTeamAndCompany() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
-        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, CompanyColumns.COMPANY_NAME };
+        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME, CompanyColumns.NAME };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
-            Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - company: " + c.getCompanyName());
+            Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName() + " - company: " + c.getCompanyName());
         }
         c.close();
     }
@@ -161,7 +161,7 @@ public class SampleActivity extends Activity {
 
     private long insertCompany(String name, String address) {
         CompanyContentValues values = new CompanyContentValues();
-        values.putCompanyName(name);
+        values.putName(name);
         values.putAddress(address);
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
@@ -170,7 +170,7 @@ public class SampleActivity extends Activity {
     private long insertTeam(long companyId, String name) {
         TeamContentValues values = new TeamContentValues();
         values.putCompanyId(companyId);
-        values.putTeamName(name);
+        values.putName(name);
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }

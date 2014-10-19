@@ -52,12 +52,12 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
             + CompanyColumns.TABLE_NAME + " ( "
             + CompanyColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + CompanyColumns.COMPANY_NAME + " TEXT NOT NULL, "
+            + CompanyColumns.NAME + " TEXT NOT NULL, "
             + CompanyColumns.ADDRESS + " TEXT "
             + " );";
 
-    private static final String SQL_CREATE_INDEX_COMPANY_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_COMPANY_NAME "
-            + " ON " + CompanyColumns.TABLE_NAME + " ( " + CompanyColumns.COMPANY_NAME + " );";
+    private static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "
+            + " ON " + CompanyColumns.TABLE_NAME + " ( " + CompanyColumns.NAME + " );";
 
     private static final String SQL_CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS "
             + PersonColumns.TABLE_NAME + " ( "
@@ -81,9 +81,9 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + TeamColumns.TABLE_NAME + " ( "
             + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
-            + TeamColumns.TEAM_NAME + " TEXT NOT NULL "
+            + TeamColumns.NAME + " TEXT NOT NULL "
             + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name UNIQUE (team_name) ON CONFLICT REPLACE"
+            + ", CONSTRAINT unique_name UNIQUE (name) ON CONFLICT REPLACE"
             + " );";
 
     // @formatter:on
@@ -143,7 +143,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
         mOpenHelperCallbacks.onPreCreate(mContext, db);
         db.execSQL(SQL_CREATE_TABLE_COMPANY);
-        db.execSQL(SQL_CREATE_INDEX_COMPANY_COMPANY_NAME);
+        db.execSQL(SQL_CREATE_INDEX_COMPANY_NAME);
         db.execSQL(SQL_CREATE_TABLE_PERSON);
         db.execSQL(SQL_CREATE_INDEX_PERSON_LAST_NAME);
         db.execSQL(SQL_CREATE_TABLE_TEAM);

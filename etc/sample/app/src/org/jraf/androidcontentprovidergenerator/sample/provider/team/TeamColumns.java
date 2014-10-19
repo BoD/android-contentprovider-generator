@@ -38,7 +38,7 @@ public class TeamColumns implements BaseColumns {
 
     public static final String _ID = new String(BaseColumns._ID);
     public static final String COMPANY_ID = "company_id";
-    public static final String TEAM_NAME = "team_name";
+    public static final String NAME = "name";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
@@ -47,7 +47,7 @@ public class TeamColumns implements BaseColumns {
         for (String c : projection) {
 	        if (c == _ID) return true;
 	        if (c == COMPANY_ID) return true;
-	        if (c == TEAM_NAME) return true;
+	        if (c == NAME) return true;
         }
         return false;
     }

@@ -108,25 +108,25 @@ public class PersonCursor extends AbstractCursor {
     /**
      * Get the {@code company_id} value.
      */
-    public long getCompanyId() {
+    public long getTeamCompanyId() {
         return getLongOrNull(TeamColumns.COMPANY_ID);
     }
 
     /**
-     * Get the {@code team_name} value.
+     * Get the {@code name} value.
      * Cannot be {@code null}.
      */
     public String getTeamName() {
-        Integer index = getCachedColumnIndexOrThrow(TeamColumns.TEAM_NAME);
+        Integer index = getCachedColumnIndexOrThrow(TeamColumns.NAME);
         return getString(index);
     }
 
     /**
-     * Get the {@code company_name} value.
+     * Get the {@code name} value.
      * Cannot be {@code null}.
      */
     public String getCompanyName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.COMPANY_NAME);
+        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
         return getString(index);
     }
 
@@ -134,7 +134,7 @@ public class PersonCursor extends AbstractCursor {
      * Get the {@code address} value.
      * Can be {@code null}.
      */
-    public String getAddress() {
+    public String getCompanyAddress() {
         Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
         return getString(index);
     }

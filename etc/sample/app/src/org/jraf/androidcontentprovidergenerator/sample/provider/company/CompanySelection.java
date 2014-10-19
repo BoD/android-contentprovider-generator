@@ -77,18 +77,18 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
     }
 
 
-    public CompanySelection companyName(String... value) {
-        addEquals(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection name(String... value) {
+        addEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public CompanySelection companyNameNot(String... value) {
-        addNotEquals(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection nameNot(String... value) {
+        addNotEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public CompanySelection companyNameLike(String... value) {
-        addLike(CompanyColumns.COMPANY_NAME, value);
+    public CompanySelection nameLike(String... value) {
+        addLike(CompanyColumns.NAME, value);
         return this;
     }
 

@@ -10,7 +10,7 @@
 			},
 		},
 		{
-			"name": "team_name",
+			"name": "name",
 			"type": "String",
 			"nullable": false,
 		},
@@ -19,7 +19,7 @@
 	"constraints": [
 		{
 			"name": "unique_name",
-			"definition": "UNIQUE (team_name) ON CONFLICT REPLACE"
+			"definition": "UNIQUE (name) ON CONFLICT REPLACE"
 		},
 	],
 }
