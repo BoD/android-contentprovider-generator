@@ -21,7 +21,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import ${config.projectPackageId}.BuildConfig;
-import org.jraf.androidcontentprovidergenerator.sample.provider.base.AliasCursor;
+import ${config.providerJavaPackage}.base.AliasCursor;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
@@ -251,12 +251,12 @@ public class ${config.providerClassName} extends ContentProvider {
         return res;
     }
 
-    private static String[] qualifyAmbiguousColumns(String[] projection, String[] columnsA, String[] columnsB) {
+    private static String[] qualifyAmbiguousColumns(String[] projection, String[]... columns) {
         if (projection == null) return null;
         String[] res = new String[projection.length];
         for (int p = 0; p < projection.length; p++) {
             String colP = projection[p];
-            if (isInBoth(colP, columnsA, columnsB)) {
+            if (isInAtLeast2(colP, columns)) {
                 // Ambiguous column names
                 res[p] = getQualifiedColumnName(colP);
             } else {
@@ -266,17 +266,18 @@ public class ${config.providerClassName} extends ContentProvider {
         return res;
     }
 
-    private static boolean isInBoth(String colP, String[] columnsA, String[] columnsB) {
-        for (String colA : columnsA) {
-            if (colP.equals(colA)) {
-                for (String colB : columnsB) {
-                    if (colP.equals(colB)) {
-                        return true;
-                    }
+    private static boolean isInAtLeast2(String colP, String[][] columnsList) {
+        int found = 0;
+        for (String[] columns : columnsList) {
+            for (String column : columns) {
+                if (colP.equals(column)) {
+                    found++;
+                    if (found > 1) return true;
+                    break;
                 }
-                return false;
             }
         }
+
         return false;
     }
 

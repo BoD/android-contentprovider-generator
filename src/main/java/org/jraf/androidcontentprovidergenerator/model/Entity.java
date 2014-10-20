@@ -48,7 +48,7 @@ public class Entity {
     private static final String ON = "\" ON \"";
     private static final String EQUALS = "\"=\"";
     private static final String DOT = "\".\"";
-    private static final String QUALIFY_AMBIGUOUS = "res.projection = qualifyAmbiguousColumns(res.projection, ";
+    private static final String QUALIFY_AMBIGUOUS = "res.projection = qualifyAmbiguousColumns(res.projection";
     private static final String ALL_COLUMNS = "Columns.ALL_COLUMNS";
     private static final String COMMA = ", ";
 
@@ -146,6 +146,20 @@ public class Entity {
         res.append(";");
 
         addAllJoinedClauses(this, res);
+
+        List<Entity> joinedEntities = new ArrayList<>();
+        getAllJoinedEntities(this, joinedEntities);
+        if (joinedEntities.size() > 1) {
+            res.append("\n\n");
+            res.append(INDENT1);
+            res.append(QUALIFY_AMBIGUOUS);
+            for (Entity entity : joinedEntities) {
+                res.append(COMMA);
+                res.append(entity.getNameCamelCase());
+                res.append(ALL_COLUMNS);
+            }
+            res.append(");\n");
+        }
         return res.toString();
     }
 
@@ -182,19 +196,23 @@ public class Entity {
             res.append(getQualifiedColumnName(foreignKey.getEntity(), foreignKey.getField()));
             res.append(";\n");
 
-            res.append(INDENT2);
-            res.append(QUALIFY_AMBIGUOUS);
-            res.append(entity.getNameCamelCase());
-            res.append(ALL_COLUMNS);
-            res.append(COMMA);
-            res.append(foreignKey.getEntity().getNameCamelCase());
-            res.append(ALL_COLUMNS);
-            res.append(");\n");
             res.append(INDENT1);
             res.append("}");
 
             // Recurse
             addAllJoinedClauses(foreignKey.getEntity(), res);
+        }
+    }
+
+    private static void getAllJoinedEntities(Entity entity, List<Entity> joinedEntities) {
+        joinedEntities.add(entity);
+        List<Field> fields = entity.getFields();
+        for (Field field : fields) {
+            ForeignKey foreignKey = field.getForeignKey();
+            if (foreignKey == null) continue;
+
+            // Recurse
+            getAllJoinedEntities(foreignKey.getEntity(), joinedEntities);
         }
     }
 

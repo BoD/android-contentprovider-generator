@@ -264,12 +264,13 @@ public class SampleProvider extends ContentProvider {
                 res.tablesWithJoins = PersonColumns.TABLE_NAME;
                 if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
-                    res.projection = qualifyAmbiguousColumns(res.projection, PersonColumns.ALL_COLUMNS, TeamColumns.ALL_COLUMNS);
                 }
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
-                    res.projection = qualifyAmbiguousColumns(res.projection, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
                 }
+
+                res.projection = qualifyAmbiguousColumns(res.projection, PersonColumns.ALL_COLUMNS, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
+
                 res.orderBy = PersonColumns.DEFAULT_ORDER;
                 break;
 
@@ -279,8 +280,10 @@ public class SampleProvider extends ContentProvider {
                 res.tablesWithJoins = TeamColumns.TABLE_NAME;
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
-                    res.projection = qualifyAmbiguousColumns(res.projection, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
                 }
+
+                res.projection = qualifyAmbiguousColumns(res.projection, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
+
                 res.orderBy = TeamColumns.DEFAULT_ORDER;
                 break;
 
@@ -307,12 +310,12 @@ public class SampleProvider extends ContentProvider {
         return res;
     }
 
-    private static String[] qualifyAmbiguousColumns(String[] projection, String[] columnsA, String[] columnsB) {
+    private static String[] qualifyAmbiguousColumns(String[] projection, String[]... columns) {
         if (projection == null) return null;
         String[] res = new String[projection.length];
         for (int p = 0; p < projection.length; p++) {
             String colP = projection[p];
-            if (isInBoth(colP, columnsA, columnsB)) {
+            if (isInAtLeast2(colP, columns)) {
                 // Ambiguous column names
                 res[p] = getQualifiedColumnName(colP);
             } else {
@@ -322,17 +325,18 @@ public class SampleProvider extends ContentProvider {
         return res;
     }
 
-    private static boolean isInBoth(String colP, String[] columnsA, String[] columnsB) {
-        for (String colA : columnsA) {
-            if (colP.equals(colA)) {
-                for (String colB : columnsB) {
-                    if (colP.equals(colB)) {
-                        return true;
-                    }
+    private static boolean isInAtLeast2(String colP, String[][] columnsList) {
+        int found = 0;
+        for (String[] columns : columnsList) {
+            for (String column : columns) {
+                if (colP.equals(column)) {
+                    found++;
+                    if (found > 1) return true;
+                    break;
                 }
-                return false;
             }
         }
+
         return false;
     }
 
