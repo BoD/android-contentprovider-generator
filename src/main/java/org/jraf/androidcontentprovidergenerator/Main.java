@@ -141,8 +141,9 @@ public class Main {
                 ForeignKey foreignKey = null;
                 if (foreignKeyJson != null) {
                     String table = foreignKeyJson.getString(Field.Json.FOREIGN_KEY_TABLE);
+                    String foreignKeyField = foreignKeyJson.getString(Field.Json.FOREIGN_KEY_FIELD);
                     OnDeleteAction onDeleteAction = OnDeleteAction.fromJsonName(foreignKeyJson.getString(Field.Json.FOREIGN_KEY_ON_DELETE_ACTION));
-                    foreignKey = new ForeignKey(table, onDeleteAction);
+                    foreignKey = new ForeignKey(table, foreignKeyField, onDeleteAction);
                 }
                 field = new Field(entity, name, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy, enumName,
                         enumValues, foreignKey);

@@ -61,19 +61,19 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     <#case "BOOLEAN">
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName} value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, toObjectArray(value));
+        addEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, toObjectArray(value));
         return this;
     }
     <#break>
     <#default>
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(${field.javaTypeSimpleName}... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
+        addEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Not(${field.javaTypeSimpleName}... value) {
-        addNotEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
+        addNotEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
 
@@ -81,117 +81,117 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     <#switch field.type.name()>
     <#case "DATE">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}(<#if field.isNullable>Long<#else>long</#if>... value) {
-        addEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value<#else>toObjectArray(value)</#if>);
+        addEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value<#else>toObjectArray(value)</#if>);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}After(Date value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}AfterEq(Date value) {
-        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Before(Date value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}BeforeEq(Date value) {
-        addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "INTEGER">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(int value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}GtEq(int value) {
-        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(int value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}LtEq(int value) {
-        addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "LONG">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(long value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}GtEq(long value) {
-        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(long value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}LtEq(long value) {
-        addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "FLOAT">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(float value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}GtEq(float value) {
-        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(float value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}LtEq(float value) {
-        addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "DOUBLE">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Gt(double value) {
-        addGreaterThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}GtEq(double value) {
-        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addGreaterThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Lt(double value) {
-        addLessThan(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThan(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}LtEq(double value) {
-        addLessThanOrEquals(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLessThanOrEquals(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "STRING">
     public ${entity.nameCamelCase}Selection ${field.nameCamelCaseLowerCase}Like(String... value) {
-        addLike(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        addLike(${entity.nameCamelCase}Columns.TABLE_NAME + "." + ${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
