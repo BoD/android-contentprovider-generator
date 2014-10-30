@@ -34,4 +34,10 @@
         android:layout_height="wrap_content"
         android:text="Query people with team and company" />
 
+    <Button
+        android:id="@+id/btnQueryTeamsWithCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query teams with company" />
+
 </LinearLayout>
