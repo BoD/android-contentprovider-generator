@@ -37,8 +37,8 @@ public class CompanyColumns implements BaseColumns {
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     public static final String _ID = new String(BaseColumns._ID);
-    public static final String NAME = new String("name");
-    public static final String ADDRESS = new String("address");
+    public static final String NAME = "name";
+    public static final String ADDRESS = "address";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
     
@@ -58,18 +58,5 @@ public class CompanyColumns implements BaseColumns {
             if (c == ADDRESS) return true;
         }
         return false;
-    }
-
-    public static String getQualifiedColumnName(String columnName) {
-        if (columnName == _ID) return TABLE_NAME + "." + columnName + " AS " + _ID;
-        if (columnName == NAME) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
-        if (columnName == ADDRESS) return TABLE_NAME + "." + columnName + " AS " + TABLE_NAME + "__" + columnName;
-        return null;
-    }
-
-    public static String getAlias(String columnName) {
-        if (columnName == NAME) return TABLE_NAME + "__" + columnName;
-        if (columnName == ADDRESS) return TABLE_NAME + "__" + columnName;
-        return null;
     }
 }
