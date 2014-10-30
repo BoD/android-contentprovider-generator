@@ -4,14 +4,14 @@ ${header}
 package ${config.providerJavaPackage}.base;
 
 import java.util.Date;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
 public abstract class AbstractCursor extends CursorWrapper {
-    private IdentityHashMap<String, Integer> mColumnIndexes = new IdentityHashMap<String, Integer>();
+	private HashMap<String, Integer> mColumnIndexes = new HashMap<String, Integer>();
 
     public AbstractCursor(Cursor cursor) {
         super(cursor);

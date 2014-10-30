@@ -118,7 +118,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android-contentprovider-generator-1.8.1-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.8.0-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -195,6 +195,7 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 
 #### Limitations
 - **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
+- **Columns of joined tables must have unique names.**  In the example above there must not be a column `name` both in `person` and in `team`. You can just prefix their name with the table name (i.e. `person_name`, `team_name`).
 - **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
 - Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
 
@@ -206,7 +207,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.8.1-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.8.0-bundle.jar` in the `target` folder.
 
 
 Similar tools

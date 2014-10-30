@@ -42,7 +42,6 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
-import org.jraf.androidcontentprovidergenerator.sample.provider.base.AliasCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
@@ -202,10 +201,21 @@ public class SampleProvider extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, queryParams.projection, queryParams.selection,
-                selectionArgs, groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        ensureIdIsFullyQualified(projection, queryParams.table);
+        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
+                null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
-        return new AliasCursor(res);
+        return res;
+    }
+
+    private void ensureIdIsFullyQualified(String[] projection, String tableName) {
+        if (projection != null) {
+            for (int i = 0; i < projection.length; ++i) {
+                if (projection[i].equals(BaseColumns._ID)) {
+                    projection[i] = tableName + "." + BaseColumns._ID + " AS " + BaseColumns._ID;
+                }
+            }
+        }
     }
 
     @Override
@@ -242,14 +252,12 @@ public class SampleProvider extends ContentProvider {
         public String tablesWithJoins;
         public String selection;
         public String orderBy;
-        public String[] projection;
     }
 
     private QueryParams getQueryParams(Uri uri, String selection, String[] projection) {
         QueryParams res = new QueryParams();
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
-        res.projection = projection;
         switch (matchedId) {
             case URI_TYPE_COMPANY:
             case URI_TYPE_COMPANY_ID:
@@ -268,9 +276,6 @@ public class SampleProvider extends ContentProvider {
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
-
-                res.projection = qualifyAmbiguousColumns(res.projection, PersonColumns.ALL_COLUMNS, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
-
                 res.orderBy = PersonColumns.DEFAULT_ORDER;
                 break;
 
@@ -281,9 +286,6 @@ public class SampleProvider extends ContentProvider {
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
-
-                res.projection = qualifyAmbiguousColumns(res.projection, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
-
                 res.orderBy = TeamColumns.DEFAULT_ORDER;
                 break;
 
@@ -306,55 +308,7 @@ public class SampleProvider extends ContentProvider {
         } else {
             res.selection = selection;
         }
-
         return res;
-    }
-
-    private static String[] qualifyAmbiguousColumns(String[] projection, String[]... columns) {
-        if (projection == null) return null;
-        String[] res = new String[projection.length];
-        for (int p = 0; p < projection.length; p++) {
-            String colP = projection[p];
-            if (isInAtLeast2(colP, columns)) {
-                // Ambiguous column names
-                res[p] = getQualifiedColumnName(colP);
-            } else {
-                res[p] = colP;
-            }
-        }
-        return res;
-    }
-
-    private static boolean isInAtLeast2(String colP, String[][] columnsList) {
-        int found = 0;
-        for (String[] columns : columnsList) {
-            for (String column : columns) {
-                if (colP.equals(column)) {
-                    found++;
-                    if (found > 1) return true;
-                    break;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private static String getQualifiedColumnName(String columnName) {
-        String res = null;
-        //  Company
-        res =  CompanyColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        //  Person
-        res =  PersonColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        //  Team
-        res =  TeamColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        return null;
     }
 
     public static Uri notify(Uri uri, boolean notify) {
