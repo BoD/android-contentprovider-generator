@@ -25,14 +25,14 @@
 package org.jraf.androidcontentprovidergenerator.sample.provider.base;
 
 import java.util.Date;
-import java.util.HashMap;
+import java.util.IdentityHashMap;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
 public abstract class AbstractCursor extends CursorWrapper {
-	private HashMap<String, Integer> mColumnIndexes = new HashMap<String, Integer>();
+    private IdentityHashMap<String, Integer> mColumnIndexes = new IdentityHashMap<String, Integer>();
 
     public AbstractCursor(Cursor cursor) {
         super(cursor);

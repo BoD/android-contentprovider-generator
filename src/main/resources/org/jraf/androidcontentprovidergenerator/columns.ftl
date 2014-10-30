@@ -25,6 +25,14 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
     
+    // @formatter:off
+    public static final String[] ALL_COLUMNS = new String[] {
+            <#list entity.fields as field>
+            ${field.nameUpperCase}<#if field_has_next>,</#if>
+            </#list>
+    };
+    // @formatter:on
+
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {

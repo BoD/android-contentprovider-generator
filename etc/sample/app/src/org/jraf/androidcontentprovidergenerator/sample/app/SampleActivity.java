@@ -24,6 +24,8 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonCur
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamContentValues;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamSelection;
 
 public class SampleActivity extends Activity {
     private static final String TAG = SampleActivity.class.getSimpleName();
@@ -43,6 +45,7 @@ public class SampleActivity extends Activity {
         findViewById(R.id.btnQueryPeople).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeopleWithTeam).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeopleWithTeamAndCompany).setOnClickListener(mOnClickListener);
+        findViewById(R.id.btnQueryTeamsWithCompany).setOnClickListener(mOnClickListener);
 
     }
 
@@ -68,6 +71,10 @@ public class SampleActivity extends Activity {
 
                 case R.id.btnQueryPeopleWithTeamAndCompany:
                     queryPeopleWithTeamAndCompany();
+                    break;
+
+                case R.id.btnQueryTeamsWithCompany:
+                    queryTeamsWithCompany();
                     break;
             }
         }
@@ -116,10 +123,22 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeamAndCompany() {
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John");
-        String[] projection = { PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME, CompanyColumns.NAME };
+        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, TeamColumns.NAME, CompanyColumns.NAME,
+                TeamColumns._ID, CompanyColumns._ID };
         PersonCursor c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ") - team: " + c.getTeamName() + " - company: " + c.getCompanyName());
+        }
+        c.close();
+    }
+
+    private void queryTeamsWithCompany() {
+        TeamSelection teamSelection = new TeamSelection();
+        teamSelection.name("Red Legends");
+        String[] projection = { TeamColumns._ID, TeamColumns.NAME, CompanyColumns.NAME, };
+        TeamCursor c = teamSelection.query(getContentResolver(), projection);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " " + c.getName() + " - company: " + c.getCompanyName());
         }
         c.close();
     }
