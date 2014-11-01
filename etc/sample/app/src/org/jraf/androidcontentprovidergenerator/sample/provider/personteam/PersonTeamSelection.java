@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.team;
+package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
 import java.util.Date;
 
@@ -33,12 +33,12 @@ import android.net.Uri;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
 
 /**
- * Selection for the {@code team} table.
+ * Selection for the {@code person_team} table.
  */
-public class TeamSelection extends AbstractSelection<TeamSelection> {
+public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> {
     @Override
     public Uri uri() {
-        return TeamColumns.CONTENT_URI;
+        return PersonTeamColumns.CONTENT_URI;
     }
 
     /**
@@ -48,92 +48,92 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
      * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
      *            order, which may be unordered.
-     * @return A {@code TeamCursor} object, which is positioned before the first entry, or null.
+     * @return A {@code PersonTeamCursor} object, which is positioned before the first entry, or null.
      */
-    public TeamCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
+    public PersonTeamCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
         Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
         if (cursor == null) return null;
-        return new TeamCursor(cursor);
+        return new PersonTeamCursor(cursor);
     }
 
     /**
      * Equivalent of calling {@code query(contentResolver, projection, null}.
      */
-    public TeamCursor query(ContentResolver contentResolver, String[] projection) {
+    public PersonTeamCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
      * Equivalent of calling {@code query(contentResolver, projection, null, null}.
      */
-    public TeamCursor query(ContentResolver contentResolver) {
+    public PersonTeamCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
     }
 
 
-    public TeamSelection id(long... value) {
-        addEquals("team." + TeamColumns._ID, toObjectArray(value));
+    public PersonTeamSelection id(long... value) {
+        addEquals("person_team." + PersonTeamColumns._ID, toObjectArray(value));
         return this;
     }
 
 
-    public TeamSelection companyId(long... value) {
-        addEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
+    public PersonTeamSelection personId(long... value) {
+        addEquals(PersonTeamColumns.PERSON_ID, toObjectArray(value));
         return this;
     }
 
-    public TeamSelection companyIdNot(long... value) {
-        addNotEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
+    public PersonTeamSelection personIdNot(long... value) {
+        addNotEquals(PersonTeamColumns.PERSON_ID, toObjectArray(value));
         return this;
     }
 
-    public TeamSelection companyIdGt(long value) {
-        addGreaterThan(TeamColumns.COMPANY_ID, value);
+    public PersonTeamSelection personIdGt(long value) {
+        addGreaterThan(PersonTeamColumns.PERSON_ID, value);
         return this;
     }
 
-    public TeamSelection companyIdGtEq(long value) {
-        addGreaterThanOrEquals(TeamColumns.COMPANY_ID, value);
+    public PersonTeamSelection personIdGtEq(long value) {
+        addGreaterThanOrEquals(PersonTeamColumns.PERSON_ID, value);
         return this;
     }
 
-    public TeamSelection companyIdLt(long value) {
-        addLessThan(TeamColumns.COMPANY_ID, value);
+    public PersonTeamSelection personIdLt(long value) {
+        addLessThan(PersonTeamColumns.PERSON_ID, value);
         return this;
     }
 
-    public TeamSelection companyIdLtEq(long value) {
-        addLessThanOrEquals(TeamColumns.COMPANY_ID, value);
+    public PersonTeamSelection personIdLtEq(long value) {
+        addLessThanOrEquals(PersonTeamColumns.PERSON_ID, value);
         return this;
     }
 
-    public TeamSelection name(String... value) {
-        addEquals(TeamColumns.NAME, value);
+    public PersonTeamSelection teamId(long... value) {
+        addEquals(PersonTeamColumns.TEAM_ID, toObjectArray(value));
         return this;
     }
 
-    public TeamSelection nameNot(String... value) {
-        addNotEquals(TeamColumns.NAME, value);
+    public PersonTeamSelection teamIdNot(long... value) {
+        addNotEquals(PersonTeamColumns.TEAM_ID, toObjectArray(value));
         return this;
     }
 
-    public TeamSelection nameLike(String... value) {
-        addLike(TeamColumns.NAME, value);
+    public PersonTeamSelection teamIdGt(long value) {
+        addGreaterThan(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
 
-    public TeamSelection countryCode(String... value) {
-        addEquals(TeamColumns.COUNTRY_CODE, value);
+    public PersonTeamSelection teamIdGtEq(long value) {
+        addGreaterThanOrEquals(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
 
-    public TeamSelection countryCodeNot(String... value) {
-        addNotEquals(TeamColumns.COUNTRY_CODE, value);
+    public PersonTeamSelection teamIdLt(long value) {
+        addLessThan(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
 
-    public TeamSelection countryCodeLike(String... value) {
-        addLike(TeamColumns.COUNTRY_CODE, value);
+    public PersonTeamSelection teamIdLtEq(long value) {
+        addLessThanOrEquals(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
 }

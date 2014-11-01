@@ -19,12 +19,12 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
     <#if field.isId>
     public static final String ${field.nameUpperCase} = new String(BaseColumns._ID);
     <#else>
-    public static final String ${field.nameUpperCase} = "${field.nameLowerCase}";
+    public static final String ${field.nameUpperCase} = "${field.nameLowerCaseOrPrefixed}";
     </#if>
     </#list>
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
-    
+
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             <#list entity.fields as field>

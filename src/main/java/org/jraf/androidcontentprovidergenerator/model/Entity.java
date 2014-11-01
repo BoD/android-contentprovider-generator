@@ -224,4 +224,32 @@ public class Entity {
     public static Entity getByName(String entityName) {
         return ALL_ENTITIES.get(entityName);
     }
+
+    public void flagAmbiguousFields() {
+        List<Field> allJoinedFields = getAllJoinedFields(this);
+        for (Field f1 : allJoinedFields) {
+            for (Field f2 : allJoinedFields) {
+                if (f1 == f2) continue;
+                if (f1.getNameLowerCase().equals(f2.getNameLowerCase())) {
+                    f1.setIsAmbiguous(true);
+                    f2.setIsAmbiguous(true);
+                }
+            }
+        }
+    }
+
+    private static List<Field> getAllJoinedFields(Entity entity) {
+        List<Field> res = new ArrayList<>();
+
+        for (Field field : entity.mFields) {
+            if (field.getIsId()) continue;
+            res.add(field);
+
+            ForeignKey foreignKey = field.getForeignKey();
+            if (foreignKey == null) continue;
+            // Recurse
+            res.addAll(getAllJoinedFields(foreignKey.getEntity()));
+        }
+        return res;
+    }
 }

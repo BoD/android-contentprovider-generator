@@ -56,6 +56,15 @@ public class TeamCursor extends AbstractCursor {
     }
 
     /**
+     * Get the {@code country_code} value.
+     * Cannot be {@code null}.
+     */
+    public String getCountryCode() {
+        Integer index = getCachedColumnIndexOrThrow(TeamColumns.COUNTRY_CODE);
+        return getString(index);
+    }
+
+    /**
      * Get the {@code name} value.
      * Cannot be {@code null}.
      */

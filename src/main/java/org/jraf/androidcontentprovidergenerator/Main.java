@@ -407,7 +407,7 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        System.out.println("\nProvider declaration to paste in the AndroidManifest.xml file: ");
+        Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);
     }
 
@@ -424,6 +424,9 @@ public class Main {
         getConfig(arguments.inputDir);
 
         loadModel(arguments.inputDir);
+
+        Model.get().flagAmbiguousFields();
+
         generateColumns(arguments);
         generateWrappers(arguments);
         generateContentProvider(arguments);

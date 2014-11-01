@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.team;
+package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
 import java.util.Date;
 
@@ -32,12 +32,12 @@ import android.net.Uri;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractContentValues;
 
 /**
- * Content values wrapper for the {@code team} table.
+ * Content values wrapper for the {@code person_team} table.
  */
-public class TeamContentValues extends AbstractContentValues {
+public class PersonTeamContentValues extends AbstractContentValues {
     @Override
     public Uri uri() {
-        return TeamColumns.CONTENT_URI;
+        return PersonTeamColumns.CONTENT_URI;
     }
 
     /**
@@ -46,28 +46,19 @@ public class TeamContentValues extends AbstractContentValues {
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, TeamSelection where) {
+    public int update(ContentResolver contentResolver, PersonTeamSelection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
-    public TeamContentValues putCompanyId(long value) {
-        mContentValues.put(TeamColumns.COMPANY_ID, value);
+    public PersonTeamContentValues putPersonId(long value) {
+        mContentValues.put(PersonTeamColumns.PERSON_ID, value);
         return this;
     }
 
 
 
-    public TeamContentValues putName(String value) {
-        if (value == null) throw new IllegalArgumentException("value for name must not be null");
-        mContentValues.put(TeamColumns.NAME, value);
-        return this;
-    }
-
-
-
-    public TeamContentValues putCountryCode(String value) {
-        if (value == null) throw new IllegalArgumentException("value for countryCode must not be null");
-        mContentValues.put(TeamColumns.COUNTRY_CODE, value);
+    public PersonTeamContentValues putTeamId(long value) {
+        mContentValues.put(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
 

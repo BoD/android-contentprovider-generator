@@ -37,7 +37,6 @@ public class PersonColumns implements BaseColumns {
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     public static final String _ID = new String(BaseColumns._ID);
-    public static final String MAIN_TEAM_ID = "main_team_id";
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";
     public static final String AGE = "age";
@@ -45,20 +44,21 @@ public class PersonColumns implements BaseColumns {
     public static final String HAS_BLUE_EYES = "has_blue_eyes";
     public static final String HEIGHT = "height";
     public static final String GENDER = "gender";
+    public static final String COUNTRY_CODE = "person__country_code";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
-    
+
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            MAIN_TEAM_ID,
             FIRST_NAME,
             LAST_NAME,
             AGE,
             BIRTH_DATE,
             HAS_BLUE_EYES,
             HEIGHT,
-            GENDER
+            GENDER,
+            COUNTRY_CODE
     };
     // @formatter:on
 
@@ -66,7 +66,6 @@ public class PersonColumns implements BaseColumns {
         if (projection == null) return true;
         for (String c : projection) {
             if (c == _ID) return true;
-            if (c == MAIN_TEAM_ID) return true;
             if (c == FIRST_NAME) return true;
             if (c == LAST_NAME) return true;
             if (c == AGE) return true;
@@ -74,6 +73,7 @@ public class PersonColumns implements BaseColumns {
             if (c == HAS_BLUE_EYES) return true;
             if (c == HEIGHT) return true;
             if (c == GENDER) return true;
+            if (c == COUNTRY_CODE) return true;
         }
         return false;
     }

@@ -14,12 +14,17 @@
 			"type": "String",
 			"nullable": false,
 		},
+		{
+			"name": "country_code",
+			"type": "String",
+			"nullable": false,
+		},
 	],
 
 	"constraints": [
 		{
 			"name": "unique_name",
-			"definition": "UNIQUE (name) ON CONFLICT REPLACE"
+			"definition": "UNIQUE (team__name) ON CONFLICT REPLACE"
 		},
 	],
 }

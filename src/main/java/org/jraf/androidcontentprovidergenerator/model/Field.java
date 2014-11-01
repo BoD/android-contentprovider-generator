@@ -149,6 +149,7 @@ public class Field {
     private final List<EnumValue> mEnumValues = new ArrayList<>();
     private final ForeignKey mForeignKey;
     private boolean mIsForeign;
+    private boolean mIsAmbiguous;
 
     public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
             List<EnumValue> enumValues, ForeignKey foreignKey) {
@@ -196,6 +197,15 @@ public class Field {
 
     public List<EnumValue> getEnumValues() {
         return mEnumValues;
+    }
+
+    public String getPrefixedName() {
+        return mEntity.getNameLowerCase() + "__" + getNameLowerCase();
+    }
+
+    public String getNameLowerCaseOrPrefixed() {
+        if (mIsAmbiguous) return getPrefixedName();
+        return getNameLowerCase();
     }
 
     public Type getType() {
@@ -246,6 +256,14 @@ public class Field {
 
     public boolean getIsForeign() {
         return mIsForeign;
+    }
+
+    /* package */void setIsAmbiguous(boolean isAmbiguous) {
+        mIsAmbiguous = isAmbiguous;
+    }
+
+    /* package */boolean getIsAmbiguous() {
+        return mIsAmbiguous;
     }
 
     @Override

@@ -1,15 +1,6 @@
 {
 	"fields": [
 		{
-			"name": "main_team_id",
-			"type": "Long",
-			"nullable": false,
-			"foreignKey": {
-				"table": "team",
-				"onDelete": "CASCADE",
-			},
-		},
-		{
 			"name": "first_name",
 			"type": "String",
 			"nullable": false,
@@ -50,6 +41,11 @@
 				"FEMALE",
 				{"OTHER": "Value to use when neither male nor female"},
 			],
+			"nullable": false,
+		},
+		{
+			"name": "country_code",
+			"type": "String",
 			"nullable": false,
 		},
 	],

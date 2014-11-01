@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.company;
+package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -30,23 +30,23 @@ import android.provider.BaseColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 
 /**
- * Columns for the {@code company} table.
+ * Columns for the {@code person_team} table.
  */
-public class CompanyColumns implements BaseColumns {
-    public static final String TABLE_NAME = "company";
+public class PersonTeamColumns implements BaseColumns {
+    public static final String TABLE_NAME = "person_team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     public static final String _ID = new String(BaseColumns._ID);
-    public static final String NAME = "company__name";
-    public static final String ADDRESS = "address";
+    public static final String PERSON_ID = "person_id";
+    public static final String TEAM_ID = "team_id";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            NAME,
-            ADDRESS
+            PERSON_ID,
+            TEAM_ID
     };
     // @formatter:on
 
@@ -54,8 +54,8 @@ public class CompanyColumns implements BaseColumns {
         if (projection == null) return true;
         for (String c : projection) {
             if (c == _ID) return true;
-            if (c == NAME) return true;
-            if (c == ADDRESS) return true;
+            if (c == PERSON_ID) return true;
+            if (c == TEAM_ID) return true;
         }
         return false;
     }

@@ -38,15 +38,17 @@ public class TeamColumns implements BaseColumns {
 
     public static final String _ID = new String(BaseColumns._ID);
     public static final String COMPANY_ID = "company_id";
-    public static final String NAME = "name";
+    public static final String NAME = "team__name";
+    public static final String COUNTRY_CODE = "team__country_code";
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
-    
+
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             COMPANY_ID,
-            NAME
+            NAME,
+            COUNTRY_CODE
     };
     // @formatter:on
 
@@ -56,6 +58,7 @@ public class TeamColumns implements BaseColumns {
             if (c == _ID) return true;
             if (c == COMPANY_ID) return true;
             if (c == NAME) return true;
+            if (c == COUNTRY_CODE) return true;
         }
         return false;
     }
