@@ -150,6 +150,7 @@ public class Field {
     private final ForeignKey mForeignKey;
     private boolean mIsForeign;
     private boolean mIsAmbiguous;
+    private Field mOriginalField;
 
     public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
             List<EnumValue> enumValues, ForeignKey foreignKey) {
@@ -168,6 +169,7 @@ public class Field {
     public Field asForeignField() {
         Field res = new Field(mEntity, mName, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
         res.mIsForeign = true;
+        res.mOriginalField = this;
         return res;
     }
 
@@ -260,6 +262,7 @@ public class Field {
 
     /* package */void setIsAmbiguous(boolean isAmbiguous) {
         mIsAmbiguous = isAmbiguous;
+        if (mOriginalField != null) mOriginalField.mIsAmbiguous = isAmbiguous;
     }
 
     /* package */boolean getIsAmbiguous() {

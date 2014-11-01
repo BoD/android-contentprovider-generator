@@ -49,13 +49,6 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code team_id} value.
-     */
-    public long getTeamId() {
-        return getLongOrNull(PersonTeamColumns.TEAM_ID);
-    }
-
-    /**
      * Get the {@code first_name} value.
      * Cannot be {@code null}.
      */
@@ -123,28 +116,17 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
+     * Get the {@code team_id} value.
+     */
+    public long getTeamId() {
+        return getLongOrNull(PersonTeamColumns.TEAM_ID);
+    }
+
+    /**
      * Get the {@code company_id} value.
      */
     public long getTeamCompanyId() {
         return getLongOrNull(TeamColumns.COMPANY_ID);
-    }
-
-    /**
-     * Get the {@code name} value.
-     * Cannot be {@code null}.
-     */
-    public String getTeamName() {
-        Integer index = getCachedColumnIndexOrThrow(TeamColumns.NAME);
-        return getString(index);
-    }
-
-    /**
-     * Get the {@code country_code} value.
-     * Cannot be {@code null}.
-     */
-    public String getTeamCountryCode() {
-        Integer index = getCachedColumnIndexOrThrow(TeamColumns.COUNTRY_CODE);
-        return getString(index);
     }
 
     /**
@@ -162,6 +144,24 @@ public class PersonTeamCursor extends AbstractCursor {
      */
     public String getCompanyAddress() {
         Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
+        return getString(index);
+    }
+
+    /**
+     * Get the {@code name} value.
+     * Cannot be {@code null}.
+     */
+    public String getTeamName() {
+        Integer index = getCachedColumnIndexOrThrow(TeamColumns.NAME);
+        return getString(index);
+    }
+
+    /**
+     * Get the {@code country_code} value.
+     * Cannot be {@code null}.
+     */
+    public String getTeamCountryCode() {
+        Integer index = getCachedColumnIndexOrThrow(TeamColumns.COUNTRY_CODE);
         return getString(index);
     }
 }

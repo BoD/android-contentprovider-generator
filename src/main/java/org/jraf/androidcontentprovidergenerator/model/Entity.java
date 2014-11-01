@@ -72,14 +72,14 @@ public class Entity {
     public List<Field> getFieldsIncludingJoins(boolean isForeign) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
+            if (field.getIsId()) continue;
+
             if (isForeign) {
                 res.add(field.asForeignField());
             } else {
                 res.add(field);
             }
-        }
 
-        for (Field field : getFields()) {
             ForeignKey foreignKey = field.getForeignKey();
             if (foreignKey == null) continue;
 
@@ -226,7 +226,7 @@ public class Entity {
     }
 
     public void flagAmbiguousFields() {
-        List<Field> allJoinedFields = getAllJoinedFields(this);
+        List<Field> allJoinedFields = getFieldsIncludingJoins(false);
         for (Field f1 : allJoinedFields) {
             for (Field f2 : allJoinedFields) {
                 if (f1 == f2) continue;
@@ -236,20 +236,5 @@ public class Entity {
                 }
             }
         }
-    }
-
-    private static List<Field> getAllJoinedFields(Entity entity) {
-        List<Field> res = new ArrayList<>();
-
-        for (Field field : entity.mFields) {
-            if (field.getIsId()) continue;
-            res.add(field);
-
-            ForeignKey foreignKey = field.getForeignKey();
-            if (foreignKey == null) continue;
-            // Recurse
-            res.addAll(getAllJoinedFields(foreignKey.getEntity()));
-        }
-        return res;
     }
 }
