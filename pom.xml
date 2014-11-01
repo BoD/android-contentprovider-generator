@@ -101,7 +101,7 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <finalName>android-contentprovider-generator-${project.version}-bundle</finalName>
+                    <finalName>android_contentprovider_generator-${project.version}-bundle</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
             </plugin>
