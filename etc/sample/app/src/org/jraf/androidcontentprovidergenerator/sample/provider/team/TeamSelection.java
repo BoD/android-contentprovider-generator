@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 
 /**
  * Selection for the {@code team} table.
@@ -104,6 +105,36 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companyIdLtEq(long value) {
         addLessThanOrEquals(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public TeamSelection companyName(String... value) {
+        addEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameNot(String... value) {
+        addNotEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameLike(String... value) {
+        addLike(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyAddress(String... value) {
+        addEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressNot(String... value) {
+        addNotEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressLike(String... value) {
+        addLike(CompanyColumns.ADDRESS, value);
         return this;
     }
 

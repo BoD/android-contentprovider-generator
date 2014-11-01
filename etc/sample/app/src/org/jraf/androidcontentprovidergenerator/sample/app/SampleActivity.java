@@ -117,7 +117,7 @@ public class SampleActivity extends Activity {
 
     private void queryPeopleWithTeam() {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
-        //        personTeamSelection.personFirstName("James", "John");
+        personTeamSelection.personFirstName("James", "John");
         String[] projection = { PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
                 TeamColumns.NAME, TeamColumns.COUNTRY_CODE };
         PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);
@@ -130,7 +130,7 @@ public class SampleActivity extends Activity {
 
     private void queryPeopleWithTeamAndCompany() {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
-        //        personTeamSelection.personFirstName("James", "John");
+        personTeamSelection.personFirstName("James", "John");
         String[] projection = { PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
                 TeamColumns.NAME, TeamColumns.COUNTRY_CODE, CompanyColumns.NAME };
         PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);

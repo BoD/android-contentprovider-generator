@@ -31,6 +31,9 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 
 /**
  * Selection for the {@code person_team} table.
@@ -107,6 +110,162 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection personFirstName(String... value) {
+        addEquals(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personFirstNameNot(String... value) {
+        addNotEquals(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personFirstNameLike(String... value) {
+        addLike(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastName(String... value) {
+        addEquals(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastNameNot(String... value) {
+        addNotEquals(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastNameLike(String... value) {
+        addLike(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personAge(int... value) {
+        addEquals(PersonColumns.AGE, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection personAgeNot(int... value) {
+        addNotEquals(PersonColumns.AGE, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection personAgeGt(int value) {
+        addGreaterThan(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personAgeGtEq(int value) {
+        addGreaterThanOrEquals(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personAgeLt(int value) {
+        addLessThan(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personAgeLtEq(int value) {
+        addLessThanOrEquals(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDate(Date... value) {
+        addEquals(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDateNot(Date... value) {
+        addNotEquals(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDate(Long... value) {
+        addEquals(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDateAfter(Date value) {
+        addGreaterThan(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDateAfterEq(Date value) {
+        addGreaterThanOrEquals(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDateBefore(Date value) {
+        addLessThan(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personBirthDateBeforeEq(Date value) {
+        addLessThanOrEquals(PersonColumns.BIRTH_DATE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHasBlueEyes(boolean value) {
+        addEquals(PersonColumns.HAS_BLUE_EYES, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection personHeight(Float... value) {
+        addEquals(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHeightNot(Float... value) {
+        addNotEquals(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHeightGt(float value) {
+        addGreaterThan(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHeightGtEq(float value) {
+        addGreaterThanOrEquals(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHeightLt(float value) {
+        addLessThan(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personHeightLtEq(float value) {
+        addLessThanOrEquals(PersonColumns.HEIGHT, value);
+        return this;
+    }
+
+    public PersonTeamSelection personGender(Gender... value) {
+        addEquals(PersonColumns.GENDER, value);
+        return this;
+    }
+
+    public PersonTeamSelection personGenderNot(Gender... value) {
+        addNotEquals(PersonColumns.GENDER, value);
+        return this;
+    }
+
+
+    public PersonTeamSelection personCountryCode(String... value) {
+        addEquals(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personCountryCodeNot(String... value) {
+        addNotEquals(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personCountryCodeLike(String... value) {
+        addLike(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
     public PersonTeamSelection teamId(long... value) {
         addEquals(PersonTeamColumns.TEAM_ID, toObjectArray(value));
         return this;
@@ -134,6 +293,96 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamIdLtEq(long value) {
         addLessThanOrEquals(PersonTeamColumns.TEAM_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyId(long... value) {
+        addEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyIdNot(long... value) {
+        addNotEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyIdGt(long value) {
+        addGreaterThan(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyIdGtEq(long value) {
+        addGreaterThanOrEquals(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyIdLt(long value) {
+        addLessThan(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyIdLtEq(long value) {
+        addLessThanOrEquals(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyName(String... value) {
+        addEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyNameNot(String... value) {
+        addNotEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyNameLike(String... value) {
+        addLike(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyAddress(String... value) {
+        addEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyAddressNot(String... value) {
+        addNotEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection companyAddressLike(String... value) {
+        addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamName(String... value) {
+        addEquals(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamNameNot(String... value) {
+        addNotEquals(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamNameLike(String... value) {
+        addLike(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCode(String... value) {
+        addEquals(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCodeNot(String... value) {
+        addNotEquals(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCodeLike(String... value) {
+        addLike(TeamColumns.COUNTRY_CODE, value);
         return this;
     }
 }
