@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 
 /**
  * Selection for the {@code team} table.
@@ -107,6 +108,36 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection companyName(String... value) {
+        addEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameNot(String... value) {
+        addNotEquals(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameLike(String... value) {
+        addLike(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyAddress(String... value) {
+        addEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressNot(String... value) {
+        addNotEquals(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressLike(String... value) {
+        addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
     public TeamSelection name(String... value) {
         addEquals(TeamColumns.NAME, value);
         return this;
@@ -119,6 +150,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection nameLike(String... value) {
         addLike(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection countryCode(String... value) {
+        addEquals(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection countryCodeNot(String... value) {
+        addNotEquals(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection countryCodeLike(String... value) {
+        addLike(TeamColumns.COUNTRY_CODE, value);
         return this;
     }
 }

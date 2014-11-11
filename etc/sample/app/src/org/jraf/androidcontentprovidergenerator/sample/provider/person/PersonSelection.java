@@ -77,36 +77,6 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
     }
 
 
-    public PersonSelection mainTeamId(long... value) {
-        addEquals(PersonColumns.MAIN_TEAM_ID, toObjectArray(value));
-        return this;
-    }
-
-    public PersonSelection mainTeamIdNot(long... value) {
-        addNotEquals(PersonColumns.MAIN_TEAM_ID, toObjectArray(value));
-        return this;
-    }
-
-    public PersonSelection mainTeamIdGt(long value) {
-        addGreaterThan(PersonColumns.MAIN_TEAM_ID, value);
-        return this;
-    }
-
-    public PersonSelection mainTeamIdGtEq(long value) {
-        addGreaterThanOrEquals(PersonColumns.MAIN_TEAM_ID, value);
-        return this;
-    }
-
-    public PersonSelection mainTeamIdLt(long value) {
-        addLessThan(PersonColumns.MAIN_TEAM_ID, value);
-        return this;
-    }
-
-    public PersonSelection mainTeamIdLtEq(long value) {
-        addLessThanOrEquals(PersonColumns.MAIN_TEAM_ID, value);
-        return this;
-    }
-
     public PersonSelection firstName(String... value) {
         addEquals(PersonColumns.FIRST_NAME, value);
         return this;
@@ -247,4 +217,19 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+
+    public PersonSelection countryCode(String... value) {
+        addEquals(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeNot(String... value) {
+        addNotEquals(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeLike(String... value) {
+        addLike(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
 }

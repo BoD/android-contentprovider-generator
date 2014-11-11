@@ -42,9 +42,9 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
-import org.jraf.androidcontentprovidergenerator.sample.provider.base.AliasCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 public class SampleProvider extends ContentProvider {
@@ -67,8 +67,11 @@ public class SampleProvider extends ContentProvider {
     private static final int URI_TYPE_PERSON = 2;
     private static final int URI_TYPE_PERSON_ID = 3;
 
-    private static final int URI_TYPE_TEAM = 4;
-    private static final int URI_TYPE_TEAM_ID = 5;
+    private static final int URI_TYPE_PERSON_TEAM = 4;
+    private static final int URI_TYPE_PERSON_TEAM_ID = 5;
+
+    private static final int URI_TYPE_TEAM = 6;
+    private static final int URI_TYPE_TEAM_ID = 7;
 
 
 
@@ -79,6 +82,8 @@ public class SampleProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME + "/#", URI_TYPE_COMPANY_ID);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME, URI_TYPE_PERSON);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_ID);
+        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME, URI_TYPE_PERSON_TEAM);
+        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_TEAM_ID);
         URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME, URI_TYPE_TEAM);
         URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME + "/#", URI_TYPE_TEAM_ID);
     }
@@ -121,6 +126,11 @@ public class SampleProvider extends ContentProvider {
                 return TYPE_CURSOR_DIR + PersonColumns.TABLE_NAME;
             case URI_TYPE_PERSON_ID:
                 return TYPE_CURSOR_ITEM + PersonColumns.TABLE_NAME;
+
+            case URI_TYPE_PERSON_TEAM:
+                return TYPE_CURSOR_DIR + PersonTeamColumns.TABLE_NAME;
+            case URI_TYPE_PERSON_TEAM_ID:
+                return TYPE_CURSOR_ITEM + PersonTeamColumns.TABLE_NAME;
 
             case URI_TYPE_TEAM:
                 return TYPE_CURSOR_DIR + TeamColumns.TABLE_NAME;
@@ -202,10 +212,21 @@ public class SampleProvider extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, queryParams.projection, queryParams.selection,
-                selectionArgs, groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        ensureIdIsFullyQualified(projection, queryParams.table);
+        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
+                null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
-        return new AliasCursor(res);
+        return res;
+    }
+
+    private void ensureIdIsFullyQualified(String[] projection, String tableName) {
+        if (projection != null) {
+            for (int i = 0; i < projection.length; ++i) {
+                if (projection[i].equals(BaseColumns._ID)) {
+                    projection[i] = tableName + "." + BaseColumns._ID + " AS " + BaseColumns._ID;
+                }
+            }
+        }
     }
 
     @Override
@@ -242,14 +263,12 @@ public class SampleProvider extends ContentProvider {
         public String tablesWithJoins;
         public String selection;
         public String orderBy;
-        public String[] projection;
     }
 
     private QueryParams getQueryParams(Uri uri, String selection, String[] projection) {
         QueryParams res = new QueryParams();
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
-        res.projection = projection;
         switch (matchedId) {
             case URI_TYPE_COMPANY:
             case URI_TYPE_COMPANY_ID:
@@ -262,16 +281,23 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_PERSON_ID:
                 res.table = PersonColumns.TABLE_NAME;
                 res.tablesWithJoins = PersonColumns.TABLE_NAME;
+                res.orderBy = PersonColumns.DEFAULT_ORDER;
+                break;
+
+            case URI_TYPE_PERSON_TEAM:
+            case URI_TYPE_PERSON_TEAM_ID:
+                res.table = PersonTeamColumns.TABLE_NAME;
+                res.tablesWithJoins = PersonTeamColumns.TABLE_NAME;
+                if (PersonColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonColumns.TABLE_NAME + "." + PersonColumns._ID;
+                }
                 if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonColumns.TABLE_NAME + "." + PersonColumns.MAIN_TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
                 }
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
-
-                res.projection = qualifyAmbiguousColumns(res.projection, PersonColumns.ALL_COLUMNS, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
-
-                res.orderBy = PersonColumns.DEFAULT_ORDER;
+                res.orderBy = PersonTeamColumns.DEFAULT_ORDER;
                 break;
 
             case URI_TYPE_TEAM:
@@ -281,9 +307,6 @@ public class SampleProvider extends ContentProvider {
                 if (CompanyColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
                 }
-
-                res.projection = qualifyAmbiguousColumns(res.projection, TeamColumns.ALL_COLUMNS, CompanyColumns.ALL_COLUMNS);
-
                 res.orderBy = TeamColumns.DEFAULT_ORDER;
                 break;
 
@@ -294,6 +317,7 @@ public class SampleProvider extends ContentProvider {
         switch (matchedId) {
             case URI_TYPE_COMPANY_ID:
             case URI_TYPE_PERSON_ID:
+            case URI_TYPE_PERSON_TEAM_ID:
             case URI_TYPE_TEAM_ID:
                 id = uri.getLastPathSegment();
         }
@@ -306,55 +330,7 @@ public class SampleProvider extends ContentProvider {
         } else {
             res.selection = selection;
         }
-
         return res;
-    }
-
-    private static String[] qualifyAmbiguousColumns(String[] projection, String[]... columns) {
-        if (projection == null) return null;
-        String[] res = new String[projection.length];
-        for (int p = 0; p < projection.length; p++) {
-            String colP = projection[p];
-            if (isInAtLeast2(colP, columns)) {
-                // Ambiguous column names
-                res[p] = getQualifiedColumnName(colP);
-            } else {
-                res[p] = colP;
-            }
-        }
-        return res;
-    }
-
-    private static boolean isInAtLeast2(String colP, String[][] columnsList) {
-        int found = 0;
-        for (String[] columns : columnsList) {
-            for (String column : columns) {
-                if (colP.equals(column)) {
-                    found++;
-                    if (found > 1) return true;
-                    break;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private static String getQualifiedColumnName(String columnName) {
-        String res = null;
-        //  Company
-        res =  CompanyColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        //  Person
-        res =  PersonColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        //  Team
-        res =  TeamColumns.getQualifiedColumnName(columnName);
-        if (res != null) return res;
-
-        return null;
     }
 
     public static Uri notify(Uri uri, boolean notify) {

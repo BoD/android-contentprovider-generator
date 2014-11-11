@@ -284,13 +284,6 @@ public class Main {
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
-        // AliasCursor
-        template = getFreeMarkerConfig().getTemplate("aliascursor.ftl");
-        outputFile = new File(baseClassesDir, "AliasCursor.java");
-        out = new OutputStreamWriter(new FileOutputStream(outputFile));
-        template.process(root, out);
-        IOUtils.closeQuietly(out);
-
         // AbstractContentValuesWrapper
         template = getFreeMarkerConfig().getTemplate("abstractcontentvalues.ftl");
         outputFile = new File(baseClassesDir, "AbstractContentValues.java");
@@ -414,7 +407,7 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        System.out.println("\nProvider declaration to paste in the AndroidManifest.xml file: ");
+        Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);
     }
 
@@ -431,6 +424,9 @@ public class Main {
         getConfig(arguments.inputDir);
 
         loadModel(arguments.inputDir);
+
+        Model.get().flagAmbiguousFields();
+
         generateColumns(arguments);
         generateWrappers(arguments);
         generateContentProvider(arguments);
