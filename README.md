@@ -194,9 +194,9 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - Of course if `team` has foreign keys they will also be handled (and recursively).
 
 #### Limitations
+- Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
 - **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
 - **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
-- Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
 
 
 Building
