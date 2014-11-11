@@ -31,6 +31,11 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
     <#list entity.fields as field>
         <#if !field.isId>
 
+    <#if field.documentation??>
+    /**
+     * ${field.documentation}
+     */
+    </#if>
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(${field.javaTypeSimpleName} value) {
             <#if !field.isNullable && !field.type.hasNotNullableJavaType()>
         if (value == null) throw new IllegalArgumentException("value for ${field.nameCamelCaseLowerCase} must not be null");

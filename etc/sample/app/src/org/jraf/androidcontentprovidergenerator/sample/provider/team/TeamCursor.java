@@ -47,7 +47,7 @@ public class TeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code name} value.
+     * The commercial name of this company.
      * Cannot be {@code null}.
      */
     public String getCompanyName() {
@@ -56,7 +56,7 @@ public class TeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code address} value.
+     * The full address of this company.
      * Can be {@code null}.
      */
     public String getCompanyAddress() {
@@ -74,7 +74,7 @@ public class TeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code country_code} value.
+     * 2 letter country code where this team operates.
      * Cannot be {@code null}.
      */
     public String getCountryCode() {

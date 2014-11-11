@@ -30,21 +30,42 @@ import android.provider.BaseColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 
 /**
- * Columns for the {@code person} table.
+ * A human being which is part of a team.
  */
 public class PersonColumns implements BaseColumns {
     public static final String TABLE_NAME = "person";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
+    /**
+     * Primary key.
+     */
     public static final String _ID = new String(BaseColumns._ID);
+
+    /**
+     * First name of this person. For instance, John.
+     */
     public static final String FIRST_NAME = "first_name";
+
+    /**
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
+     */
     public static final String LAST_NAME = "last_name";
+
     public static final String AGE = "age";
+
     public static final String BIRTH_DATE = "birth_date";
+
+    /**
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
+     */
     public static final String HAS_BLUE_EYES = "has_blue_eyes";
+
     public static final String HEIGHT = "height";
+
     public static final String GENDER = "gender";
+
     public static final String COUNTRY_CODE = "person__country_code";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 

@@ -1,4 +1,5 @@
 {
+	"documentation": "Entity joining people and teams.  A team contains several people, and a person can belong to several teams.",
 	"fields": [
 		{
 			"name": "person_id",

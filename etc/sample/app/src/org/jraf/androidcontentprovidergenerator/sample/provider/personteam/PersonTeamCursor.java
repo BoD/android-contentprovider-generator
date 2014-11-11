@@ -49,7 +49,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code first_name} value.
+     * First name of this person. For instance, John.
      * Cannot be {@code null}.
      */
     public String getPersonFirstName() {
@@ -58,7 +58,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code last_name} value.
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
      * Cannot be {@code null}.
      */
     public String getPersonLastName() {
@@ -82,7 +82,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code has_blue_eyes} value.
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getPersonHasBlueEyes() {
         return getBoolean(PersonColumns.HAS_BLUE_EYES);
@@ -130,7 +130,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code name} value.
+     * The commercial name of this company.
      * Cannot be {@code null}.
      */
     public String getCompanyName() {
@@ -139,7 +139,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code address} value.
+     * The full address of this company.
      * Can be {@code null}.
      */
     public String getCompanyAddress() {
@@ -157,7 +157,7 @@ public class PersonTeamCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code country_code} value.
+     * 2 letter country code where this team operates.
      * Cannot be {@code null}.
      */
     public String getTeamCountryCode() {

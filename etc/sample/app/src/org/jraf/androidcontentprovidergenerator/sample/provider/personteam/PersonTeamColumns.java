@@ -30,15 +30,21 @@ import android.provider.BaseColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 
 /**
- * Columns for the {@code person_team} table.
+ * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
  */
 public class PersonTeamColumns implements BaseColumns {
     public static final String TABLE_NAME = "person_team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
+    /**
+     * Primary key.
+     */
     public static final String _ID = new String(BaseColumns._ID);
+
     public static final String PERSON_ID = "person_id";
+
     public static final String TEAM_ID = "team_id";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 

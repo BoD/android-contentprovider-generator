@@ -39,7 +39,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code first_name} value.
+     * First name of this person. For instance, John.
      * Cannot be {@code null}.
      */
     public String getFirstName() {
@@ -48,7 +48,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code last_name} value.
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
      * Cannot be {@code null}.
      */
     public String getLastName() {
@@ -72,7 +72,7 @@ public class PersonCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code has_blue_eyes} value.
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getHasBlueEyes() {
         return getBoolean(PersonColumns.HAS_BLUE_EYES);

@@ -26,18 +26,18 @@ package org.jraf.androidcontentprovidergenerator.model;
 
 public class EnumValue {
     private final String mName;
-    private final String mJavadoc;
+    private final String mDocumentation;
 
-    public EnumValue(String name, String javadoc) {
+    public EnumValue(String name, String documentation) {
         mName = name;
-        mJavadoc = javadoc;
+        mDocumentation = documentation;
     }
 
     public String getName() {
         return mName;
     }
 
-    public String getJavadoc() {
-        return mJavadoc;
+    public String getDocumentation() {
+        return mDocumentation;
     }
 }

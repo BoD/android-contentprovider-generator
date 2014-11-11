@@ -30,16 +30,26 @@ import android.provider.BaseColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 
 /**
- * Columns for the {@code team} table.
+ * A group of people who work together.
  */
 public class TeamColumns implements BaseColumns {
     public static final String TABLE_NAME = "team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
+    /**
+     * Primary key.
+     */
     public static final String _ID = new String(BaseColumns._ID);
+
     public static final String COMPANY_ID = "company_id";
+
     public static final String NAME = "team__name";
+
+    /**
+     * 2 letter country code where this team operates.
+     */
     public static final String COUNTRY_CODE = "team__country_code";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
