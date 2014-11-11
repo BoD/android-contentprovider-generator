@@ -50,6 +50,9 @@ public class CompanyContentValues extends AbstractContentValues {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
+    /**
+     * The commercial name of this company.
+     */
     public CompanyContentValues putName(String value) {
         if (value == null) throw new IllegalArgumentException("value for name must not be null");
         mContentValues.put(CompanyColumns.NAME, value);
@@ -58,6 +61,9 @@ public class CompanyContentValues extends AbstractContentValues {
 
 
 
+    /**
+     * The full address of this company.
+     */
     public CompanyContentValues putAddress(String value) {
         mContentValues.put(CompanyColumns.ADDRESS, value);
         return this;

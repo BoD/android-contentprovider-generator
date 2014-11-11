@@ -50,6 +50,9 @@ public class PersonContentValues extends AbstractContentValues {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
+    /**
+     * First name of this person. For instance, John.
+     */
     public PersonContentValues putFirstName(String value) {
         if (value == null) throw new IllegalArgumentException("value for firstName must not be null");
         mContentValues.put(PersonColumns.FIRST_NAME, value);
@@ -58,6 +61,9 @@ public class PersonContentValues extends AbstractContentValues {
 
 
 
+    /**
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
+     */
     public PersonContentValues putLastName(String value) {
         if (value == null) throw new IllegalArgumentException("value for lastName must not be null");
         mContentValues.put(PersonColumns.LAST_NAME, value);
@@ -89,6 +95,9 @@ public class PersonContentValues extends AbstractContentValues {
     }
 
 
+    /**
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
+     */
     public PersonContentValues putHasBlueEyes(boolean value) {
         mContentValues.put(PersonColumns.HAS_BLUE_EYES, value);
         return this;

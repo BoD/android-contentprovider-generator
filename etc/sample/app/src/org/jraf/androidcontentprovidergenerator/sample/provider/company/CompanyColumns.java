@@ -30,15 +30,27 @@ import android.provider.BaseColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 
 /**
- * Columns for the {@code company} table.
+ * A commercial business.
  */
 public class CompanyColumns implements BaseColumns {
     public static final String TABLE_NAME = "company";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
+    /**
+     * Primary key.
+     */
     public static final String _ID = new String(BaseColumns._ID);
+
+    /**
+     * The commercial name of this company.
+     */
     public static final String NAME = "company__name";
+
+    /**
+     * The full address of this company.
+     */
     public static final String ADDRESS = "address";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 

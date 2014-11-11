@@ -39,7 +39,7 @@ public class CompanyCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code name} value.
+     * The commercial name of this company.
      * Cannot be {@code null}.
      */
     public String getName() {
@@ -48,7 +48,7 @@ public class CompanyCursor extends AbstractCursor {
     }
 
     /**
-     * Get the {@code address} value.
+     * The full address of this company.
      * Can be {@code null}.
      */
     public String getAddress() {

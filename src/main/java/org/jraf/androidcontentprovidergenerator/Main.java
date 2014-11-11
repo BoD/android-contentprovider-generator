@@ -98,21 +98,28 @@ public class Main {
             if (Config.LOGD) Log.d(TAG, entityFile.getCanonicalPath());
             String entityName = FilenameUtils.getBaseName(entityFile.getCanonicalPath());
             if (Config.LOGD) Log.d(TAG, "entityName=" + entityName);
-            Entity entity = new Entity(entityName);
             String fileContents = FileUtils.readFileToString(entityFile);
             JSONObject entityJson = new JSONObject(fileContents);
 
+            // Documentation (optional)
+            String entityDocumentation = entityJson.optString(Entity.Json.DOCUMENTATION);
+            if (entityDocumentation.isEmpty()) entityDocumentation = null;
+
+            Entity entity = new Entity(entityName, entityDocumentation);
+
             // Implicit _id field
-            Field field = new Field(entity, "_id", "Long", true, false, false, null, null, null, null);
+            Field field = new Field(entity, "_id", "Primary key.", "Long", true, false, false, null, null, null, null);
             entity.addField(field);
 
             // Fields
-            JSONArray fieldsJson = entityJson.getJSONArray("fields");
+            JSONArray fieldsJson = entityJson.getJSONArray(Entity.Json.FIELDS);
             int len = fieldsJson.length();
             for (int i = 0; i < len; i++) {
                 JSONObject fieldJson = fieldsJson.getJSONObject(i);
                 if (Config.LOGD) Log.d(TAG, "fieldJson=" + fieldJson);
                 String name = fieldJson.getString(Field.Json.NAME);
+                String fieldDocumentation = fieldJson.optString(Field.Json.DOCUMENTATION);
+                if (fieldDocumentation.isEmpty()) fieldDocumentation = null;
                 String type = fieldJson.getString(Field.Json.TYPE);
                 boolean isIndex = fieldJson.optBoolean(Field.Json.INDEX, false);
                 boolean isNullable = fieldJson.optBoolean(Field.Json.NULLABLE, true);
@@ -129,11 +136,11 @@ public class Main {
                             // Name only
                             enumValues.add(new EnumValue((String) enumValue, null));
                         } else {
-                            // Name and Javadoc
+                            // Name and documentation
                             JSONObject enumValueJson = (JSONObject) enumValue;
                             String enumValueName = (String) enumValueJson.keys().next();
-                            String enumValueJavadoc = enumValueJson.getString(enumValueName);
-                            enumValues.add(new EnumValue(enumValueName, enumValueJavadoc));
+                            String enumValueDocumentation = enumValueJson.getString(enumValueName);
+                            enumValues.add(new EnumValue(enumValueName, enumValueDocumentation));
                         }
                     }
                 }
@@ -144,13 +151,13 @@ public class Main {
                     OnDeleteAction onDeleteAction = OnDeleteAction.fromJsonName(foreignKeyJson.getString(Field.Json.FOREIGN_KEY_ON_DELETE_ACTION));
                     foreignKey = new ForeignKey(table, onDeleteAction);
                 }
-                field = new Field(entity, name, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy, enumName,
-                        enumValues, foreignKey);
+                field = new Field(entity, name, fieldDocumentation, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy,
+                        enumName, enumValues, foreignKey);
                 entity.addField(field);
             }
 
             // Constraints (optional)
-            JSONArray constraintsJson = entityJson.optJSONArray("constraints");
+            JSONArray constraintsJson = entityJson.optJSONArray(Entity.Json.CONSTRAINTS);
             if (constraintsJson != null) {
                 len = constraintsJson.length();
                 for (int i = 0; i < len; i++) {
@@ -200,7 +207,7 @@ public class Main {
                         + "' field in _config.json, which is mandatory and must be equal to '" + Constants.SYNTAX_VERSION + "'.");
             }
         }
-        if (!syntaxVersion.startsWith(Constants.SYNTAX_VERSION)) {
+        if (!syntaxVersion.equals(Constants.SYNTAX_VERSION)) {
             throw new IllegalArgumentException("Invalid '" + Json.SYNTAX_VERSION + "' value in _config.json: found '" + syntaxVersion + "' but expected '"
                     + Constants.SYNTAX_VERSION + "'.");
         }

@@ -65,6 +65,9 @@ public class TeamContentValues extends AbstractContentValues {
 
 
 
+    /**
+     * 2 letter country code where this team operates.
+     */
     public TeamContentValues putCountryCode(String value) {
         if (value == null) throw new IllegalArgumentException("value for countryCode must not be null");
         mContentValues.put(TeamColumns.COUNTRY_CODE, value);

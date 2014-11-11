@@ -34,6 +34,12 @@ import java.util.Map;
 import org.apache.commons.lang.WordUtils;
 
 public class Entity {
+    public static class Json {
+        public static final String FIELDS = "fields";
+        public static final String CONSTRAINTS = "constraints";
+        public static final String DOCUMENTATION = "documentation";
+    }
+
     private static final String CONCAT = "res.tablesWithJoins += ";
     private static final String HAS_COLUMNS = ".hasColumns(projection)";
     private static final String OPEN_BRACE = ") {\n";
@@ -55,9 +61,11 @@ public class Entity {
     private final String mName;
     private final List<Field> mFields = new ArrayList<>();
     private final List<Constraint> mConstraints = new ArrayList<>();
+    private final String mDocumentation;
 
-    public Entity(String name) {
+    public Entity(String name, String documentation) {
         mName = name;
+        mDocumentation = documentation;
         ALL_ENTITIES.put(name, this);
     }
 
@@ -216,9 +224,13 @@ public class Entity {
         return res.toString();
     }
 
+    public String getDocumentation() {
+        return mDocumentation;
+    }
+
     @Override
     public String toString() {
-        return "Entity [mName=" + mName + ", mFields=" + mFields + ", mConstraints=" + mConstraints + "]";
+        return "Entity [mName=" + mName + ", mFields=" + mFields + ", mConstraints=" + mConstraints + ", mDocumentation=" + mDocumentation + "]";
     }
 
     public static Entity getByName(String entityName) {

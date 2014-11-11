@@ -22,7 +22,7 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"syntaxVersion": "1.7",
+	"syntaxVersion": "2",
 	"projectPackageId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
@@ -39,7 +39,7 @@ These are self-explanatory so here is an example:
 
 Create one file per entity, naming it `<entity_name>.json`.
 Inside each file, declare your fields (a.k.a "columns") with a name and a type.
-You can also optionally declare a default value, an index flag and a nullable flag.
+You can also optionally declare a default value, an index flag, a documentation and a nullable flag.
 
 Currently the type can be:
 - `String` (SQLite type: `TEXT`)
@@ -58,13 +58,16 @@ Here is a `person.json` file as an example:
 
 ```json
 {
+	"documentation": "A human being which is part of a team.",
 	"fields": [
 		{
+			"documentation": "First name of this person. For instance, John.",
 			"name": "first_name",
 			"type": "String",
 			"defaultValue": "John",
 		},
 		{
+			"documentation": "Last name (a.k.a. Given name) of this person. For instance, Smith.",
 			"name": "last_name",
 			"type": "String",
 			"nullable": true,
@@ -100,6 +103,7 @@ Here is a `person.json` file as an example:
 Notes:
 - An `_id` primary key field is automatically (implicitly) declared for all entities. It must not be declared in the json file.
 - `nullable` is optional (true by default).
+- if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 
 A more comprehensive example is available in the [etc/sample](etc/sample) folder.
 
@@ -206,7 +210,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.8.1-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.8.2-bundle.jar` in the `target` folder.
 
 
 Similar tools

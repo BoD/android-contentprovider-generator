@@ -1,4 +1,5 @@
 {
+	"documentation": "A group of people who work together.",
 	"fields": [
 		{
 			"name": "company_id",
@@ -15,6 +16,7 @@
 			"nullable": false,
 		},
 		{
+			"documentation": "2 letter country code where this team operates.",
 			"name": "country_code",
 			"type": "String",
 			"nullable": false,

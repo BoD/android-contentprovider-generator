@@ -36,6 +36,7 @@ public class Field {
     public static class Json {
         public static final String NAME = "name";
         public static final String TYPE = "type";
+        public static final String DOCUMENTATION = "documentation";
         public static final String INDEX = "index";
         public static final String NULLABLE = "nullable";
         public static final String DEFAULT_VALUE = "defaultValue";
@@ -140,6 +141,7 @@ public class Field {
 
     private final Entity mEntity;
     private final String mName;
+    private final String mDocumentation;
     private final Type mType;
     private final boolean mIsId;
     private final boolean mIsIndex;
@@ -152,10 +154,11 @@ public class Field {
     private boolean mIsAmbiguous;
     private Field mOriginalField;
 
-    public Field(Entity entity, String name, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue, String enumName,
-            List<EnumValue> enumValues, ForeignKey foreignKey) {
+    public Field(Entity entity, String name, String documentation, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue,
+            String enumName, List<EnumValue> enumValues, ForeignKey foreignKey) {
         mEntity = entity;
         mName = name;
+        mDocumentation = documentation;
         mType = Type.fromJsonName(type);
         mIsId = isId;
         mIsIndex = isIndex;
@@ -167,7 +170,7 @@ public class Field {
     }
 
     public Field asForeignField() {
-        Field res = new Field(mEntity, mName, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
+        Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
         res.mIsForeign = true;
         res.mOriginalField = this;
         return res;
@@ -269,9 +272,14 @@ public class Field {
         return mIsAmbiguous;
     }
 
+    public String getDocumentation() {
+        return mDocumentation;
+    }
+
     @Override
     public String toString() {
-        return "Field [mName=" + mName + ", mType=" + mType + ", mIsId=" + mIsId + ", mIsIndex=" + mIsIndex + ", mIsNullable=" + mIsNullable
-                + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues + ", mForeignKey=" + mForeignKey + "]";
+        return "Field [mName=" + mName + ", mDocumentation=" + mDocumentation + ", mType=" + mType + ", mIsId=" + mIsId + ", mIsIndex=" + mIsIndex
+                + ", mIsNullable=" + mIsNullable + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues
+                + ", mForeignKey=" + mForeignKey + "]";
     }
 }

@@ -23,7 +23,11 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
         <#if !field.isId>
 
     /**
+    <#if field.documentation??>
+     * ${field.documentation}
+    <#else>
      * Get the {@code ${field.nameLowerCase}} value.
+    </#if>
         <#if field.isNullable>
      * Can be {@code null}.
         <#else>
