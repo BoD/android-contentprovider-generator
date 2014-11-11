@@ -25,8 +25,6 @@
 package org.jraf.androidcontentprovidergenerator;
 
 public class Constants {
-    // TODO: For the next version, use a single digit, instead of a version number with several parts
-    // TODO: which doesn't make sense for the version number of a syntax.
-    public static final String SYNTAX_VERSION = "1.7";
+    public static final String SYNTAX_VERSION = "2";
     public static final String TAG = "";
 }

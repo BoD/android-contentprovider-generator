@@ -207,7 +207,7 @@ public class Main {
                         + "' field in _config.json, which is mandatory and must be equal to '" + Constants.SYNTAX_VERSION + "'.");
             }
         }
-        if (!syntaxVersion.startsWith(Constants.SYNTAX_VERSION)) {
+        if (!syntaxVersion.equals(Constants.SYNTAX_VERSION)) {
             throw new IllegalArgumentException("Invalid '" + Json.SYNTAX_VERSION + "' value in _config.json: found '" + syntaxVersion + "' but expected '"
                     + Constants.SYNTAX_VERSION + "'.");
         }

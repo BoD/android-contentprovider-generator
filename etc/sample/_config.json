@@ -1,5 +1,5 @@
 {
-	"syntaxVersion": "1.7",
+	"syntaxVersion": "2",
 	"projectPackageId": "org.jraf.androidcontentprovidergenerator.sample",
 	"authority": "org.jraf.androidcontentprovidergenerator.sample.provider",
 	"providerJavaPackage": "org.jraf.androidcontentprovidergenerator.sample.provider",
