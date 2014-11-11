@@ -6,7 +6,7 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
 - a `SQLiteOpenHelperCallbacks` class
-- one `BaseColumns` interface per entity
+- one `BaseColumns` class per entity
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
 - one `Selection` class per entity
