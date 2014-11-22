@@ -31,6 +31,7 @@ import android.database.Cursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Cursor wrapper for the {@code team} table.
@@ -76,8 +77,8 @@ public class TeamCursor extends AbstractCursor {
      * Unique id, first part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid0() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID0);
+    public String getCompanySerialNumberPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
         return getString(index);
     }
 
@@ -85,8 +86,8 @@ public class TeamCursor extends AbstractCursor {
      * Unique id, second part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid1() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID1);
+    public String getCompanySerialNumberPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 
@@ -105,6 +106,31 @@ public class TeamCursor extends AbstractCursor {
      */
     public String getCountryCode() {
         Integer index = getCachedColumnIndexOrThrow(TeamColumns.COUNTRY_CODE);
+        return getString(index);
+    }
+
+    /**
+     * The serial number of this team.
+     */
+    public long getSerialNumberId() {
+        return getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+    }
+
+    /**
+     * Unique id, first part.
+     * Cannot be {@code null}.
+     */
+    public String getSerialNumberPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
+        return getString(index);
+    }
+
+    /**
+     * Unique id, second part.
+     * Cannot be {@code null}.
+     */
+    public String getSerialNumberPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 }

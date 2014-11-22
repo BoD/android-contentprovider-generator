@@ -53,9 +53,9 @@ public class SerialNumberContentValues extends AbstractContentValues {
     /**
      * Unique id, first part.
      */
-    public SerialNumberContentValues putUid0(String value) {
-        if (value == null) throw new IllegalArgumentException("value for uid0 must not be null");
-        mContentValues.put(SerialNumberColumns.UID0, value);
+    public SerialNumberContentValues putPart0(String value) {
+        if (value == null) throw new IllegalArgumentException("value for part0 must not be null");
+        mContentValues.put(SerialNumberColumns.PART0, value);
         return this;
     }
 
@@ -64,9 +64,9 @@ public class SerialNumberContentValues extends AbstractContentValues {
     /**
      * Unique id, second part.
      */
-    public SerialNumberContentValues putUid1(String value) {
-        if (value == null) throw new IllegalArgumentException("value for uid1 must not be null");
-        mContentValues.put(SerialNumberColumns.UID1, value);
+    public SerialNumberContentValues putPart1(String value) {
+        if (value == null) throw new IllegalArgumentException("value for part1 must not be null");
+        mContentValues.put(SerialNumberColumns.PART1, value);
         return this;
     }
 

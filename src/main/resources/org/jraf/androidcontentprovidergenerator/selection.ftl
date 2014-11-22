@@ -58,24 +58,24 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         return this;
     }
 
-    <#list entity.getFieldsIncludingJoins(false) as field>
+    <#list entity.getFieldsIncludingJoins() as field>
     <#if !field.isId>
     <#switch field.type.name()>
     <#case "BOOLEAN">
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(${field.javaTypeSimpleName} value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(${field.javaTypeSimpleName} value) {
         addEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, toObjectArray(value));
         return this;
     }
     <#break>
     <#default>
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(${field.javaTypeSimpleName}... value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(${field.javaTypeSimpleName}... value) {
         addEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Not(${field.javaTypeSimpleName}... value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Not(${field.javaTypeSimpleName}... value) {
         addNotEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isConvertionNeeded>toObjectArray(value)<#else>value</#if>);
         return this;
     }
@@ -83,117 +83,117 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     </#switch>
     <#switch field.type.name()>
     <#case "DATE">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(<#if field.isNullable>Long<#else>long</#if>... value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>(<#if field.isNullable>Long<#else>long</#if>... value) {
         addEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, <#if field.isNullable>value<#else>toObjectArray(value)</#if>);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>After(Date value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>After(Date value) {
         addGreaterThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>AfterEq(Date value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>AfterEq(Date value) {
         addGreaterThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Before(Date value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Before(Date value) {
         addLessThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>BeforeEq(Date value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>BeforeEq(Date value) {
         addLessThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "INTEGER">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(int value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(int value) {
         addGreaterThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(int value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(int value) {
         addGreaterThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(int value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(int value) {
         addLessThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(int value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(int value) {
         addLessThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "LONG">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(long value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(long value) {
         addGreaterThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(long value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(long value) {
         addGreaterThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(long value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(long value) {
         addLessThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(long value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(long value) {
         addLessThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "FLOAT">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(float value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(float value) {
         addGreaterThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(float value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(float value) {
         addGreaterThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(float value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(float value) {
         addLessThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(float value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(float value) {
         addLessThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "DOUBLE">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(double value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Gt(double value) {
         addGreaterThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(double value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>GtEq(double value) {
         addGreaterThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(double value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Lt(double value) {
         addLessThan(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
 
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(double value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>LtEq(double value) {
         addLessThanOrEquals(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>
     <#case "STRING">
-    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.entity.nameCamelCase?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Like(String... value) {
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Like(String... value) {
         addLike(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }

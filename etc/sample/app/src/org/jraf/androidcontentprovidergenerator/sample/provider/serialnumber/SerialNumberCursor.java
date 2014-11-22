@@ -42,8 +42,8 @@ public class SerialNumberCursor extends AbstractCursor {
      * Unique id, first part.
      * Cannot be {@code null}.
      */
-    public String getUid0() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID0);
+    public String getPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
         return getString(index);
     }
 
@@ -51,8 +51,8 @@ public class SerialNumberCursor extends AbstractCursor {
      * Unique id, second part.
      * Cannot be {@code null}.
      */
-    public String getUid1() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID1);
+    public String getPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 }

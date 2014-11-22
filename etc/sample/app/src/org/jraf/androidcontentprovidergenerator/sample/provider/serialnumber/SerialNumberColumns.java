@@ -28,6 +28,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
  * A serial number.
@@ -44,12 +49,12 @@ public class SerialNumberColumns implements BaseColumns {
     /**
      * Unique id, first part.
      */
-    public static final String UID0 = "uid0";
+    public static final String PART0 = "serial_number__part0";
 
     /**
      * Unique id, second part.
      */
-    public static final String UID1 = "uid1";
+    public static final String PART1 = "serial_number__part1";
 
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
@@ -57,18 +62,18 @@ public class SerialNumberColumns implements BaseColumns {
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            UID0,
-            UID1
+            PART0,
+            PART1
     };
     // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == _ID) return true;
-            if (c == UID0) return true;
-            if (c == UID1) return true;
+            if (c == PART0 || c.contains("." + PART0)) return true;
+            if (c == PART1 || c.contains("." + PART1)) return true;
         }
         return false;
     }
+
 }

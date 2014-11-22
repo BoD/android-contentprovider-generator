@@ -51,6 +51,12 @@ public abstract class AbstractCursor extends CursorWrapper {
         return index;
     }
 
+    public String getStringOrNull(String colName) {
+        Integer index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getString(index);
+    }
+
     public Integer getIntegerOrNull(String colName) {
         Integer index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;

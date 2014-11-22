@@ -19,7 +19,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
     public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
     }
-    <#list entity.getFieldsIncludingJoins(false) as field>
+    <#list entity.getFieldsIncludingJoins() as field>
         <#if !field.isId>
 
     /**
@@ -36,7 +36,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
             </#if>
         </#if>
      */
-    public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.entity.nameCamelCase}</#if>${field.nameCamelCase}() {
+    public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}() {
             <#switch field.type.name()>
             <#case "STRING">
         Integer index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});

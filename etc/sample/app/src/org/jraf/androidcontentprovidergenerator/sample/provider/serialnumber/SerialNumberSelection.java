@@ -77,33 +77,33 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
     }
 
 
-    public SerialNumberSelection uid0(String... value) {
-        addEquals(SerialNumberColumns.UID0, value);
+    public SerialNumberSelection part0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public SerialNumberSelection uid0Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID0, value);
+    public SerialNumberSelection part0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public SerialNumberSelection uid0Like(String... value) {
-        addLike(SerialNumberColumns.UID0, value);
+    public SerialNumberSelection part0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public SerialNumberSelection uid1(String... value) {
-        addEquals(SerialNumberColumns.UID1, value);
+    public SerialNumberSelection part1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public SerialNumberSelection uid1Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID1, value);
+    public SerialNumberSelection part1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public SerialNumberSelection uid1Like(String... value) {
-        addLike(SerialNumberColumns.UID1, value);
+    public SerialNumberSelection part1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 }

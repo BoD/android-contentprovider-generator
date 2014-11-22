@@ -153,6 +153,7 @@ public class Field {
     private boolean mIsForeign;
     private boolean mIsAmbiguous;
     private Field mOriginalField;
+    private String mPath;
 
     public Field(Entity entity, String name, String documentation, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue,
             String enumName, List<EnumValue> enumValues, ForeignKey foreignKey) {
@@ -169,10 +170,11 @@ public class Field {
         mForeignKey = foreignKey;
     }
 
-    public Field asForeignField() {
+    public Field asForeignField(String path) {
         Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
         res.mIsForeign = true;
         res.mOriginalField = this;
+        res.mPath = path;
         return res;
     }
 
@@ -261,6 +263,10 @@ public class Field {
 
     public boolean getIsForeign() {
         return mIsForeign;
+    }
+
+    public String getPath() {
+        return mPath;
     }
 
     /* package */void setIsAmbiguous(boolean isAmbiguous) {

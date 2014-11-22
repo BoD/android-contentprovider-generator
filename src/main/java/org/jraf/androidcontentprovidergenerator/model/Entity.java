@@ -32,8 +32,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.WordUtils;
+import org.jraf.androidcontentprovidergenerator.Constants;
 
 public class Entity {
+    private static final String TAG = Constants.TAG + Entity.class.getSimpleName();
+
     public static class Json {
         public static final String FIELDS = "fields";
         public static final String CONSTRAINTS = "constraints";
@@ -54,7 +57,8 @@ public class Entity {
     private static final String ON = "\" ON \"";
     private static final String EQUALS = "\"=\"";
     private static final String DOT = "\".\"";
-
+    private static final String AS = "\" AS \"";
+    private static final String PREFIX = ".PREFIX_";
 
     private static final Map<String, Entity> ALL_ENTITIES = new HashMap<>();
 
@@ -77,13 +81,17 @@ public class Entity {
         return Collections.unmodifiableList(mFields);
     }
 
-    public List<Field> getFieldsIncludingJoins(boolean isForeign) {
+    public List<Field> getFieldsIncludingJoins() {
+        return getFieldsIncludingJoins(false, "");
+    }
+
+    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
             if (field.getIsId()) continue;
 
             if (isForeign) {
-                res.add(field.asForeignField());
+                res.add(field.asForeignField(path));
             } else {
                 res.add(field);
             }
@@ -91,8 +99,9 @@ public class Entity {
             ForeignKey foreignKey = field.getForeignKey();
             if (foreignKey == null) continue;
 
+            String newPath = path + foreignKey.getEntity().getNameCamelCase();
             // Recurse
-            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true));
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath));
         }
 
         return res;
@@ -150,11 +159,11 @@ public class Entity {
         res.append(TABLE_NAME);
         res.append(";");
 
-        addAllJoinedClauses(this, res);
+        addAllJoinedClauses(this, null, res);
         return res.toString();
     }
 
-    private static void addAllJoinedClauses(Entity entity, StringBuilder res) {
+    private static void addAllJoinedClauses(Entity entity, String alias, StringBuilder res) {
         List<Field> fields = entity.getFields();
         for (Field field : fields) {
             ForeignKey foreignKey = field.getForeignKey();
@@ -175,23 +184,44 @@ public class Entity {
             res.append(COLUMNS);
             res.append(TABLE_NAME);
             res.append(PLUS);
+            res.append(AS);
+            res.append(PLUS);
+            res.append(getPrefix(entity, foreignKey));
+            res.append(PLUS);
             res.append(ON);
             res.append(PLUS);
 
-            res.append(getQualifiedColumnName(entity, field));
+            res.append(getQualifiedColumnName(entity, field, alias));
 
             res.append(PLUS);
             res.append(EQUALS);
             res.append(PLUS);
 
-            res.append(getQualifiedColumnName(foreignKey.getEntity(), foreignKey.getField()));
+            res.append(getPrefix(entity, foreignKey));
+            res.append(PLUS);
+            res.append(DOT);
+            res.append(PLUS);
+            res.append(foreignKey.getEntity().getNameCamelCase());
+            res.append(COLUMNS);
+            res.append(".");
+            res.append(foreignKey.getField().getNameUpperCase());
+
             res.append(";\n");
             res.append(INDENT1);
             res.append("}");
 
             // Recurse
-            addAllJoinedClauses(foreignKey.getEntity(), res);
+            addAllJoinedClauses(foreignKey.getEntity(), getPrefix(entity, foreignKey), res);
         }
+    }
+
+    private static String getPrefix(Entity entity, ForeignKey foreignKey) {
+        StringBuilder res = new StringBuilder();
+        res.append(entity.getNameCamelCase());
+        res.append(COLUMNS);
+        res.append(PREFIX);
+        res.append(foreignKey.getEntity().getNameUpperCase());
+        return res.toString();
     }
 
     private static void getHasColumnClauses(StringBuilder res, Entity entity) {
@@ -209,12 +239,17 @@ public class Entity {
         }
     }
 
-    private static String getQualifiedColumnName(Entity entity, Field field) {
+    private static String getQualifiedColumnName(Entity entity, Field field, String alias) {
         StringBuilder res = new StringBuilder();
-        res.append(entity.getNameCamelCase());
-        res.append(COLUMNS);
-        res.append(TABLE_NAME);
-        res.append(PLUS);
+        if (alias == null) {
+            res.append(entity.getNameCamelCase());
+            res.append(COLUMNS);
+            res.append(TABLE_NAME);
+            res.append(PLUS);
+        } else {
+            res.append(alias);
+            res.append(PLUS);
+        }
         res.append(DOT);
         res.append(PLUS);
         res.append(entity.getNameCamelCase());
@@ -238,7 +273,7 @@ public class Entity {
     }
 
     public void flagAmbiguousFields() {
-        List<Field> allJoinedFields = getFieldsIncludingJoins(false);
+        List<Field> allJoinedFields = getFieldsIncludingJoins();
         for (Field f1 : allJoinedFields) {
             for (Field f2 : allJoinedFields) {
                 if (f1 == f2) continue;

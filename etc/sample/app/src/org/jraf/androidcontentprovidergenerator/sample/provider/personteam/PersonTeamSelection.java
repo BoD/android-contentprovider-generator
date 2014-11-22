@@ -35,6 +35,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.person.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Selection for the {@code person_team} table.
@@ -327,93 +328,93 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
-    public PersonTeamSelection companyName(String... value) {
+    public PersonTeamSelection teamCompanyName(String... value) {
         addEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public PersonTeamSelection companyNameNot(String... value) {
+    public PersonTeamSelection teamCompanyNameNot(String... value) {
         addNotEquals(CompanyColumns.NAME, value);
         return this;
     }
 
-    public PersonTeamSelection companyNameLike(String... value) {
+    public PersonTeamSelection teamCompanyNameLike(String... value) {
         addLike(CompanyColumns.NAME, value);
         return this;
     }
 
-    public PersonTeamSelection companyAddress(String... value) {
+    public PersonTeamSelection teamCompanyAddress(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
     }
 
-    public PersonTeamSelection companyAddressNot(String... value) {
+    public PersonTeamSelection teamCompanyAddressNot(String... value) {
         addNotEquals(CompanyColumns.ADDRESS, value);
         return this;
     }
 
-    public PersonTeamSelection companyAddressLike(String... value) {
+    public PersonTeamSelection teamCompanyAddressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberId(long... value) {
+    public PersonTeamSelection teamCompanySerialNumberId(long... value) {
         addEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberIdNot(long... value) {
+    public PersonTeamSelection teamCompanySerialNumberIdNot(long... value) {
         addNotEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberIdGt(long value) {
+    public PersonTeamSelection teamCompanySerialNumberIdGt(long value) {
         addGreaterThan(CompanyColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberIdGtEq(long value) {
+    public PersonTeamSelection teamCompanySerialNumberIdGtEq(long value) {
         addGreaterThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberIdLt(long value) {
+    public PersonTeamSelection teamCompanySerialNumberIdLt(long value) {
         addLessThan(CompanyColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
 
-    public PersonTeamSelection companySerialNumberIdLtEq(long value) {
+    public PersonTeamSelection teamCompanySerialNumberIdLtEq(long value) {
         addLessThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid0(String... value) {
-        addEquals(SerialNumberColumns.UID0, value);
+    public PersonTeamSelection teamCompanySerialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid0Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID0, value);
+    public PersonTeamSelection teamCompanySerialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid0Like(String... value) {
-        addLike(SerialNumberColumns.UID0, value);
+    public PersonTeamSelection teamCompanySerialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid1(String... value) {
-        addEquals(SerialNumberColumns.UID1, value);
+    public PersonTeamSelection teamCompanySerialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid1Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID1, value);
+    public PersonTeamSelection teamCompanySerialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public PersonTeamSelection serialNumberUid1Like(String... value) {
-        addLike(SerialNumberColumns.UID1, value);
+    public PersonTeamSelection teamCompanySerialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 
@@ -444,6 +445,66 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCountryCodeLike(String... value) {
         addLike(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberId(long... value) {
+        addEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberIdNot(long... value) {
+        addNotEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberIdGt(long value) {
+        addGreaterThan(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberIdGtEq(long value) {
+        addGreaterThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberIdLt(long value) {
+        addLessThan(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberIdLtEq(long value) {
+        addLessThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 }

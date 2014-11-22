@@ -33,6 +33,7 @@ import android.net.Uri;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Selection for the {@code team} table.
@@ -169,33 +170,33 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
-    public TeamSelection serialNumberUid0(String... value) {
-        addEquals(SerialNumberColumns.UID0, value);
+    public TeamSelection companySerialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public TeamSelection serialNumberUid0Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID0, value);
+    public TeamSelection companySerialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public TeamSelection serialNumberUid0Like(String... value) {
-        addLike(SerialNumberColumns.UID0, value);
+    public TeamSelection companySerialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public TeamSelection serialNumberUid1(String... value) {
-        addEquals(SerialNumberColumns.UID1, value);
+    public TeamSelection companySerialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public TeamSelection serialNumberUid1Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID1, value);
+    public TeamSelection companySerialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public TeamSelection serialNumberUid1Like(String... value) {
-        addLike(SerialNumberColumns.UID1, value);
+    public TeamSelection companySerialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 
@@ -226,6 +227,66 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection countryCodeLike(String... value) {
         addLike(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberId(long... value) {
+        addEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public TeamSelection serialNumberIdNot(long... value) {
+        addNotEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public TeamSelection serialNumberIdGt(long value) {
+        addGreaterThan(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberIdGtEq(long value) {
+        addGreaterThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberIdLt(long value) {
+        addLessThan(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberIdLtEq(long value) {
+        addLessThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 }

@@ -28,6 +28,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
  * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
@@ -59,10 +64,12 @@ public class PersonTeamColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == _ID) return true;
-            if (c == PERSON_ID) return true;
-            if (c == TEAM_ID) return true;
+            if (c == PERSON_ID || c.contains("." + PERSON_ID)) return true;
+            if (c == TEAM_ID || c.contains("." + TEAM_ID)) return true;
         }
         return false;
     }
+
+    public static final String PREFIX_PERSON = TABLE_NAME + "__" + PersonColumns.TABLE_NAME;
+    public static final String PREFIX_TEAM = TABLE_NAME + "__" + TeamColumns.TABLE_NAME;
 }

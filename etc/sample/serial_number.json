@@ -3,13 +3,13 @@
 	"fields": [
 		{
 			"documentation": "Unique id, first part.",
-			"name": "uid0",
+			"name": "part0",
 			"type": "String",
 			"nullable": false,
 		},
 		{
 			"documentation": "Unique id, second part.",
-			"name": "uid1",
+			"name": "part1",
 			"type": "String",
 			"nullable": false,
 		},

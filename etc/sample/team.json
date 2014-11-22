@@ -21,6 +21,16 @@
 			"type": "String",
 			"nullable": false,
 		},
+		{
+			"documentation": "The serial number of this team.",
+			"name": "serial_number_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "serial_number",
+				"onDelete": "CASCADE"
+			}
+		},
 	],
 
 	"constraints": [

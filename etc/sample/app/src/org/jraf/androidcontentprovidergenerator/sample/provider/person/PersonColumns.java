@@ -28,6 +28,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 /**
  * A human being which is part of a team.
@@ -86,16 +91,16 @@ public class PersonColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == _ID) return true;
-            if (c == FIRST_NAME) return true;
-            if (c == LAST_NAME) return true;
-            if (c == AGE) return true;
-            if (c == BIRTH_DATE) return true;
-            if (c == HAS_BLUE_EYES) return true;
-            if (c == HEIGHT) return true;
-            if (c == GENDER) return true;
-            if (c == COUNTRY_CODE) return true;
+            if (c == FIRST_NAME || c.contains("." + FIRST_NAME)) return true;
+            if (c == LAST_NAME || c.contains("." + LAST_NAME)) return true;
+            if (c == AGE || c.contains("." + AGE)) return true;
+            if (c == BIRTH_DATE || c.contains("." + BIRTH_DATE)) return true;
+            if (c == HAS_BLUE_EYES || c.contains("." + HAS_BLUE_EYES)) return true;
+            if (c == HEIGHT || c.contains("." + HEIGHT)) return true;
+            if (c == GENDER || c.contains("." + GENDER)) return true;
+            if (c == COUNTRY_CODE || c.contains("." + COUNTRY_CODE)) return true;
         }
         return false;
     }
+
 }

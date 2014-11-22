@@ -33,6 +33,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.person.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Cursor wrapper for the {@code person_team} table.
@@ -134,7 +135,7 @@ public class PersonTeamCursor extends AbstractCursor {
      * The commercial name of this company.
      * Cannot be {@code null}.
      */
-    public String getCompanyName() {
+    public String getTeamCompanyName() {
         Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
         return getString(index);
     }
@@ -143,7 +144,7 @@ public class PersonTeamCursor extends AbstractCursor {
      * The full address of this company.
      * Can be {@code null}.
      */
-    public String getCompanyAddress() {
+    public String getTeamCompanyAddress() {
         Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
         return getString(index);
     }
@@ -151,7 +152,7 @@ public class PersonTeamCursor extends AbstractCursor {
     /**
      * The serial number of this company.
      */
-    public long getCompanySerialNumberId() {
+    public long getTeamCompanySerialNumberId() {
         return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
     }
 
@@ -159,8 +160,8 @@ public class PersonTeamCursor extends AbstractCursor {
      * Unique id, first part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid0() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID0);
+    public String getTeamCompanySerialNumberPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
         return getString(index);
     }
 
@@ -168,8 +169,8 @@ public class PersonTeamCursor extends AbstractCursor {
      * Unique id, second part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid1() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID1);
+    public String getTeamCompanySerialNumberPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 
@@ -188,6 +189,31 @@ public class PersonTeamCursor extends AbstractCursor {
      */
     public String getTeamCountryCode() {
         Integer index = getCachedColumnIndexOrThrow(TeamColumns.COUNTRY_CODE);
+        return getString(index);
+    }
+
+    /**
+     * The serial number of this team.
+     */
+    public long getTeamSerialNumberId() {
+        return getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+    }
+
+    /**
+     * Unique id, first part.
+     * Cannot be {@code null}.
+     */
+    public String getTeamSerialNumberPart0() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
+        return getString(index);
+    }
+
+    /**
+     * Unique id, second part.
+     * Cannot be {@code null}.
+     */
+    public String getTeamSerialNumberPart1() {
+        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
         return getString(index);
     }
 }

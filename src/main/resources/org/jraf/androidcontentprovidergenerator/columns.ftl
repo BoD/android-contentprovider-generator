@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import ${config.providerJavaPackage}.${config.providerClassName};
+<#list model.entities as entity>
+import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
+</#list>
 
 /**
 <#if entity.documentation??>
@@ -47,9 +50,17 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
         if (projection == null) return true;
         for (String c : projection) {
         <#list entity.fields as field>
-            if (c == ${field.nameUpperCase}) return true;
+        <#if !field.isId>
+            if (c == ${field.nameUpperCase} || c.contains("." + ${field.nameUpperCase})) return true;
+        </#if>
         </#list>
         }
         return false;
     }
+
+    <#list entity.fields as field>
+    <#if field.foreignKey??>
+    public static final String PREFIX_${field.foreignKey.entity.nameUpperCase} = TABLE_NAME + "__" + ${field.foreignKey.entity.nameCamelCase}Columns.TABLE_NAME;
+    </#if>
+    </#list>
 }

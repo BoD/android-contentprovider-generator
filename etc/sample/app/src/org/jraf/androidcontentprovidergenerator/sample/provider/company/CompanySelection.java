@@ -138,33 +138,33 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         return this;
     }
 
-    public CompanySelection serialNumberUid0(String... value) {
-        addEquals(SerialNumberColumns.UID0, value);
+    public CompanySelection serialNumberPart0(String... value) {
+        addEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public CompanySelection serialNumberUid0Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID0, value);
+    public CompanySelection serialNumberPart0Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public CompanySelection serialNumberUid0Like(String... value) {
-        addLike(SerialNumberColumns.UID0, value);
+    public CompanySelection serialNumberPart0Like(String... value) {
+        addLike(SerialNumberColumns.PART0, value);
         return this;
     }
 
-    public CompanySelection serialNumberUid1(String... value) {
-        addEquals(SerialNumberColumns.UID1, value);
+    public CompanySelection serialNumberPart1(String... value) {
+        addEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public CompanySelection serialNumberUid1Not(String... value) {
-        addNotEquals(SerialNumberColumns.UID1, value);
+    public CompanySelection serialNumberPart1Not(String... value) {
+        addNotEquals(SerialNumberColumns.PART1, value);
         return this;
     }
 
-    public CompanySelection serialNumberUid1Like(String... value) {
-        addLike(SerialNumberColumns.UID1, value);
+    public CompanySelection serialNumberPart1Like(String... value) {
+        addLike(SerialNumberColumns.PART1, value);
         return this;
     }
 }

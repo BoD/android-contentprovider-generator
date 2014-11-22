@@ -54,8 +54,8 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
             + SerialNumberColumns.TABLE_NAME + " ( "
             + SerialNumberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + SerialNumberColumns.UID0 + " TEXT NOT NULL, "
-            + SerialNumberColumns.UID1 + " TEXT NOT NULL "
+            + SerialNumberColumns.PART0 + " TEXT NOT NULL, "
+            + SerialNumberColumns.PART1 + " TEXT NOT NULL "
             + " );";
 
     private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
@@ -63,8 +63,8 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
             + PersonTeamColumns.TEAM_ID + " INTEGER NOT NULL "
-            + ", CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES person (_id) ON DELETE RESTRICT"
-            + ", CONSTRAINT fk_team_id FOREIGN KEY (team_id) REFERENCES team (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT fk_person_id FOREIGN KEY (" + PersonTeamColumns.PERSON_ID + ") REFERENCES person (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT fk_team_id FOREIGN KEY (" + PersonTeamColumns.TEAM_ID + ") REFERENCES team (_id) ON DELETE RESTRICT"
             + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
             + " );";
 
@@ -73,8 +73,10 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
             + TeamColumns.NAME + " TEXT NOT NULL, "
-            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL "
-            + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
+            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL, "
+            + TeamColumns.SERIAL_NUMBER_ID + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_company_id FOREIGN KEY (" + TeamColumns.COMPANY_ID + ") REFERENCES company (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (" + TeamColumns.SERIAL_NUMBER_ID + ") REFERENCES serial_number (_id) ON DELETE CASCADE"
             + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
             + " );";
 
@@ -84,7 +86,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + CompanyColumns.NAME + " TEXT NOT NULL, "
             + CompanyColumns.ADDRESS + " TEXT, "
             + CompanyColumns.SERIAL_NUMBER_ID + " INTEGER NOT NULL "
-            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (serial_number_id) REFERENCES serial_number (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (" + CompanyColumns.SERIAL_NUMBER_ID + ") REFERENCES serial_number (_id) ON DELETE CASCADE"
             + " );";
 
     private static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "

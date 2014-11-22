@@ -293,16 +293,19 @@ public class SampleProvider extends ContentProvider {
                 res.table = PersonTeamColumns.TABLE_NAME;
                 res.tablesWithJoins = PersonTeamColumns.TABLE_NAME;
                 if (PersonColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonColumns.TABLE_NAME + "." + PersonColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_PERSON + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonTeamColumns.PREFIX_PERSON + "." + PersonColumns._ID;
                 }
-                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.TEAM_ID + "=" + TeamColumns.TABLE_NAME + "." + TeamColumns._ID;
+                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_TEAM + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.TEAM_ID + "=" + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns._ID;
                 }
                 if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON " + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
                 }
                 if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + SerialNumberColumns.TABLE_NAME + "." + SerialNumberColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON " + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
                 }
                 res.orderBy = PersonTeamColumns.DEFAULT_ORDER;
                 break;
@@ -312,10 +315,13 @@ public class SampleProvider extends ContentProvider {
                 res.table = TeamColumns.TABLE_NAME;
                 res.tablesWithJoins = TeamColumns.TABLE_NAME;
                 if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + CompanyColumns.TABLE_NAME + "." + CompanyColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
                 }
                 if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + SerialNumberColumns.TABLE_NAME + "." + SerialNumberColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
                 }
                 res.orderBy = TeamColumns.DEFAULT_ORDER;
                 break;
@@ -325,7 +331,7 @@ public class SampleProvider extends ContentProvider {
                 res.table = CompanyColumns.TABLE_NAME;
                 res.tablesWithJoins = CompanyColumns.TABLE_NAME;
                 if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + SerialNumberColumns.TABLE_NAME + "." + SerialNumberColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
                 }
                 res.orderBy = CompanyColumns.DEFAULT_ORDER;
                 break;

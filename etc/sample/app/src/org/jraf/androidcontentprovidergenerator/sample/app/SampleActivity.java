@@ -133,14 +133,33 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeamAndCompany() {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
-        String[] projection = { PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
-                TeamColumns.NAME, TeamColumns.COUNTRY_CODE, CompanyColumns.NAME, SerialNumberColumns.UID0, SerialNumberColumns.UID1, };
+        // @formatter:off
+        String[] projection = { PersonTeamColumns._ID,
+                PersonColumns.FIRST_NAME,
+                PersonColumns.LAST_NAME,
+                PersonColumns.AGE,
+                PersonColumns.COUNTRY_CODE,
+                TeamColumns.NAME,
+                TeamColumns.COUNTRY_CODE,
+                TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS TEAM_SN_PART0", // In this case we need to manually prefix and alias
+                TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS TEAM_SN_PART1", // In this case we need to manually prefix and alias
+                CompanyColumns.NAME,
+                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0", // In this case we need to manually prefix and alias
+                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1", // In this case we need to manually prefix and alias
+        };
+        // @formatter:on
         PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG,
-                    c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode()
-                            + " ) - team: " + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ") - company: " + c.getCompanyName() + " (S/N: "
-                            + c.getSerialNumberUid0() + "-" + c.getSerialNumberUid1() + ")");
+                    // @formatter:off
+                    c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode() + ")"
+                    + " - "
+                    + "team: "
+                    + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
+                    + " - "
+                    + "company: "
+                    + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
+            // @formatter:on
         }
         c.close();
     }
@@ -171,26 +190,34 @@ public class SampleActivity extends Activity {
     }
 
     private void populateBase() {
-        // Insert companies serial numbers
-        long googleSn = insertSerialNumber("XXX", "GOOG");
-        long microsoftSn = insertSerialNumber("XXX", "MSFT");
-        long appleSn = insertSerialNumber("XXX", "AAPL");
+        // Insert company serial numbers
+        long googleSn = insertSerialNumber("C", "GOOG");
+        long microsoftSn = insertSerialNumber("C", "MSFT");
+        long appleSn = insertSerialNumber("C", "AAPL");
 
         // Insert companies
         long google = insertCompany("Google", "1600 Amphitheatre Pkwy, Mountain View, CA 94043", googleSn);
         long microsoft = insertCompany("Microsoft", "One Microsoft Way Redmond, WA 98052-7329 USA", microsoftSn);
         long apple = insertCompany("Apple", "1 Infinite Loop, Cupertino, CA 95014", appleSn);
 
-        // Insert teams
+        // Insert teams (and also team serial numbers)
         ArrayList<Long> teams = new ArrayList<>();
-        teams.add(insertTeam(google, "Nunchuk Geckos", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(google, "Dancing Dingoes", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(google, "American Dragons", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(microsoft, "New York Lightning", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(microsoft, "Red Legends", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(microsoft, "Awesome Predators", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(apple, "Cyborg Chasers", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
-        teams.add(insertTeam(apple, "Kamikaze Falcons", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)]));
+        teams.add(insertTeam(google, "Nunchuk Geckos", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(google, "Dancing Dingoes", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(google, "American Dragons", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(microsoft, "New York Lightning", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(microsoft, "Red Legends", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(microsoft, "Awesome Predators", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(apple, "Cyborg Chasers", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
+        teams.add(insertTeam(apple, "Kamikaze Falcons", COUNTRY_CODES[sRandom.nextInt(COUNTRY_CODES.length)],
+                insertSerialNumber("T", Integer.toHexString(sRandom.nextInt()))));
 
         // Insert persons
         ArrayList<Long> persons = new ArrayList<>();
@@ -225,10 +252,11 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created serialnumber.
      */
-    private long insertSerialNumber(String uid0, String uid1) {
+    private long insertSerialNumber(String part0, String part1) {
         SerialNumberContentValues values = new SerialNumberContentValues();
-        values.putUid0(uid0);
-        values.putUid1(uid1);
+        values.putPart0(part0);
+        values.putPart1(part1);
+
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }
@@ -243,6 +271,7 @@ public class SampleActivity extends Activity {
         values.putName(name);
         values.putAddress(address);
         values.putSerialNumberId(serialNumberId);
+
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }
@@ -252,11 +281,13 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created team.
      */
-    private long insertTeam(long companyId, String name, String countryCode) {
+    private long insertTeam(long companyId, String name, String countryCode, long serialNumberId) {
         TeamContentValues values = new TeamContentValues();
         values.putCompanyId(companyId);
         values.putName(name);
         values.putCountryCode(countryCode);
+        values.putSerialNumberId(serialNumberId);
+
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }
@@ -291,6 +322,7 @@ public class SampleActivity extends Activity {
         PersonTeamContentValues values = new PersonTeamContentValues();
         values.putPersonId(personId);
         values.putTeamId(teamId);
+
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }

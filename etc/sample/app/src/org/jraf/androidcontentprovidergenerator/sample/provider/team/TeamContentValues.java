@@ -75,4 +75,14 @@ public class TeamContentValues extends AbstractContentValues {
     }
 
 
+
+    /**
+     * The serial number of this team.
+     */
+    public TeamContentValues putSerialNumberId(long value) {
+        mContentValues.put(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+
 }

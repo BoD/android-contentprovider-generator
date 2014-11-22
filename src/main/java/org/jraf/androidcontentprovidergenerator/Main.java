@@ -257,6 +257,7 @@ public class Main {
         Map<String, Object> root = new HashMap<>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
