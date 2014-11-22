@@ -27,6 +27,8 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.Perso
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamCursor;
@@ -55,7 +57,7 @@ public class SampleActivity extends Activity {
 
     }
 
-    private OnClickListener mOnClickListener = new OnClickListener() {
+    private final OnClickListener mOnClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -132,11 +134,13 @@ public class SampleActivity extends Activity {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
         String[] projection = { PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
-                TeamColumns.NAME, TeamColumns.COUNTRY_CODE, CompanyColumns.NAME };
+                TeamColumns.NAME, TeamColumns.COUNTRY_CODE, CompanyColumns.NAME, SerialNumberColumns.UID0, SerialNumberColumns.UID1, };
         PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
-            Log.d(TAG, c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode()
-                    + " ) - team: " + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ") - company: " + c.getCompanyName());
+            Log.d(TAG,
+                    c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode()
+                            + " ) - team: " + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ") - company: " + c.getCompanyName() + " (S/N: "
+                            + c.getSerialNumberUid0() + "-" + c.getSerialNumberUid1() + ")");
         }
         c.close();
     }
@@ -167,10 +171,15 @@ public class SampleActivity extends Activity {
     }
 
     private void populateBase() {
+        // Insert companies serial numbers
+        long googleSn = insertSerialNumber("XXX", "GOOG");
+        long microsoftSn = insertSerialNumber("XXX", "MSFT");
+        long appleSn = insertSerialNumber("XXX", "AAPL");
+
         // Insert companies
-        long google = insertCompany("Google", "1600 Amphitheatre Pkwy, Mountain View, CA 94043");
-        long microsoft = insertCompany("Microsoft", "One Microsoft Way Redmond, WA 98052-7329 USA");
-        long apple = insertCompany("Apple", "1 Infinite Loop, Cupertino, CA 95014");
+        long google = insertCompany("Google", "1600 Amphitheatre Pkwy, Mountain View, CA 94043", googleSn);
+        long microsoft = insertCompany("Microsoft", "One Microsoft Way Redmond, WA 98052-7329 USA", microsoftSn);
+        long apple = insertCompany("Apple", "1 Infinite Loop, Cupertino, CA 95014", appleSn);
 
         // Insert teams
         ArrayList<Long> teams = new ArrayList<>();
@@ -212,14 +221,28 @@ public class SampleActivity extends Activity {
     }
 
     /**
+     * Insert a serial number.
+     *
+     * @return the id of the created serialnumber.
+     */
+    private long insertSerialNumber(String uid0, String uid1) {
+        SerialNumberContentValues values = new SerialNumberContentValues();
+        values.putUid0(uid0);
+        values.putUid1(uid1);
+        Uri uri = values.insert(getContentResolver());
+        return ContentUris.parseId(uri);
+    }
+
+    /**
      * Insert a company.
      *
      * @return the id of the created company.
      */
-    private long insertCompany(String name, String address) {
+    private long insertCompany(String name, String address, long serialNumberId) {
         CompanyContentValues values = new CompanyContentValues();
         values.putName(name);
         values.putAddress(address);
+        values.putSerialNumberId(serialNumberId);
         Uri uri = values.insert(getContentResolver());
         return ContentUris.parseId(uri);
     }

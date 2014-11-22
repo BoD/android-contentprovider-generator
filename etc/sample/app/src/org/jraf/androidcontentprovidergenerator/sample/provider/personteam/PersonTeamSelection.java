@@ -34,6 +34,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.*;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
  * Selection for the {@code person_team} table.
@@ -353,6 +354,66 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection companyAddressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberId(long... value) {
+        addEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberIdNot(long... value) {
+        addNotEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberIdGt(long value) {
+        addGreaterThan(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberIdGtEq(long value) {
+        addGreaterThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberIdLt(long value) {
+        addLessThan(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection companySerialNumberIdLtEq(long value) {
+        addLessThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid0(String... value) {
+        addEquals(SerialNumberColumns.UID0, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid0Not(String... value) {
+        addNotEquals(SerialNumberColumns.UID0, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid0Like(String... value) {
+        addLike(SerialNumberColumns.UID0, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid1(String... value) {
+        addEquals(SerialNumberColumns.UID1, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid1Not(String... value) {
+        addNotEquals(SerialNumberColumns.UID1, value);
+        return this;
+    }
+
+    public PersonTeamSelection serialNumberUid1Like(String... value) {
+        addLike(SerialNumberColumns.UID1, value);
         return this;
     }
 

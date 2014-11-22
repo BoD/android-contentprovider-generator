@@ -11,7 +11,7 @@ import android.net.Uri;
 
 import ${config.providerJavaPackage}.base.AbstractSelection;
 <#list entity.joinedEntities as joinedEntity>
-import ${config.providerJavaPackage}.${joinedEntity.nameLowerCase}.*;
+import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
 </#list>
 
 /**

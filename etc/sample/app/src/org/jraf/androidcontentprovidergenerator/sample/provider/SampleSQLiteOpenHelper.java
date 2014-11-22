@@ -35,10 +35,11 @@ import android.os.Build;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
-import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 
 public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = SampleSQLiteOpenHelper.class.getSimpleName();
@@ -50,11 +51,40 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private final SampleSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
     // @formatter:off
+    private static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
+            + SerialNumberColumns.TABLE_NAME + " ( "
+            + SerialNumberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + SerialNumberColumns.UID0 + " TEXT NOT NULL, "
+            + SerialNumberColumns.UID1 + " TEXT NOT NULL "
+            + " );";
+
+    private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
+            + PersonTeamColumns.TABLE_NAME + " ( "
+            + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
+            + PersonTeamColumns.TEAM_ID + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES person (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT fk_team_id FOREIGN KEY (team_id) REFERENCES team (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
+            + " );";
+
+    private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
+            + TeamColumns.TABLE_NAME + " ( "
+            + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
+            + TeamColumns.NAME + " TEXT NOT NULL, "
+            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL "
+            + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
+            + " );";
+
     private static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
             + CompanyColumns.TABLE_NAME + " ( "
             + CompanyColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CompanyColumns.NAME + " TEXT NOT NULL, "
-            + CompanyColumns.ADDRESS + " TEXT "
+            + CompanyColumns.ADDRESS + " TEXT, "
+            + CompanyColumns.SERIAL_NUMBER_ID + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (serial_number_id) REFERENCES serial_number (_id) ON DELETE CASCADE"
             + " );";
 
     private static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "
@@ -76,26 +106,6 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
             + " ON " + PersonColumns.TABLE_NAME + " ( " + PersonColumns.LAST_NAME + " );";
-
-    private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
-            + PersonTeamColumns.TABLE_NAME + " ( "
-            + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
-            + PersonTeamColumns.TEAM_ID + " INTEGER NOT NULL "
-            + ", CONSTRAINT fk_person_id FOREIGN KEY (person_id) REFERENCES person (_id) ON DELETE RESTRICT"
-            + ", CONSTRAINT fk_team_id FOREIGN KEY (team_id) REFERENCES team (_id) ON DELETE RESTRICT"
-            + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
-            + " );";
-
-    private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
-            + TeamColumns.TABLE_NAME + " ( "
-            + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
-            + TeamColumns.NAME + " TEXT NOT NULL, "
-            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL "
-            + ", CONSTRAINT fk_company_id FOREIGN KEY (company_id) REFERENCES company (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
-            + " );";
 
     // @formatter:on
 
@@ -153,12 +163,13 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
         mOpenHelperCallbacks.onPreCreate(mContext, db);
+        db.execSQL(SQL_CREATE_TABLE_SERIAL_NUMBER);
+        db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
+        db.execSQL(SQL_CREATE_TABLE_TEAM);
         db.execSQL(SQL_CREATE_TABLE_COMPANY);
         db.execSQL(SQL_CREATE_INDEX_COMPANY_NAME);
         db.execSQL(SQL_CREATE_TABLE_PERSON);
         db.execSQL(SQL_CREATE_INDEX_PERSON_LAST_NAME);
-        db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
-        db.execSQL(SQL_CREATE_TABLE_TEAM);
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 

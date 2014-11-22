@@ -22,53 +22,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.company;
+package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
 
 import java.util.Date;
 
 import android.database.Cursor;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
-import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 
 /**
- * Cursor wrapper for the {@code company} table.
+ * Cursor wrapper for the {@code serial_number} table.
  */
-public class CompanyCursor extends AbstractCursor {
-    public CompanyCursor(Cursor cursor) {
+public class SerialNumberCursor extends AbstractCursor {
+    public SerialNumberCursor(Cursor cursor) {
         super(cursor);
-    }
-
-    /**
-     * The commercial name of this company.
-     * Cannot be {@code null}.
-     */
-    public String getName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
-        return getString(index);
-    }
-
-    /**
-     * The full address of this company.
-     * Can be {@code null}.
-     */
-    public String getAddress() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
-        return getString(index);
-    }
-
-    /**
-     * The serial number of this company.
-     */
-    public long getSerialNumberId() {
-        return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
     }
 
     /**
      * Unique id, first part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid0() {
+    public String getUid0() {
         Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID0);
         return getString(index);
     }
@@ -77,7 +51,7 @@ public class CompanyCursor extends AbstractCursor {
      * Unique id, second part.
      * Cannot be {@code null}.
      */
-    public String getSerialNumberUid1() {
+    public String getUid1() {
         Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.UID1);
         return getString(index);
     }

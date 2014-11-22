@@ -14,5 +14,15 @@
 			"type": "String",
 			"nullable": true,
 		},
+		{
+			"documentation": "The serial number of this company.",
+			"name": "serial_number_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "serial_number",
+				"onDelete": "CASCADE"
+			}
+		},
 	]
 }

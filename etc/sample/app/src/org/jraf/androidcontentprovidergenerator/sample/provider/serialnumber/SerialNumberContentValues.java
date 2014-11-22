@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.company;
+package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
 
 import java.util.Date;
 
@@ -32,12 +32,12 @@ import android.net.Uri;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractContentValues;
 
 /**
- * Content values wrapper for the {@code company} table.
+ * Content values wrapper for the {@code serial_number} table.
  */
-public class CompanyContentValues extends AbstractContentValues {
+public class SerialNumberContentValues extends AbstractContentValues {
     @Override
     public Uri uri() {
-        return CompanyColumns.CONTENT_URI;
+        return SerialNumberColumns.CONTENT_URI;
     }
 
     /**
@@ -46,40 +46,27 @@ public class CompanyContentValues extends AbstractContentValues {
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, CompanySelection where) {
+    public int update(ContentResolver contentResolver, SerialNumberSelection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
     /**
-     * The commercial name of this company.
+     * Unique id, first part.
      */
-    public CompanyContentValues putName(String value) {
-        if (value == null) throw new IllegalArgumentException("value for name must not be null");
-        mContentValues.put(CompanyColumns.NAME, value);
+    public SerialNumberContentValues putUid0(String value) {
+        if (value == null) throw new IllegalArgumentException("value for uid0 must not be null");
+        mContentValues.put(SerialNumberColumns.UID0, value);
         return this;
     }
 
 
 
     /**
-     * The full address of this company.
+     * Unique id, second part.
      */
-    public CompanyContentValues putAddress(String value) {
-        mContentValues.put(CompanyColumns.ADDRESS, value);
-        return this;
-    }
-
-    public CompanyContentValues putAddressNull() {
-        mContentValues.putNull(CompanyColumns.ADDRESS);
-        return this;
-    }
-
-
-    /**
-     * The serial number of this company.
-     */
-    public CompanyContentValues putSerialNumberId(long value) {
-        mContentValues.put(CompanyColumns.SERIAL_NUMBER_ID, value);
+    public SerialNumberContentValues putUid1(String value) {
+        if (value == null) throw new IllegalArgumentException("value for uid1 must not be null");
+        mContentValues.put(SerialNumberColumns.UID1, value);
         return this;
     }
 
