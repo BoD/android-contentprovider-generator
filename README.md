@@ -201,7 +201,7 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
 - **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
 - **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
-- Cases such as "A has a FK to B, B has a FK to C, A has a FK to C" generate ambiguities in the queries, because C columns appear twice.  In the sample app you can see an example of how to deal with this case, using prefixes and aliases (SQL's `AS` keyword).
+- Cases such as "A has a FK to B, B has a FK to C, A has a FK to C" generate ambiguities in the queries, because C columns appear twice.  In the [sample app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) you can see an example of how to deal with this case, using prefixes and aliases (SQL's `AS` keyword).
 
 
 Building
