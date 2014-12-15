@@ -6,9 +6,13 @@ package ${config.providerJavaPackage}.${entity.packageName};
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+<#if !library>
 import ${config.providerJavaPackage}.${config.providerClassName};
-<#list model.entities as entity>
-import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
+</#if>
+<#list model.entities as e>
+<#if e != entity>
+import ${config.providerJavaPackage}.${e.packageName}.${e.nameCamelCase}Columns;
+</#if>
 </#list>
 
 /**
@@ -20,7 +24,11 @@ import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCas
  */
 public class ${entity.nameCamelCase}Columns implements BaseColumns {
     public static final String TABLE_NAME = "${entity.nameLowerCase}";
+    <#if library??>
+    public static final Uri CONTENT_URI = Uri.parse("content://${config.authority}/" + TABLE_NAME);
+	<#else>
     public static final Uri CONTENT_URI = Uri.parse(${config.providerClassName}.CONTENT_URI_BASE + "/" + TABLE_NAME);
+	</#if>
 
     <#list entity.fields as field>
     <#if field.documentation??>

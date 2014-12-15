@@ -2,8 +2,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jraf</groupId>
-    <artifactId>android_contentprovider_generator</artifactId>
-    <version>1.8.3</version> <!-- Do not forget to update README.md when updating this value -->
+    <artifactId>android-contentprovider-generator</artifactId>
+    <version>1.9.0</version> <!-- Do not forget to update README.md when updating this value -->
     <packaging>jar</packaging>
 
     <name>GenerateAndroidProvider</name>

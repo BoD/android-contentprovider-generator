@@ -24,21 +24,30 @@
  */
 package org.jraf.androidcontentprovidergenerator;
 
-import java.io.File;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+
+import java.io.File;
 
 @Parameters(separators = " =")
 public class Arguments {
     public static String DEFAULT_TITLE = "GenerateAndroidProvider";
 
-    @Parameter(names = { "-h", "--help" }, description = "Display this help and exit")
+    @Parameter(names = {"-h", "--help"}, description = "Display this help and exit")
     public boolean help;
 
-    @Parameter(names = { "-i", "--input" }, description = "Input folder, where to find _config.json and your entity json files")
+    @Parameter(names = {"-i", "--input"}, description = "Input folder, where to find _config.json and your entity json files")
     public File inputDir = new File(".");
 
-    @Parameter(names = { "-o", "--output" }, description = "Output folder, where the resulting files will be generated")
+    @Parameter(names = {"-o", "--output"}, description = "Output folder, where the resulting files will be generated")
     public File outputDir = new File("generated");
+
+    @Parameter(names = {"-c", "--custom"}, description = "Custom output folder, where customizable files will be generated")
+    public File customDir;
+
+    @Parameter(names = {"-l", "--library"}, description = "Generate for library (Do not generate provider and db helper classes)")
+    public boolean library = false;
+
+    @Parameter(names = {"-d", "--debug"}, description = "Generate debug code")
+    public boolean debug = false;
 }

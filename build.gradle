@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'maven'
 
 ['deploy', 'eclipse', 'idea'].each { g ->
@@ -8,11 +9,13 @@ apply plugin: 'maven'
 }
 
 group = 'org.jraf'
-version = '1.8.3'
+version = '1.9.0'
 description = """GenerateAndroidProvider"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+mainClassName = 'org.jraf.androidcontentprovidergenerator.Main'
 
 repositories {
     maven { url "http://repo.maven.apache.org/maven2" }

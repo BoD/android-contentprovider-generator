@@ -258,6 +258,8 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
         root.put("model", Model.get());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
@@ -284,6 +286,8 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
         root.put("model", Model.get());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         // AbstractCursor
         Template template = getFreeMarkerConfig().getTemplate("abstractcursor.ftl");
@@ -363,6 +367,8 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         template.process(root, out);
     }
@@ -380,6 +386,8 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         template.process(root, out);
     }
@@ -388,7 +396,11 @@ public class Main {
         Template template = getFreeMarkerConfig().getTemplate("sqliteopenhelpercallbacks.ftl");
         JSONObject config = getConfig(arguments.inputDir);
         String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
-        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        File outputDir = arguments.customDir;
+        if(outputDir == null) {
+        	outputDir = arguments.outputDir;
+        }
+        File providerDir = new File(outputDir, providerJavaPackage.replace('.', '/'));
         providerDir.mkdirs();
         File outputFile = new File(providerDir, config.getString(Json.SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME) + ".java");
         if (outputFile.exists()) {
@@ -401,6 +413,8 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         template.process(root, out);
     }
@@ -414,6 +428,8 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("library", arguments.library);
+        root.put("debug", arguments.debug);
 
         Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);
@@ -422,7 +438,7 @@ public class Main {
     private void go(String[] args) throws IOException, JSONException, TemplateException {
         Arguments arguments = new Arguments();
         JCommander jCommander = new JCommander(arguments, args);
-        jCommander.setProgramName("GenerateAndroidProvider");
+        jCommander.setProgramName("generate ");
 
         if (arguments.help) {
             jCommander.usage();
@@ -437,11 +453,12 @@ public class Main {
 
         generateColumns(arguments);
         generateWrappers(arguments);
-        generateContentProvider(arguments);
-        generateSqliteOpenHelper(arguments);
-        generateSqliteOpenHelperCallbacks(arguments);
-
-        printManifest(arguments);
+        if (!arguments.library){
+        	generateContentProvider(arguments);
+        	generateSqliteOpenHelper(arguments);
+        	generateSqliteOpenHelperCallbacks(arguments);
+            printManifest(arguments);
+        }
     }
 
     public static void main(String[] args) throws Exception {

@@ -18,6 +18,7 @@ eclipse.gradle
 .classpath
 .project
 .settings
+bin
 
 # mac
 *.DS_Store
