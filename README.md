@@ -216,7 +216,7 @@ This will produce `android-contentprovider-generator-1.8.4-bundle.jar` in the `t
 
 Similar tools
 -------------
-Here is a list of other tools that try to solve the same problem.
+Here is a list of other tools that try to tackle the same problem.
 
 I did not have the chance to try them out.
 
