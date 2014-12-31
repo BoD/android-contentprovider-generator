@@ -31,43 +31,42 @@ public abstract class AbstractCursor extends CursorWrapper {
     }
 
     public String getStringOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
-        if (isNull(index)) return null;
+        int index = getCachedColumnIndexOrThrow(colName);
         return getString(index);
     }
 
     public Integer getIntegerOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getInt(index);
     }
 
     public Long getLongOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Float getFloatOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getFloat(index);
     }
 
     public Double getDoubleOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getDouble(index);
     }
 
     public Boolean getBoolean(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getInt(index) != 0;
     }
 
     public Date getDate(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return new Date(getLong(index));
     }
