@@ -7,7 +7,7 @@
  *                              /___/
  * repository.
  *
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -62,36 +62,36 @@ public class SampleProvider extends ContentProvider {
     public static final String QUERY_NOTIFY = "QUERY_NOTIFY";
     public static final String QUERY_GROUP_BY = "QUERY_GROUP_BY";
 
-    private static final int URI_TYPE_SERIAL_NUMBER = 0;
-    private static final int URI_TYPE_SERIAL_NUMBER_ID = 1;
+    private static final int URI_TYPE_COMPANY = 0;
+    private static final int URI_TYPE_COMPANY_ID = 1;
 
-    private static final int URI_TYPE_PERSON_TEAM = 2;
-    private static final int URI_TYPE_PERSON_TEAM_ID = 3;
+    private static final int URI_TYPE_PERSON = 2;
+    private static final int URI_TYPE_PERSON_ID = 3;
 
-    private static final int URI_TYPE_TEAM = 4;
-    private static final int URI_TYPE_TEAM_ID = 5;
+    private static final int URI_TYPE_PERSON_TEAM = 4;
+    private static final int URI_TYPE_PERSON_TEAM_ID = 5;
 
-    private static final int URI_TYPE_COMPANY = 6;
-    private static final int URI_TYPE_COMPANY_ID = 7;
+    private static final int URI_TYPE_SERIAL_NUMBER = 6;
+    private static final int URI_TYPE_SERIAL_NUMBER_ID = 7;
 
-    private static final int URI_TYPE_PERSON = 8;
-    private static final int URI_TYPE_PERSON_ID = 9;
+    private static final int URI_TYPE_TEAM = 8;
+    private static final int URI_TYPE_TEAM_ID = 9;
 
 
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
-        URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME, URI_TYPE_SERIAL_NUMBER);
-        URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME + "/#", URI_TYPE_SERIAL_NUMBER_ID);
-        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME, URI_TYPE_PERSON_TEAM);
-        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_TEAM_ID);
-        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME, URI_TYPE_TEAM);
-        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME + "/#", URI_TYPE_TEAM_ID);
         URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME, URI_TYPE_COMPANY);
         URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME + "/#", URI_TYPE_COMPANY_ID);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME, URI_TYPE_PERSON);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_ID);
+        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME, URI_TYPE_PERSON_TEAM);
+        URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_TEAM_ID);
+        URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME, URI_TYPE_SERIAL_NUMBER);
+        URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME + "/#", URI_TYPE_SERIAL_NUMBER_ID);
+        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME, URI_TYPE_TEAM);
+        URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME + "/#", URI_TYPE_TEAM_ID);
     }
 
     protected SampleSQLiteOpenHelper mSampleSQLiteOpenHelper;
@@ -123,21 +123,6 @@ public class SampleProvider extends ContentProvider {
     public String getType(Uri uri) {
         int match = URI_MATCHER.match(uri);
         switch (match) {
-            case URI_TYPE_SERIAL_NUMBER:
-                return TYPE_CURSOR_DIR + SerialNumberColumns.TABLE_NAME;
-            case URI_TYPE_SERIAL_NUMBER_ID:
-                return TYPE_CURSOR_ITEM + SerialNumberColumns.TABLE_NAME;
-
-            case URI_TYPE_PERSON_TEAM:
-                return TYPE_CURSOR_DIR + PersonTeamColumns.TABLE_NAME;
-            case URI_TYPE_PERSON_TEAM_ID:
-                return TYPE_CURSOR_ITEM + PersonTeamColumns.TABLE_NAME;
-
-            case URI_TYPE_TEAM:
-                return TYPE_CURSOR_DIR + TeamColumns.TABLE_NAME;
-            case URI_TYPE_TEAM_ID:
-                return TYPE_CURSOR_ITEM + TeamColumns.TABLE_NAME;
-
             case URI_TYPE_COMPANY:
                 return TYPE_CURSOR_DIR + CompanyColumns.TABLE_NAME;
             case URI_TYPE_COMPANY_ID:
@@ -147,6 +132,21 @@ public class SampleProvider extends ContentProvider {
                 return TYPE_CURSOR_DIR + PersonColumns.TABLE_NAME;
             case URI_TYPE_PERSON_ID:
                 return TYPE_CURSOR_ITEM + PersonColumns.TABLE_NAME;
+
+            case URI_TYPE_PERSON_TEAM:
+                return TYPE_CURSOR_DIR + PersonTeamColumns.TABLE_NAME;
+            case URI_TYPE_PERSON_TEAM_ID:
+                return TYPE_CURSOR_ITEM + PersonTeamColumns.TABLE_NAME;
+
+            case URI_TYPE_SERIAL_NUMBER:
+                return TYPE_CURSOR_DIR + SerialNumberColumns.TABLE_NAME;
+            case URI_TYPE_SERIAL_NUMBER_ID:
+                return TYPE_CURSOR_ITEM + SerialNumberColumns.TABLE_NAME;
+
+            case URI_TYPE_TEAM:
+                return TYPE_CURSOR_DIR + TeamColumns.TABLE_NAME;
+            case URI_TYPE_TEAM_ID:
+                return TYPE_CURSOR_ITEM + TeamColumns.TABLE_NAME;
 
         }
         return null;
@@ -224,8 +224,8 @@ public class SampleProvider extends ContentProvider {
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
         projection = ensureIdIsFullyQualified(projection, queryParams.table);
-        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs,
-                groupBy, null, sortOrder == null ? queryParams.orderBy : sortOrder);
+        Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
+                null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
@@ -284,73 +284,12 @@ public class SampleProvider extends ContentProvider {
         String id = null;
         int matchedId = URI_MATCHER.match(uri);
         switch (matchedId) {
-            case URI_TYPE_SERIAL_NUMBER:
-            case URI_TYPE_SERIAL_NUMBER_ID:
-                res.table = SerialNumberColumns.TABLE_NAME;
-                res.tablesWithJoins = SerialNumberColumns.TABLE_NAME;
-                res.orderBy = SerialNumberColumns.DEFAULT_ORDER;
-                break;
-
-            case URI_TYPE_PERSON_TEAM:
-            case URI_TYPE_PERSON_TEAM_ID:
-                res.table = PersonTeamColumns.TABLE_NAME;
-                res.tablesWithJoins = PersonTeamColumns.TABLE_NAME;
-                if (PersonColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_PERSON + " ON "
-                            + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonTeamColumns.PREFIX_PERSON + "."
-                            + PersonColumns._ID;
-                }
-                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)
-                        || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_TEAM + " ON "
-                            + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.TEAM_ID + "=" + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns._ID;
-                }
-                if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON "
-                            + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
-                }
-                if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON "
-                            + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "."
-                            + SerialNumberColumns._ID;
-                }
-                if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON "
-                            + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "."
-                            + SerialNumberColumns._ID;
-                }
-                res.orderBy = PersonTeamColumns.DEFAULT_ORDER;
-                break;
-
-            case URI_TYPE_TEAM:
-            case URI_TYPE_TEAM_ID:
-                res.table = TeamColumns.TABLE_NAME;
-                res.tablesWithJoins = TeamColumns.TABLE_NAME;
-                if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON "
-                            + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
-                }
-                if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON "
-                            + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "."
-                            + SerialNumberColumns._ID;
-                }
-                if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON "
-                            + TeamColumns.TABLE_NAME + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "."
-                            + SerialNumberColumns._ID;
-                }
-                res.orderBy = TeamColumns.DEFAULT_ORDER;
-                break;
-
             case URI_TYPE_COMPANY:
             case URI_TYPE_COMPANY_ID:
                 res.table = CompanyColumns.TABLE_NAME;
                 res.tablesWithJoins = CompanyColumns.TABLE_NAME;
                 if (SerialNumberColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON "
-                            + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "."
-                            + SerialNumberColumns._ID;
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
                 }
                 res.orderBy = CompanyColumns.DEFAULT_ORDER;
                 break;
@@ -362,16 +301,61 @@ public class SampleProvider extends ContentProvider {
                 res.orderBy = PersonColumns.DEFAULT_ORDER;
                 break;
 
+            case URI_TYPE_PERSON_TEAM:
+            case URI_TYPE_PERSON_TEAM_ID:
+                res.table = PersonTeamColumns.TABLE_NAME;
+                res.tablesWithJoins = PersonTeamColumns.TABLE_NAME;
+                if (PersonColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_PERSON + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonTeamColumns.PREFIX_PERSON + "." + PersonColumns._ID;
+                }
+                if (TeamColumns.hasColumns(projection) || CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + TeamColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_TEAM + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.TEAM_ID + "=" + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns._ID;
+                }
+                if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON " + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON " + PersonTeamColumns.PREFIX_TEAM + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                res.orderBy = PersonTeamColumns.DEFAULT_ORDER;
+                break;
+
+            case URI_TYPE_SERIAL_NUMBER:
+            case URI_TYPE_SERIAL_NUMBER_ID:
+                res.table = SerialNumberColumns.TABLE_NAME;
+                res.tablesWithJoins = SerialNumberColumns.TABLE_NAME;
+                res.orderBy = SerialNumberColumns.DEFAULT_ORDER;
+                break;
+
+            case URI_TYPE_TEAM:
+            case URI_TYPE_TEAM_ID:
+                res.table = TeamColumns.TABLE_NAME;
+                res.tablesWithJoins = TeamColumns.TABLE_NAME;
+                if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                if (SerialNumberColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_SERIAL_NUMBER + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.SERIAL_NUMBER_ID + "=" + TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
+                }
+                res.orderBy = TeamColumns.DEFAULT_ORDER;
+                break;
+
             default:
                 throw new IllegalArgumentException("The uri '" + uri + "' is not supported by this ContentProvider");
         }
 
         switch (matchedId) {
-            case URI_TYPE_SERIAL_NUMBER_ID:
-            case URI_TYPE_PERSON_TEAM_ID:
-            case URI_TYPE_TEAM_ID:
             case URI_TYPE_COMPANY_ID:
             case URI_TYPE_PERSON_ID:
+            case URI_TYPE_PERSON_TEAM_ID:
+            case URI_TYPE_SERIAL_NUMBER_ID:
+            case URI_TYPE_TEAM_ID:
                 id = uri.getLastPathSegment();
         }
         if (id != null) {

@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,11 +35,11 @@ import android.os.Build;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
-import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = SampleSQLiteOpenHelper.class.getSimpleName();
@@ -51,35 +51,6 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private final SampleSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
     // @formatter:off
-    private static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
-            + SerialNumberColumns.TABLE_NAME + " ( "
-            + SerialNumberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + SerialNumberColumns.PART0 + " TEXT NOT NULL, "
-            + SerialNumberColumns.PART1 + " TEXT NOT NULL "
-            + " );";
-
-    private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
-            + PersonTeamColumns.TABLE_NAME + " ( "
-            + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
-            + PersonTeamColumns.TEAM_ID + " INTEGER NOT NULL "
-            + ", CONSTRAINT fk_person_id FOREIGN KEY (" + PersonTeamColumns.PERSON_ID + ") REFERENCES person (_id) ON DELETE RESTRICT"
-            + ", CONSTRAINT fk_team_id FOREIGN KEY (" + PersonTeamColumns.TEAM_ID + ") REFERENCES team (_id) ON DELETE RESTRICT"
-            + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
-            + " );";
-
-    private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
-            + TeamColumns.TABLE_NAME + " ( "
-            + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
-            + TeamColumns.NAME + " TEXT NOT NULL, "
-            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL, "
-            + TeamColumns.SERIAL_NUMBER_ID + " INTEGER NOT NULL "
-            + ", CONSTRAINT fk_company_id FOREIGN KEY (" + TeamColumns.COMPANY_ID + ") REFERENCES company (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (" + TeamColumns.SERIAL_NUMBER_ID + ") REFERENCES serial_number (_id) ON DELETE CASCADE"
-            + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
-            + " );";
-
     private static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
             + CompanyColumns.TABLE_NAME + " ( "
             + CompanyColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -108,6 +79,35 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
             + " ON " + PersonColumns.TABLE_NAME + " ( " + PersonColumns.LAST_NAME + " );";
+
+    private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
+            + PersonTeamColumns.TABLE_NAME + " ( "
+            + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
+            + PersonTeamColumns.TEAM_ID + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_person_id FOREIGN KEY (" + PersonTeamColumns.PERSON_ID + ") REFERENCES person (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT fk_team_id FOREIGN KEY (" + PersonTeamColumns.TEAM_ID + ") REFERENCES team (_id) ON DELETE RESTRICT"
+            + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
+            + " );";
+
+    private static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
+            + SerialNumberColumns.TABLE_NAME + " ( "
+            + SerialNumberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + SerialNumberColumns.PART0 + " TEXT NOT NULL, "
+            + SerialNumberColumns.PART1 + " TEXT NOT NULL "
+            + " );";
+
+    private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
+            + TeamColumns.TABLE_NAME + " ( "
+            + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
+            + TeamColumns.NAME + " TEXT NOT NULL, "
+            + TeamColumns.COUNTRY_CODE + " TEXT NOT NULL, "
+            + TeamColumns.SERIAL_NUMBER_ID + " INTEGER NOT NULL "
+            + ", CONSTRAINT fk_company_id FOREIGN KEY (" + TeamColumns.COMPANY_ID + ") REFERENCES company (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (" + TeamColumns.SERIAL_NUMBER_ID + ") REFERENCES serial_number (_id) ON DELETE CASCADE"
+            + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
+            + " );";
 
     // @formatter:on
 
@@ -165,13 +165,13 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
         mOpenHelperCallbacks.onPreCreate(mContext, db);
-        db.execSQL(SQL_CREATE_TABLE_SERIAL_NUMBER);
-        db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
-        db.execSQL(SQL_CREATE_TABLE_TEAM);
         db.execSQL(SQL_CREATE_TABLE_COMPANY);
         db.execSQL(SQL_CREATE_INDEX_COMPANY_NAME);
         db.execSQL(SQL_CREATE_TABLE_PERSON);
         db.execSQL(SQL_CREATE_INDEX_PERSON_LAST_NAME);
+        db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
+        db.execSQL(SQL_CREATE_TABLE_SERIAL_NUMBER);
+        db.execSQL(SQL_CREATE_TABLE_TEAM);
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 

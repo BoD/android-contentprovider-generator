@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,6 +95,10 @@ public class Main {
                 return !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json");
             }
         });
+
+        // Sort the entity files (lexicographically) so they are always processed in the same order
+        Arrays.sort(entityFiles);
+
         for (File entityFile : entityFiles) {
             if (Config.LOGD) Log.d(TAG, entityFile.getCanonicalPath());
             String entityName = FilenameUtils.getBaseName(entityFile.getCanonicalPath());
