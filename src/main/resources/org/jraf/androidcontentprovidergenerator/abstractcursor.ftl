@@ -15,7 +15,7 @@ public abstract class AbstractCursor extends CursorWrapper {
 
     public AbstractCursor(Cursor cursor) {
         super(cursor);
-        mColumnIndexes = new HashMap<String, Integer>(cursor.getColumnCount());
+        mColumnIndexes = new HashMap<String, Integer>(cursor.getColumnCount() * 4 / 3, .75f);
     }
 
     public long getId() {
