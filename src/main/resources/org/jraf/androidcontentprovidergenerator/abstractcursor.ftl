@@ -11,10 +11,11 @@ import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
 public abstract class AbstractCursor extends CursorWrapper {
-	private HashMap<String, Integer> mColumnIndexes = new HashMap<String, Integer>();
+    private final HashMap<String, Integer> mColumnIndexes;
 
     public AbstractCursor(Cursor cursor) {
         super(cursor);
+        mColumnIndexes = new HashMap<String, Integer>(cursor.getColumnCount() * 4 / 3, .75f);
     }
 
     public long getId() {
