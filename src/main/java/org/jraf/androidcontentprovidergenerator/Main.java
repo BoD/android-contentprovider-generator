@@ -278,6 +278,31 @@ public class Main {
         }
     }
 
+    private void generateModels(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("model.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        Map<String, Object> root = new HashMap<>();
+        root.put("config", getConfig(arguments.inputDir));
+        root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
+
+        // Entities
+        for (Entity entity : Model.get().getEntities()) {
+            File outputDir = new File(providerDir, entity.getPackageName());
+            outputDir.mkdirs();
+            File outputFile = new File(outputDir, entity.getNameCamelCase() + "Model.java");
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+            root.put("entity", entity);
+
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
+        }
+    }
+
     private void generateWrappers(Arguments arguments) throws IOException, JSONException, TemplateException {
         JSONObject config = getConfig(arguments.inputDir);
         String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
@@ -307,6 +332,13 @@ public class Main {
         // AbstractSelection
         template = getFreeMarkerConfig().getTemplate("abstractselection.ftl");
         outputFile = new File(baseClassesDir, "AbstractSelection.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // BaseModel
+        template = getFreeMarkerConfig().getTemplate("basemodel.ftl");
+        outputFile = new File(baseClassesDir, "BaseModel.java");
         out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
@@ -442,6 +474,7 @@ public class Main {
 
         generateColumns(arguments);
         generateWrappers(arguments);
+        generateModels(arguments);
         generateContentProvider(arguments);
         generateSqliteOpenHelper(arguments);
         generateSqliteOpenHelperCallbacks(arguments);
