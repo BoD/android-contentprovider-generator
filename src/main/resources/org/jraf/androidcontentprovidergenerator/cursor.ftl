@@ -39,7 +39,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
     public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}() {
             <#switch field.type.name()>
             <#case "STRING">
-        Integer index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        int index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getString(index);
             <#break>
             <#case "INTEGER">
@@ -61,7 +61,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
         return getDate(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
             <#break>
             <#case "BYTE_ARRAY">
-        Integer index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        int index = getCachedColumnIndexOrThrow(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
         return getBlob(index);
             <#break>
             <#case "ENUM">
