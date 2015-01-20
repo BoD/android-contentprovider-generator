@@ -206,6 +206,15 @@ public class Field {
         return mEnumValues;
     }
 
+    public String getPrefixedCaseName() {
+        return mEntity.getNameLowerCase() + "__" + mName;
+    }
+
+    public String getCaseFieldNameOrPrefixed() {
+        if (mIsAmbiguous) return getPrefixedCaseName();
+        return mName;
+    }
+
     public String getPrefixedName() {
         return mEntity.getNameLowerCase() + "__" + getNameLowerCase();
     }

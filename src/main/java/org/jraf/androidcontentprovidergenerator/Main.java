@@ -74,6 +74,7 @@ public class Main {
         public static final String DATABASE_FILE_NAME = "databaseFileName";
         public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
+        public static final String FIELD_CASE_NAME = "keepFieldCase";
     }
 
     private Configuration mFreemarkerConfig;
@@ -223,6 +224,7 @@ public class Main {
         ensureString(Json.PROVIDER_CLASS_NAME);
         ensureString(Json.SQLITE_OPEN_HELPER_CLASS_NAME);
         ensureString(Json.SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME);
+        ensureBoolean(Json.FIELD_CASE_NAME);
         ensureString(Json.AUTHORITY);
         ensureString(Json.DATABASE_FILE_NAME);
         ensureInt(Json.DATABASE_VERSION);
