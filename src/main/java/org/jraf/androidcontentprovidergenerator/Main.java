@@ -263,6 +263,7 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
         root.put("model", Model.get());
+        root.put("annotations", arguments.supportAnnotations);
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
@@ -288,6 +289,7 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
         root.put("model", Model.get());
+        root.put("annotations", arguments.supportAnnotations);
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
@@ -314,6 +316,7 @@ public class Main {
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
         root.put("model", Model.get());
+        root.put("annotations", arguments.supportAnnotations);
 
         // AbstractCursor
         Template template = getFreeMarkerConfig().getTemplate("abstractcursor.ftl");
@@ -400,6 +403,7 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("annotations", arguments.supportAnnotations);
 
         template.process(root, out);
     }
@@ -417,6 +421,7 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("annotations", arguments.supportAnnotations);
 
         template.process(root, out);
     }
@@ -438,6 +443,7 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("annotations", arguments.supportAnnotations);
 
         template.process(root, out);
     }
@@ -451,6 +457,7 @@ public class Main {
         root.put("config", config);
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
+        root.put("annotations", arguments.supportAnnotations);
 
         Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);

@@ -5,6 +5,11 @@ package ${config.providerJavaPackage}.${entity.packageName};
 
 import java.util.Date;
 
+<#if annotations>
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+</#if>
+
 import android.content.ContentResolver;
 import android.net.Uri;
 
@@ -25,7 +30,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, ${entity.nameCamelCase}Selection where) {
+    public int update(ContentResolver contentResolver, <#if annotations>@Nullable</#if> ${entity.nameCamelCase}Selection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     <#list entity.fields as field>
@@ -36,7 +41,11 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * ${field.documentation}
      */
     </#if>
+    <#if annotations && !field.isNullable && !field.type.hasNotNullableJavaType()>
+    public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(@NonNull ${field.javaTypeSimpleName} value) {
+    <#else>
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(${field.javaTypeSimpleName} value) {
+    </#if>
             <#if !field.isNullable && !field.type.hasNotNullableJavaType()>
         if (value == null) throw new IllegalArgumentException("value for ${field.nameCamelCaseLowerCase} must not be null");
             </#if>
