@@ -22,45 +22,69 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
+package org.jraf.androidcontentprovidergenerator.sample.provider.person;
+
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseModel;
 
 import java.util.Date;
 
-import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
-
 /**
- * Cursor wrapper for the {@code serial_number} table.
+ * A human being which is part of a team.
  */
-public class SerialNumberCursor extends AbstractCursor {
-    public SerialNumberCursor(Cursor cursor) {
-        super(cursor);
-    }
+public interface PersonModel extends BaseModel {
 
     /**
-     * Unique id, first part.
+     * First name of this person. For instance, John.
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getPart0() {
-        String res = getStringOrNull(SerialNumberColumns.PART0);
-        if (res == null)
-            throw new NullPointerException("The value of 'part0' in the database was null, which is not allowed according to the model definition");
-        return res;
-    }
+    String getFirstName();
 
     /**
-     * Unique id, second part.
+     * Last name (a.k.a. Given name) of this person. For instance, Smith.
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getPart1() {
-        String res = getStringOrNull(SerialNumberColumns.PART1);
-        if (res == null)
-            throw new NullPointerException("The value of 'part1' in the database was null, which is not allowed according to the model definition");
-        return res;
-    }
+    String getLastName();
+
+    /**
+     * Get the {@code age} value.
+     */
+    int getAge();
+
+    /**
+     * Get the {@code birth_date} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    Date getBirthDate();
+
+    /**
+     * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
+     */
+    boolean getHasBlueEyes();
+
+    /**
+     * Get the {@code height} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    Float getHeight();
+
+    /**
+     * Get the {@code gender} value.
+     * Cannot be {@code null}.
+     */
+    @NonNull
+    Gender getGender();
+
+    /**
+     * Get the {@code country_code} value.
+     * Cannot be {@code null}.
+     */
+    @NonNull
+    String getCountryCode();
 }

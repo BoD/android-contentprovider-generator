@@ -27,6 +27,8 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.company;
 import java.util.Date;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
@@ -43,18 +45,21 @@ public class CompanyCursor extends AbstractCursor {
      * The commercial name of this company.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getName() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.NAME);
-        return getString(index);
+        String res = getStringOrNull(CompanyColumns.NAME);
+        if (res == null)
+            throw new NullPointerException("The value of 'name' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * The full address of this company.
      * Can be {@code null}.
      */
+    @Nullable
     public String getAddress() {
-        Integer index = getCachedColumnIndexOrThrow(CompanyColumns.ADDRESS);
-        return getString(index);
+        return getStringOrNull(CompanyColumns.ADDRESS);
     }
 
     /**
@@ -68,17 +73,23 @@ public class CompanyCursor extends AbstractCursor {
      * Unique id, first part.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getSerialNumberPart0() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART0);
-        return getString(index);
+        String res = getStringOrNull(SerialNumberColumns.PART0);
+        if (res == null)
+            throw new NullPointerException("The value of 'part0' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * Unique id, second part.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getSerialNumberPart1() {
-        Integer index = getCachedColumnIndexOrThrow(SerialNumberColumns.PART1);
-        return getString(index);
+        String res = getStringOrNull(SerialNumberColumns.PART1);
+        if (res == null)
+            throw new NullPointerException("The value of 'part1' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 }
