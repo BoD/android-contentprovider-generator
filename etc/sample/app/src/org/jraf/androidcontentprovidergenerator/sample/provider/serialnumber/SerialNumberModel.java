@@ -22,23 +22,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator;
+package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
 
-import java.io.File;
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseModel;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+import java.util.Date;
 
-@Parameters(separators = " =")
-public class Arguments {
-    public static String DEFAULT_TITLE = "GenerateAndroidProvider";
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-    @Parameter(names = { "-h", "--help" }, description = "Display this help and exit")
-    public boolean help;
+/**
+ * A serial number.
+ */
+public interface SerialNumberModel extends BaseModel {
 
-    @Parameter(names = { "-i", "--input" }, description = "Input folder, where to find _config.json and your entity json files")
-    public File inputDir = new File(".");
+    /**
+     * Unique id, first part.
+     * Cannot be {@code null}.
+     */
+    @NonNull
+    String getPart0();
 
-    @Parameter(names = { "-o", "--output" }, description = "Output folder, where the resulting files will be generated")
-    public File outputDir = new File("generated");
+    /**
+     * Unique id, second part.
+     * Cannot be {@code null}.
+     */
+    @NonNull
+    String getPart1();
 }

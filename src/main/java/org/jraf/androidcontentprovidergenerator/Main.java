@@ -74,6 +74,7 @@ public class Main {
         public static final String DATABASE_FILE_NAME = "databaseFileName";
         public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
+        public static final String USE_ANNOTATIONS = "useAnnotations";
     }
 
     private Configuration mFreemarkerConfig;
@@ -200,19 +201,24 @@ public class Main {
 
     private void validateConfig() {
         // Ensure the input files are compatible with this version of the tool
-        String syntaxVersion;
+        int syntaxVersion;
         try {
-            syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION);
+            syntaxVersion = mConfig.getInt(Json.SYNTAX_VERSION);
         } catch (JSONException e) {
             try {
-                // Try the old name of this attribute
-                syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION_LEGACY);
-            } catch (JSONException e2) {
-                throw new IllegalArgumentException("Could not find '" + Json.SYNTAX_VERSION
-                        + "' field in _config.json, which is mandatory and must be equal to '" + Constants.SYNTAX_VERSION + "'.");
+                // For legacy reasons we also allow this attribute to be a String
+                syntaxVersion = Integer.parseInt(mConfig.getString(Json.SYNTAX_VERSION));
+            } catch (Exception e2) {
+                try {
+                    // For legacy reasons we also allow a different name for this attribute
+                    syntaxVersion = Integer.parseInt(mConfig.getString(Json.SYNTAX_VERSION_LEGACY));
+                } catch (Exception e3) {
+                    throw new IllegalArgumentException("Could not find '" + Json.SYNTAX_VERSION
+                            + "' field in _config.json, which is mandatory and must be equal to " + Constants.SYNTAX_VERSION + ".");
+                }
             }
         }
-        if (!syntaxVersion.equals(Constants.SYNTAX_VERSION)) {
+        if (syntaxVersion != Constants.SYNTAX_VERSION) {
             throw new IllegalArgumentException("Invalid '" + Json.SYNTAX_VERSION + "' value in _config.json: found '" + syntaxVersion + "' but expected '"
                     + Constants.SYNTAX_VERSION + "'.");
         }
@@ -227,6 +233,7 @@ public class Main {
         ensureString(Json.DATABASE_FILE_NAME);
         ensureInt(Json.DATABASE_VERSION);
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
+        ensureBoolean(Json.USE_ANNOTATIONS);
     }
 
     private void ensureString(String field) {

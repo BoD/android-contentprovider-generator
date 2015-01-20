@@ -6,10 +6,11 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
 - a `SQLiteOpenHelperCallbacks` class
-- one `BaseColumns` class per entity
+- one `Columns` class per entity
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
 - one `Selection` class per entity
+- one `Model` interface per entity
 
 
 How to use
@@ -22,7 +23,7 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"syntaxVersion": "2",
+	"syntaxVersion": 3,
 	"projectPackageId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
@@ -32,6 +33,7 @@ These are self-explanatory so here is an example:
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
+	"useAnnotations": true,
 }
 ```
 
@@ -122,7 +124,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android-contentprovider-generator-1.8.4-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android-contentprovider-generator-1.9.0-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -211,7 +213,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.8.4-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.9.0-bundle.jar` in the `target` folder.
 
 
 Similar tools

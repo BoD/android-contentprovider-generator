@@ -27,6 +27,8 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.person;
 import java.util.Date;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
 
@@ -42,18 +44,24 @@ public class PersonCursor extends AbstractCursor {
      * First name of this person. For instance, John.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getFirstName() {
-        Integer index = getCachedColumnIndexOrThrow(PersonColumns.FIRST_NAME);
-        return getString(index);
+        String res = getStringOrNull(PersonColumns.FIRST_NAME);
+        if (res == null)
+            throw new NullPointerException("The value of 'first_name' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * Last name (a.k.a. Given name) of this person. For instance, Smith.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getLastName() {
-        Integer index = getCachedColumnIndexOrThrow(PersonColumns.LAST_NAME);
-        return getString(index);
+        String res = getStringOrNull(PersonColumns.LAST_NAME);
+        if (res == null)
+            throw new NullPointerException("The value of 'last_name' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -67,21 +75,23 @@ public class PersonCursor extends AbstractCursor {
      * Get the {@code birth_date} value.
      * Can be {@code null}.
      */
+    @Nullable
     public Date getBirthDate() {
-        return getDate(PersonColumns.BIRTH_DATE);
+        return getDateOrNull(PersonColumns.BIRTH_DATE);
     }
 
     /**
      * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getHasBlueEyes() {
-        return getBoolean(PersonColumns.HAS_BLUE_EYES);
+        return getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
     }
 
     /**
      * Get the {@code height} value.
      * Can be {@code null}.
      */
+    @Nullable
     public Float getHeight() {
         return getFloatOrNull(PersonColumns.HEIGHT);
     }
@@ -90,9 +100,11 @@ public class PersonCursor extends AbstractCursor {
      * Get the {@code gender} value.
      * Cannot be {@code null}.
      */
+    @NonNull
     public Gender getGender() {
         Integer intValue = getIntegerOrNull(PersonColumns.GENDER);
-        if (intValue == null) return null;
+        if (intValue == null)
+            throw new NullPointerException("The value of 'gender' in the database was null, which is not allowed according to the model definition");
         return Gender.values()[intValue];
     }
 
@@ -100,8 +112,11 @@ public class PersonCursor extends AbstractCursor {
      * Get the {@code country_code} value.
      * Cannot be {@code null}.
      */
+    @NonNull
     public String getCountryCode() {
-        Integer index = getCachedColumnIndexOrThrow(PersonColumns.COUNTRY_CODE);
-        return getString(index);
+        String res = getStringOrNull(PersonColumns.COUNTRY_CODE);
+        if (res == null)
+            throw new NullPointerException("The value of 'country_code' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 }

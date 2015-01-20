@@ -61,15 +61,21 @@ public abstract class AbstractCursor extends CursorWrapper {
         return getDouble(index);
     }
 
-    public Boolean getBoolean(String colName) {
+    public Boolean getBooleanOrNull(String colName) {
         int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getInt(index) != 0;
     }
 
-    public Date getDate(String colName) {
+    public Date getDateOrNull(String colName) {
         int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return new Date(getLong(index));
+    }
+
+    public byte[] getBlobOrNull(String colName) {
+        int index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getBlob(index);
     }
 }

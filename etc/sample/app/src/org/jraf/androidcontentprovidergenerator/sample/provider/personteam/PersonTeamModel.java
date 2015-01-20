@@ -22,23 +22,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator;
+package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
-import java.io.File;
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseModel;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+import java.util.Date;
 
-@Parameters(separators = " =")
-public class Arguments {
-    public static String DEFAULT_TITLE = "GenerateAndroidProvider";
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-    @Parameter(names = { "-h", "--help" }, description = "Display this help and exit")
-    public boolean help;
+/**
+ * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
+ */
+public interface PersonTeamModel extends BaseModel {
 
-    @Parameter(names = { "-i", "--input" }, description = "Input folder, where to find _config.json and your entity json files")
-    public File inputDir = new File(".");
+    /**
+     * Get the {@code person_id} value.
+     */
+    long getPersonId();
 
-    @Parameter(names = { "-o", "--output" }, description = "Output folder, where the resulting files will be generated")
-    public File outputDir = new File("generated");
+    /**
+     * Get the {@code team_id} value.
+     */
+    long getTeamId();
 }
