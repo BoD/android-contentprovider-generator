@@ -25,6 +25,6 @@
 package org.jraf.androidcontentprovidergenerator;
 
 public class Constants {
-    public static final String SYNTAX_VERSION = "2";
+    public static final String SYNTAX_VERSION = "2.1";
     public static final String TAG = "";
 }
