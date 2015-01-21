@@ -29,7 +29,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
      */
     </#if>
     <#if field.isId>
-    public static final String ${field.nameUpperCase} = new String(BaseColumns._ID);
+    public static final String ${field.nameUpperCase} = BaseColumns._ID;
     <#else>
     public static final String ${field.nameUpperCase} = "${field.nameLowerCaseOrPrefixed}";
     </#if>
