@@ -19,7 +19,7 @@ import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
 /**
  * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.
  */
-public class ${entity.nameCamelCase}Cursor extends AbstractCursor {
+public class ${entity.nameCamelCase}Cursor extends AbstractCursor implements ${entity.nameCamelCase}Model {
     public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
     }
