@@ -113,10 +113,6 @@ public class Main {
 
             Entity entity = new Entity(entityName, entityDocumentation);
 
-            // Implicit _id field
-            Field field = new Field(entity, "_id", "Primary key.", "Long", true, false, false, null, null, null, null);
-            entity.addField(field);
-
             // Fields
             JSONArray fieldsJson = entityJson.getJSONArray(Entity.Json.FIELDS);
             int len = fieldsJson.length();
@@ -157,9 +153,43 @@ public class Main {
                     OnDeleteAction onDeleteAction = OnDeleteAction.fromJsonName(foreignKeyJson.getString(Field.Json.FOREIGN_KEY_ON_DELETE_ACTION));
                     foreignKey = new ForeignKey(table, onDeleteAction);
                 }
-                field = new Field(entity, name, fieldDocumentation, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy,
-                        enumName, enumValues, foreignKey);
+                Field field = new Field(entity, name, fieldDocumentation, type, false, isIndex, isNullable, false, defaultValue != null ? defaultValue
+                        : defaultValueLegacy, enumName, enumValues, foreignKey);
                 entity.addField(field);
+            }
+
+            // ID Field
+            String idFieldName = entityJson.optString(Entity.Json.ID_FIELD, "_id");
+            if (idFieldName == null) {
+                throw new IllegalArgumentException("Invalid idField '" + idFieldName + "' value in " + entityFile.getCanonicalPath() + ".");
+            }
+            final Field idField;
+            if ("_id".equals(idFieldName)) {
+                // Implicit id field: create a Field named "_id"
+                idField = new Field(entity, "_id", "Primary key.", "Long", true, false, false, true, null, null, null, null);
+                entity.addField(0, idField);
+            } else {
+                // Explicit id field (reference)
+                idField = entity.getFieldByName(idFieldName);
+                if (idField == null) {
+                    // Referenced field not found
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' not found " + entityFile.getCanonicalPath() + ".");
+                }
+                if (idField.getType() != Field.Type.INTEGER && idField.getType() != Field.Type.LONG && idField.getType() != Field.Type.DATE
+                        && idField.getType() != Field.Type.ENUM) {
+                    // Invalid type
+                    throw new IllegalArgumentException("Invalid idField type " + idField.getType() + " in " + entityFile.getCanonicalPath() + "."
+                            + "  It must be Integer, Long, Date or Enum.");
+                }
+                if (idField.getIsNullable()) {
+                    // Referenced field is nullable
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' must not be nullable in " + entityFile.getCanonicalPath() + ".");
+                }
+                if (!idField.getIsIndex()) {
+                    // Referenced field is not an index
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' must be an index in " + entityFile.getCanonicalPath() + ".");
+                }
+                idField.setIsId(true);
             }
 
             // Constraints (optional)

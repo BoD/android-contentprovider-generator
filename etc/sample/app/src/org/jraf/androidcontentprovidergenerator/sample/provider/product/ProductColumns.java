@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
+package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -36,26 +36,16 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.Ser
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 /**
- * A serial number.
+ * A product that the company sells.
  */
-public class SerialNumberColumns implements BaseColumns {
-    public static final String TABLE_NAME = "serial_number";
+public class ProductColumns implements BaseColumns {
+    public static final String TABLE_NAME = "product";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
-    /**
-     * Primary key.
-     */
-    public static final String _ID = BaseColumns._ID;
+    public static final String _ID = "product_id";
+    public static final String PRODUCT_ID = "product_id";
 
-    /**
-     * Unique id, first part.
-     */
-    public static final String PART0 = "serial_number__part0";
-
-    /**
-     * Unique id, second part.
-     */
-    public static final String PART1 = "serial_number__part1";
+    public static final String NAME = "name";
 
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
@@ -63,16 +53,14 @@ public class SerialNumberColumns implements BaseColumns {
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            PART0,
-            PART1
+            NAME
     };
     // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == PART0 || c.contains("." + PART0)) return true;
-            if (c == PART1 || c.contains("." + PART1)) return true;
+            if (c == NAME || c.contains("." + NAME)) return true;
         }
         return false;
     }

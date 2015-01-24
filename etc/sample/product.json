@@ -1,0 +1,17 @@
+{
+	"documentation": "A product that the company sells.",
+	"fields": [
+		{
+			"name": "product_id",
+			"type": "Long",
+			"nullable": false,
+			"index": true,
+		},
+		{
+			"name": "name",
+			"type": "String",
+			"nullable": false,
+		},
+	],
+	"idField": "product_id",
+}

@@ -43,6 +43,11 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
         super(cursor);
     }
 
+    @Override
+    public long getId() {
+        return getLongOrNull(TeamColumns._ID);
+    }
+
     /**
      * Get the {@code company_id} value.
      */

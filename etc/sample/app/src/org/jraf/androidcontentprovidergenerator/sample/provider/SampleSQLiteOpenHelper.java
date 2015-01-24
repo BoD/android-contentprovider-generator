@@ -38,6 +38,7 @@ import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
@@ -51,7 +52,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private final SampleSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
     // @formatter:off
-    private static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
             + CompanyColumns.TABLE_NAME + " ( "
             + CompanyColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + CompanyColumns.NAME + " TEXT NOT NULL, "
@@ -60,10 +61,10 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + ", CONSTRAINT fk_serial_number_id FOREIGN KEY (" + CompanyColumns.SERIAL_NUMBER_ID + ") REFERENCES serial_number (_id) ON DELETE CASCADE"
             + " );";
 
-    private static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "
+    public static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "
             + " ON " + CompanyColumns.TABLE_NAME + " ( " + CompanyColumns.NAME + " );";
 
-    private static final String SQL_CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS "
             + PersonColumns.TABLE_NAME + " ( "
             + PersonColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + PersonColumns.FIRST_NAME + " TEXT NOT NULL, "
@@ -77,10 +78,10 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + ", CONSTRAINT unique_name UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
             + " );";
 
-    private static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
+    public static final String SQL_CREATE_INDEX_PERSON_LAST_NAME = "CREATE INDEX IDX_PERSON_LAST_NAME "
             + " ON " + PersonColumns.TABLE_NAME + " ( " + PersonColumns.LAST_NAME + " );";
 
-    private static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_PERSON_TEAM = "CREATE TABLE IF NOT EXISTS "
             + PersonTeamColumns.TABLE_NAME + " ( "
             + PersonTeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + PersonTeamColumns.PERSON_ID + " INTEGER NOT NULL, "
@@ -90,14 +91,23 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + ", CONSTRAINT unique_person_team UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
             + " );";
 
-    private static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_PRODUCT = "CREATE TABLE IF NOT EXISTS "
+            + ProductColumns.TABLE_NAME + " ( "
+            + ProductColumns._ID + " INTEGER PRIMARY KEY, "
+            + ProductColumns.NAME + " TEXT NOT NULL "
+            + " );";
+
+    public static final String SQL_CREATE_INDEX_PRODUCT_PRODUCT_ID = "CREATE INDEX IDX_PRODUCT_PRODUCT_ID "
+            + " ON " + ProductColumns.TABLE_NAME + " ( " + ProductColumns.PRODUCT_ID + " );";
+
+    public static final String SQL_CREATE_TABLE_SERIAL_NUMBER = "CREATE TABLE IF NOT EXISTS "
             + SerialNumberColumns.TABLE_NAME + " ( "
             + SerialNumberColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + SerialNumberColumns.PART0 + " TEXT NOT NULL, "
             + SerialNumberColumns.PART1 + " TEXT NOT NULL "
             + " );";
 
-    private static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_TEAM = "CREATE TABLE IF NOT EXISTS "
             + TeamColumns.TABLE_NAME + " ( "
             + TeamColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             + TeamColumns.COMPANY_ID + " INTEGER NOT NULL, "
@@ -170,6 +180,8 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_PERSON);
         db.execSQL(SQL_CREATE_INDEX_PERSON_LAST_NAME);
         db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
+        db.execSQL(SQL_CREATE_TABLE_PRODUCT);
+        db.execSQL(SQL_CREATE_INDEX_PRODUCT_PRODUCT_ID);
         db.execSQL(SQL_CREATE_TABLE_SERIAL_NUMBER);
         db.execSQL(SQL_CREATE_TABLE_TEAM);
         mOpenHelperCallbacks.onPostCreate(mContext, db);

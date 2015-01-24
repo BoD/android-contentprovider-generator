@@ -45,6 +45,7 @@ import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
@@ -71,11 +72,14 @@ public class SampleProvider extends ContentProvider {
     private static final int URI_TYPE_PERSON_TEAM = 4;
     private static final int URI_TYPE_PERSON_TEAM_ID = 5;
 
-    private static final int URI_TYPE_SERIAL_NUMBER = 6;
-    private static final int URI_TYPE_SERIAL_NUMBER_ID = 7;
+    private static final int URI_TYPE_PRODUCT = 6;
+    private static final int URI_TYPE_PRODUCT_ID = 7;
 
-    private static final int URI_TYPE_TEAM = 8;
-    private static final int URI_TYPE_TEAM_ID = 9;
+    private static final int URI_TYPE_SERIAL_NUMBER = 8;
+    private static final int URI_TYPE_SERIAL_NUMBER_ID = 9;
+
+    private static final int URI_TYPE_TEAM = 10;
+    private static final int URI_TYPE_TEAM_ID = 11;
 
 
 
@@ -88,6 +92,8 @@ public class SampleProvider extends ContentProvider {
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_ID);
         URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME, URI_TYPE_PERSON_TEAM);
         URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_TEAM_ID);
+        URI_MATCHER.addURI(AUTHORITY, ProductColumns.TABLE_NAME, URI_TYPE_PRODUCT);
+        URI_MATCHER.addURI(AUTHORITY, ProductColumns.TABLE_NAME + "/#", URI_TYPE_PRODUCT_ID);
         URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME, URI_TYPE_SERIAL_NUMBER);
         URI_MATCHER.addURI(AUTHORITY, SerialNumberColumns.TABLE_NAME + "/#", URI_TYPE_SERIAL_NUMBER_ID);
         URI_MATCHER.addURI(AUTHORITY, TeamColumns.TABLE_NAME, URI_TYPE_TEAM);
@@ -137,6 +143,11 @@ public class SampleProvider extends ContentProvider {
                 return TYPE_CURSOR_DIR + PersonTeamColumns.TABLE_NAME;
             case URI_TYPE_PERSON_TEAM_ID:
                 return TYPE_CURSOR_ITEM + PersonTeamColumns.TABLE_NAME;
+
+            case URI_TYPE_PRODUCT:
+                return TYPE_CURSOR_DIR + ProductColumns.TABLE_NAME;
+            case URI_TYPE_PRODUCT_ID:
+                return TYPE_CURSOR_ITEM + ProductColumns.TABLE_NAME;
 
             case URI_TYPE_SERIAL_NUMBER:
                 return TYPE_CURSOR_DIR + SerialNumberColumns.TABLE_NAME;
@@ -223,19 +234,19 @@ public class SampleProvider extends ContentProvider {
             Log.d(TAG, "query uri=" + uri + " selection=" + selection + " selectionArgs=" + Arrays.toString(selectionArgs) + " sortOrder=" + sortOrder
                     + " groupBy=" + groupBy);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
-        projection = ensureIdIsFullyQualified(projection, queryParams.table);
+        projection = ensureIdIsFullyQualified(projection, queryParams.table, queryParams.idColumn);
         Cursor res = mSampleSQLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
                 null, sortOrder == null ? queryParams.orderBy : sortOrder);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
 
-    private String[] ensureIdIsFullyQualified(String[] projection, String tableName) {
+    private String[] ensureIdIsFullyQualified(String[] projection, String tableName, String idColumn) {
         if (projection == null) return null;
         String[] res = new String[projection.length];
         for (int i = 0; i < projection.length; i++) {
-            if (projection[i].equals(BaseColumns._ID)) {
-                res[i] = tableName + "." + BaseColumns._ID + " AS " + BaseColumns._ID;
+            if (projection[i].equals(idColumn)) {
+                res[i] = tableName + "." + idColumn + " AS " + BaseColumns._ID;
             } else {
                 res[i] = projection[i];
             }
@@ -275,6 +286,7 @@ public class SampleProvider extends ContentProvider {
     private static class QueryParams {
         public String table;
         public String tablesWithJoins;
+        public String idColumn;
         public String selection;
         public String orderBy;
     }
@@ -287,6 +299,7 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_COMPANY:
             case URI_TYPE_COMPANY_ID:
                 res.table = CompanyColumns.TABLE_NAME;
+                res.idColumn = CompanyColumns._ID;
                 res.tablesWithJoins = CompanyColumns.TABLE_NAME;
                 if (SerialNumberColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + SerialNumberColumns.TABLE_NAME + " AS " + CompanyColumns.PREFIX_SERIAL_NUMBER + " ON " + CompanyColumns.TABLE_NAME + "." + CompanyColumns.SERIAL_NUMBER_ID + "=" + CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns._ID;
@@ -297,6 +310,7 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_PERSON:
             case URI_TYPE_PERSON_ID:
                 res.table = PersonColumns.TABLE_NAME;
+                res.idColumn = PersonColumns._ID;
                 res.tablesWithJoins = PersonColumns.TABLE_NAME;
                 res.orderBy = PersonColumns.DEFAULT_ORDER;
                 break;
@@ -304,6 +318,7 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_PERSON_TEAM:
             case URI_TYPE_PERSON_TEAM_ID:
                 res.table = PersonTeamColumns.TABLE_NAME;
+                res.idColumn = PersonTeamColumns._ID;
                 res.tablesWithJoins = PersonTeamColumns.TABLE_NAME;
                 if (PersonColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + PersonColumns.TABLE_NAME + " AS " + PersonTeamColumns.PREFIX_PERSON + " ON " + PersonTeamColumns.TABLE_NAME + "." + PersonTeamColumns.PERSON_ID + "=" + PersonTeamColumns.PREFIX_PERSON + "." + PersonColumns._ID;
@@ -323,9 +338,18 @@ public class SampleProvider extends ContentProvider {
                 res.orderBy = PersonTeamColumns.DEFAULT_ORDER;
                 break;
 
+            case URI_TYPE_PRODUCT:
+            case URI_TYPE_PRODUCT_ID:
+                res.table = ProductColumns.TABLE_NAME;
+                res.idColumn = ProductColumns._ID;
+                res.tablesWithJoins = ProductColumns.TABLE_NAME;
+                res.orderBy = ProductColumns.DEFAULT_ORDER;
+                break;
+
             case URI_TYPE_SERIAL_NUMBER:
             case URI_TYPE_SERIAL_NUMBER_ID:
                 res.table = SerialNumberColumns.TABLE_NAME;
+                res.idColumn = SerialNumberColumns._ID;
                 res.tablesWithJoins = SerialNumberColumns.TABLE_NAME;
                 res.orderBy = SerialNumberColumns.DEFAULT_ORDER;
                 break;
@@ -333,6 +357,7 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_TEAM:
             case URI_TYPE_TEAM_ID:
                 res.table = TeamColumns.TABLE_NAME;
+                res.idColumn = TeamColumns._ID;
                 res.tablesWithJoins = TeamColumns.TABLE_NAME;
                 if (CompanyColumns.hasColumns(projection) || SerialNumberColumns.hasColumns(projection)) {
                     res.tablesWithJoins += " LEFT OUTER JOIN " + CompanyColumns.TABLE_NAME + " AS " + TeamColumns.PREFIX_COMPANY + " ON " + TeamColumns.TABLE_NAME + "." + TeamColumns.COMPANY_ID + "=" + TeamColumns.PREFIX_COMPANY + "." + CompanyColumns._ID;
@@ -354,15 +379,16 @@ public class SampleProvider extends ContentProvider {
             case URI_TYPE_COMPANY_ID:
             case URI_TYPE_PERSON_ID:
             case URI_TYPE_PERSON_TEAM_ID:
+            case URI_TYPE_PRODUCT_ID:
             case URI_TYPE_SERIAL_NUMBER_ID:
             case URI_TYPE_TEAM_ID:
                 id = uri.getLastPathSegment();
         }
         if (id != null) {
             if (selection != null) {
-                res.selection = res.table + "." + BaseColumns._ID + "=" + id + " and (" + selection + ")";
+                res.selection = res.table + "." + res.idColumn + "=" + id + " and (" + selection + ")";
             } else {
-                res.selection = res.table + "." + BaseColumns._ID + "=" + id;
+                res.selection = res.table + "." + res.idColumn + "=" + id;
             }
         } else {
             res.selection = selection;
