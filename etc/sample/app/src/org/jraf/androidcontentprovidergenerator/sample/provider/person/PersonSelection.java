@@ -92,6 +92,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+    public PersonSelection firstNameContains(String... value) {
+        addContains(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection firstNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection firstNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
     public PersonSelection lastName(String... value) {
         addEquals(PersonColumns.LAST_NAME, value);
         return this;
@@ -104,6 +119,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection lastNameLike(String... value) {
         addLike(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameContains(String... value) {
+        addContains(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.LAST_NAME, value);
         return this;
     }
 
@@ -230,6 +260,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection countryCodeLike(String... value) {
         addLike(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeContains(String... value) {
+        addContains(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeStartsWith(String... value) {
+        addStartsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeEndsWith(String... value) {
+        addEndsWith(PersonColumns.COUNTRY_CODE, value);
         return this;
     }
 }

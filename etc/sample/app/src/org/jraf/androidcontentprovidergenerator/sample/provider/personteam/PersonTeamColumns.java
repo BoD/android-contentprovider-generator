@@ -44,7 +44,7 @@ public class PersonTeamColumns implements BaseColumns {
     /**
      * Primary key.
      */
-    public static final String _ID = new String(BaseColumns._ID);
+    public static final String _ID = BaseColumns._ID;
 
     public static final String PERSON_ID = "person_id";
 
