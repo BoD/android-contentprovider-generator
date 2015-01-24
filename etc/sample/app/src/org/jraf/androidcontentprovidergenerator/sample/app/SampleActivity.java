@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -134,7 +135,10 @@ public class SampleActivity extends Activity {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
         // @formatter:off
-        String[] projection = { PersonTeamColumns._ID,
+        String[] projection = {
+                PersonTeamColumns._ID,
+                PersonTeamColumns.PERSON_ID,
+                PersonTeamColumns.TEAM_ID,
                 PersonColumns.FIRST_NAME,
                 PersonColumns.LAST_NAME,
                 PersonColumns.AGE,
@@ -143,6 +147,7 @@ public class SampleActivity extends Activity {
                 TeamColumns.COUNTRY_CODE,
                 TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS TEAM_SN_PART0", // In this case we need to manually prefix and alias
                 TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS TEAM_SN_PART1", // In this case we need to manually prefix and alias
+                TeamColumns.COMPANY_ID,
                 CompanyColumns.NAME,
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0", // In this case we need to manually prefix and alias
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1", // In this case we need to manually prefix and alias
@@ -155,10 +160,10 @@ public class SampleActivity extends Activity {
                     c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode() + ")"
                     + " - "
                     + "team: "
-                    + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
+                    + c.getTeamId() + " " +  c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
                     + " - "
                     + "company: "
-                    + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
+                    + c.getTeamCompanyId() + " " + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
             // @formatter:on
         }
         c.close();
@@ -189,6 +194,7 @@ public class SampleActivity extends Activity {
         personSelection.delete(getContentResolver());
     }
 
+    @SuppressWarnings("null")
     private void populateBase() {
         // Insert company serial numbers
         long googleSn = insertSerialNumber("C", "GOOG");
@@ -252,7 +258,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created serialnumber.
      */
-    private long insertSerialNumber(String part0, String part1) {
+    private long insertSerialNumber(@NonNull String part0, @NonNull String part1) {
         SerialNumberContentValues values = new SerialNumberContentValues();
         values.putPart0(part0);
         values.putPart1(part1);
@@ -266,7 +272,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created company.
      */
-    private long insertCompany(String name, String address, long serialNumberId) {
+    private long insertCompany(@NonNull String name, String address, long serialNumberId) {
         CompanyContentValues values = new CompanyContentValues();
         values.putName(name);
         values.putAddress(address);
@@ -281,7 +287,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created team.
      */
-    private long insertTeam(long companyId, String name, String countryCode, long serialNumberId) {
+    private long insertTeam(long companyId, @NonNull String name, @NonNull String countryCode, long serialNumberId) {
         TeamContentValues values = new TeamContentValues();
         values.putCompanyId(companyId);
         values.putName(name);
@@ -297,8 +303,8 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created person.
      */
-    private long insertPerson(long mainTeamId, long secondaryTeamId, String firstName, String lastName, int age, Date birthDate, boolean hasBlueEyes,
-            Float height, Gender gender, String countryCode) {
+    private long insertPerson(long mainTeamId, long secondaryTeamId, @NonNull String firstName, @NonNull String lastName, int age, Date birthDate,
+            boolean hasBlueEyes, Float height, @NonNull Gender gender, @NonNull String countryCode) {
         PersonContentValues values = new PersonContentValues();
         values.putFirstName(firstName);
         values.putLastName(lastName);
@@ -327,11 +333,13 @@ public class SampleActivity extends Activity {
         return ContentUris.parseId(uri);
     }
 
-    private static String getRandomFirstName() {
+    @SuppressWarnings("null")
+    private static @NonNull String getRandomFirstName() {
         return FIRST_NAMES[sRandom.nextInt(FIRST_NAMES.length)];
     }
 
-    private static String getRandomLastName() {
+    @SuppressWarnings("null")
+    private static @NonNull String getRandomLastName() {
         return LAST_NAMES[sRandom.nextInt(LAST_NAMES.length)];
     }
 }
