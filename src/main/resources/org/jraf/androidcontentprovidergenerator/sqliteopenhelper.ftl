@@ -29,7 +29,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     // @formatter:off
     <#list model.entities as entity>
-    private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
             <#list entity.fields as field>
                 <#if field.isId>
@@ -64,7 +64,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     <#list entity.fields as field>
     <#if field.isIndex>
-    private static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
+    public static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
             + " ON " + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( " + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " );";
 
     </#if>
