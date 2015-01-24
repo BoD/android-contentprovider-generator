@@ -32,8 +32,12 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
             <#list entity.fields as field>
+                <#if entity.idField == field>
                 <#if field.isId>
             + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                <#else>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " INTEGER PRIMARY KEY, "
+                </#if>
                 <#else>
                     <#if field.isNullable>
                         <#if field.hasDefaultValue>
