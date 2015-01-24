@@ -8,3 +8,5 @@ v1.9.0 (2015-??-??)
 - New `useAnnotations` boolean parameter in config, to generate annotations from the `support-annotations` library (issue #38)
 - A few optimizations in the generated code
 - Column names are no longer automatically made lower case, to help using the tool with an existing db (issue #52)
+- New contains, startsWith, endsWitdh methods on Selection objects (issue #55)
+- The CREATE_TABLE and CREATE_INDEX constants are now public to make upgrades easier (issue #59)
