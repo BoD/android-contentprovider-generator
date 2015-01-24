@@ -44,7 +44,7 @@ public class CompanyColumns implements BaseColumns {
     /**
      * Primary key.
      */
-    public static final String _ID = new String(BaseColumns._ID);
+    public static final String _ID = BaseColumns._ID;
 
     /**
      * The commercial name of this company.

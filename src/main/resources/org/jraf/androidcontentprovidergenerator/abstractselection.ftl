@@ -27,6 +27,9 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String LT_EQ = "<=?";
     private static final String NOT_EQ = "<>?";
     private static final String LIKE = " LIKE ?";
+    private static final String CONTAINS = " LIKE '%' || ? || '%'";
+    private static final String STARTS = " LIKE ? || '%'";
+    private static final String ENDS = " LIKE '%' || ?";
 
     private StringBuilder mSelection = new StringBuilder();
     private List<String> mSelectionArgs = new ArrayList<String>(5);
@@ -96,6 +99,45 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         for (int i = 0; i < values.length; i++) {
             mSelection.append(column);
             mSelection.append(LIKE);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addContains(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(CONTAINS);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addStartsWith(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(STARTS);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addEndsWith(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(ENDS);
             mSelectionArgs.add(values[i]);
             if (i < values.length - 1) {
                 mSelection.append(OR);

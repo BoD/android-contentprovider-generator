@@ -109,9 +109,20 @@ public class SampleActivity extends Activity {
         c.close();
 
         // Another way to query one person
+        Log.d(TAG, "---");
         Uri uri = ContentUris.withAppendedId(PersonColumns.CONTENT_URI, 2l);
         Cursor c2 = getContentResolver().query(uri, projection, null, null, null);
         c = new PersonCursor(c2);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
+        }
+        c.close();
+
+        // Like / startsWitdh / contains / endsWith
+        Log.d(TAG, "---");
+        personSelection = new PersonSelection();
+        personSelection.lastNameEndsWith("SON").or().firstNameContains("ar", "ae");
+        c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }

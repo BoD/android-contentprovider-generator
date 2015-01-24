@@ -92,6 +92,21 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
         return this;
     }
 
+    public SerialNumberSelection part0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public SerialNumberSelection part0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public SerialNumberSelection part0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public SerialNumberSelection part1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -104,6 +119,21 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
 
     public SerialNumberSelection part1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 }

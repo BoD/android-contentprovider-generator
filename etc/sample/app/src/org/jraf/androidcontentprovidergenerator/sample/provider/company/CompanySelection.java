@@ -93,6 +93,21 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         return this;
     }
 
+    public CompanySelection nameContains(String... value) {
+        addContains(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public CompanySelection nameStartsWith(String... value) {
+        addStartsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public CompanySelection nameEndsWith(String... value) {
+        addEndsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
     public CompanySelection address(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
@@ -105,6 +120,21 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection addressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public CompanySelection addressContains(String... value) {
+        addContains(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public CompanySelection addressStartsWith(String... value) {
+        addStartsWith(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public CompanySelection addressEndsWith(String... value) {
+        addEndsWith(CompanyColumns.ADDRESS, value);
         return this;
     }
 
@@ -153,6 +183,21 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         return this;
     }
 
+    public CompanySelection serialNumberPart0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public CompanySelection serialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -165,6 +210,21 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection serialNumberPart1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection serialNumberPart1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 }

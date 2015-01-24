@@ -44,7 +44,7 @@ public class PersonColumns implements BaseColumns {
     /**
      * Primary key.
      */
-    public static final String _ID = new String(BaseColumns._ID);
+    public static final String _ID = BaseColumns._ID;
 
     /**
      * First name of this person. For instance, John.
