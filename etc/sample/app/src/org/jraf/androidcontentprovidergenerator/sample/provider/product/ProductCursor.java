@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
+package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
 import java.util.Date;
 
@@ -33,39 +33,27 @@ import android.support.annotation.Nullable;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
 
 /**
- * Cursor wrapper for the {@code serial_number} table.
+ * Cursor wrapper for the {@code product} table.
  */
-public class SerialNumberCursor extends AbstractCursor implements SerialNumberModel {
-    public SerialNumberCursor(Cursor cursor) {
+public class ProductCursor extends AbstractCursor implements ProductModel {
+    public ProductCursor(Cursor cursor) {
         super(cursor);
     }
 
     @Override
     public long getId() {
-        return getLongOrNull(SerialNumberColumns._ID);
+        return getLongOrNull(ProductColumns._ID);
     }
 
     /**
-     * Unique id, first part.
+     * Get the {@code name} value.
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getPart0() {
-        String res = getStringOrNull(SerialNumberColumns.PART0);
+    public String getName() {
+        String res = getStringOrNull(ProductColumns.NAME);
         if (res == null)
-            throw new NullPointerException("The value of 'part0' in the database was null, which is not allowed according to the model definition");
-        return res;
-    }
-
-    /**
-     * Unique id, second part.
-     * Cannot be {@code null}.
-     */
-    @NonNull
-    public String getPart1() {
-        String res = getStringOrNull(SerialNumberColumns.PART1);
-        if (res == null)
-            throw new NullPointerException("The value of 'part1' in the database was null, which is not allowed according to the model definition");
+            throw new NullPointerException("The value of 'name' in the database was null, which is not allowed according to the model definition");
         return res;
     }
 }

@@ -45,6 +45,11 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
         super(cursor);
     }
 
+    @Override
+    public long getId() {
+        return getLongOrNull(PersonTeamColumns._ID);
+    }
+
     /**
      * Get the {@code person_id} value.
      */

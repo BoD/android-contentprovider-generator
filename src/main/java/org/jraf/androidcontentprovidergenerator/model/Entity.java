@@ -41,6 +41,7 @@ public class Entity {
         public static final String FIELDS = "fields";
         public static final String CONSTRAINTS = "constraints";
         public static final String DOCUMENTATION = "documentation";
+        public static final String ID_FIELD = "idField";
     }
 
     private static final String CONCAT = "res.tablesWithJoins += ";
@@ -75,6 +76,10 @@ public class Entity {
 
     public void addField(Field field) {
         mFields.add(field);
+    }
+
+    public void addField(int index, Field field) {
+        mFields.add(index, field);
     }
 
     public List<Field> getFields() {
