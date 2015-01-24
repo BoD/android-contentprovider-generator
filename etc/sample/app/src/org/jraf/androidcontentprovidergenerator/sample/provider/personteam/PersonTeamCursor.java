@@ -40,7 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Cursor wrapper for the {@code person_team} table.
  */
-public class PersonTeamCursor extends AbstractCursor {
+public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel {
     public PersonTeamCursor(Cursor cursor) {
         super(cursor);
     }

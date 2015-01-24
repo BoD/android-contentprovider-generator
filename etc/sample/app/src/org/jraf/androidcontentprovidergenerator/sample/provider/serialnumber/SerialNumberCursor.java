@@ -35,7 +35,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCur
 /**
  * Cursor wrapper for the {@code serial_number} table.
  */
-public class SerialNumberCursor extends AbstractCursor {
+public class SerialNumberCursor extends AbstractCursor implements SerialNumberModel {
     public SerialNumberCursor(Cursor cursor) {
         super(cursor);
     }

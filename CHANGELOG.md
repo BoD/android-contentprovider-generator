@@ -7,3 +7,4 @@ v1.9.0 (2015-??-??)
 - Generation of new "Model" interfaces (one per entity)
 - New `useAnnotations` boolean parameter in config, to generate annotations from the `support-annotations` library (issue #38)
 - A few optimizations in the generated code
+- Column names are no longer automatically made lower case, to help using the tool with an existing db (issue #52)

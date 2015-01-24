@@ -74,8 +74,9 @@ public class Model {
         for (Entity entity : mEntities) {
             for (Field field : entity.getFields()) {
                 if (field.getIsAmbiguous()) {
-                    Log.i(TAG, "\nNote: in the table '" + entity.getNameLowerCase() + "', the column '" + field.getNameLowerCase() + "' will be named '"
-                            + field.getPrefixedName() + "' to avoid ambiguities when joining.\n");
+                    Log.i(TAG,
+                            "\nNote: in the table '" + entity.getNameLowerCase() + "', the column '" + field.getName() + "' will be named '"
+                                    + field.getPrefixedName() + "' to avoid ambiguities when joining.\n");
                 }
             }
         }

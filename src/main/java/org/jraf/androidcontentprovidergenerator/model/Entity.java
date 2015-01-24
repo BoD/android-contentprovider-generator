@@ -124,7 +124,7 @@ public class Entity {
 
     public Field getFieldByName(String fieldName) {
         for (Field field : getFields()) {
-            if (fieldName.equals(field.getNameLowerCase())) return field;
+            if (fieldName.toLowerCase(Locale.US).equals(field.getNameLowerCase())) return field;
         }
         return null;
     }

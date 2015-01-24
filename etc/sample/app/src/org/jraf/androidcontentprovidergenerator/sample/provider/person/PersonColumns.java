@@ -56,7 +56,7 @@ public class PersonColumns implements BaseColumns {
      */
     public static final String LAST_NAME = "last_name";
 
-    public static final String AGE = "age";
+    public static final String AGE = "Age";
 
     public static final String BIRTH_DATE = "birth_date";
 

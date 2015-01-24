@@ -35,7 +35,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCur
 /**
  * Cursor wrapper for the {@code person} table.
  */
-public class PersonCursor extends AbstractCursor {
+public class PersonCursor extends AbstractCursor implements PersonModel {
     public PersonCursor(Cursor cursor) {
         super(cursor);
     }

@@ -182,6 +182,10 @@ public class Field {
         return mEntity;
     }
 
+    public String getName() {
+        return mName;
+    }
+
     public String getNameUpperCase() {
         return mName.toUpperCase(Locale.US);
     }
@@ -210,9 +214,9 @@ public class Field {
         return mEntity.getNameLowerCase() + "__" + getNameLowerCase();
     }
 
-    public String getNameLowerCaseOrPrefixed() {
+    public String getNameOrPrefixed() {
         if (mIsAmbiguous) return getPrefixedName();
-        return getNameLowerCase();
+        return mName;
     }
 
     public Type getType() {

@@ -15,7 +15,7 @@
 			"index": true,
 		},
 		{
-			"name": "age",
+			"name": "Age",
 			"type": "Integer",
 			"nullable": false,
 		},

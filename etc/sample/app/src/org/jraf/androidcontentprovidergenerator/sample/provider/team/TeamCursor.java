@@ -38,7 +38,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Cursor wrapper for the {@code team} table.
  */
-public class TeamCursor extends AbstractCursor {
+public class TeamCursor extends AbstractCursor implements TeamModel {
     public TeamCursor(Cursor cursor) {
         super(cursor);
     }
