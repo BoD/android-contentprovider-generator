@@ -373,6 +373,13 @@ public class Main {
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
+        // BaseContentProvider
+        template = getFreeMarkerConfig().getTemplate("basecontentprovider.ftl");
+        outputFile = new File(baseClassesDir, "BaseContentProvider.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
         // BaseModel
         template = getFreeMarkerConfig().getTemplate("basemodel.ftl");
         outputFile = new File(baseClassesDir, "BaseModel.java");
