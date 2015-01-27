@@ -33,7 +33,7 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     <#list entity.fields as field>
-        <#if !field.isId>
+        <#if field.nameLowerCase != "_id">
 
     <#if field.documentation??>
     /**
@@ -69,14 +69,13 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
         return this;
     }
             </#if>
-
             <#switch field.type.name()>
             <#case "DATE">
+
     public ${entity.nameCamelCase}ContentValues put${field.nameCamelCase}(<#if field.isNullable><#if config.useAnnotations>@Nullable </#if>Long<#else>long</#if> value) {
         mContentValues.put(${entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
-
             <#break>
             </#switch>
         </#if>
