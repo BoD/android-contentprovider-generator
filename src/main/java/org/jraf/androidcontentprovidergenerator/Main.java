@@ -159,9 +159,16 @@ public class Main {
             }
 
             // ID Field
-            String idFieldName = entityJson.optString(Entity.Json.ID_FIELD, "_id");
-            if (idFieldName == null) {
-                throw new IllegalArgumentException("Invalid idField '" + idFieldName + "' value in " + entityFile.getCanonicalPath() + ".");
+            // we are using multiple keys, with no _id
+            JSONArray idFields = entityJson.optJSONArray(Entity.Json.ID_FIELD);
+            final String idFieldName;
+            if (idFields == null) {
+                idFieldName = "_id";
+            } else {
+                if (idFields.length() != 1) {
+                    throw new IllegalArgumentException("Invalid number of idField '" + idFields + "' value in " + entityFile.getCanonicalPath() + ".");
+                }
+                idFieldName = idFields.getString(0);
             }
             final Field idField;
             if ("_id".equals(idFieldName)) {
