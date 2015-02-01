@@ -35,7 +35,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
                 <#if field.isId>
             + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY<#if field.isAutoIncrement> AUTOINCREMENT</#if>, "
                 <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if !field.isNullable> NOT NULL</#if><#if field.hasDefaultValue> DEFAULT '${field.defaultValue}'</#if><#if field_has_next>,</#if> "
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if !field.isNullable> NOT NULL</#if><#if field.hasDefaultValue> DEFAULT ${field.defaultValue}</#if><#if field_has_next>,</#if> "
                 </#if>
             </#list>
             <#if config.enableForeignKeys >

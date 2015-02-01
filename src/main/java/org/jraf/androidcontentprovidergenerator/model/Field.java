@@ -243,7 +243,28 @@ public class Field {
     }
 
     public String getDefaultValue() {
-        return mDefaultValue;
+        switch (mType) {
+        case BOOLEAN:
+            if ("true".equals(mDefaultValue))
+                return Integer.toString(1, 10);
+            if ("false".equals(mDefaultValue))
+                return Integer.toString(0, 10);
+            // fallthrough
+        case INTEGER:
+        case LONG:
+        case FLOAT:
+        case DOUBLE:
+        case DATE:
+        case ENUM:
+            try {
+                Long.parseLong(mDefaultValue);
+                return mDefaultValue;
+            } catch (NumberFormatException ignored) {
+            }
+            // fallthrough
+        default:
+            return '\'' + mDefaultValue + '\'';
+        }
     }
 
     public boolean getHasDefaultValue() {
