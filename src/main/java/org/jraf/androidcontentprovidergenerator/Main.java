@@ -159,11 +159,18 @@ public class Main {
             }
 
             // ID Field
-            String idFieldName = entityJson.optString(Entity.Json.ID_FIELD, "_id");
-            if (idFieldName == null) {
-                throw new IllegalArgumentException("Invalid idField '" + idFieldName + "' value in " + entityFile.getCanonicalPath() + ".");
+            JSONArray idFields = entityJson.optJSONArray(Entity.Json.ID_FIELD);
+            String idFieldName;
+            if (idFields == null) {
+                // Implicit id field
+                idFieldName = "_id";
+            } else {
+                if (idFields.length() != 1) {
+                    throw new IllegalArgumentException("Invalid number of idField '" + idFields + "' value in " + entityFile.getCanonicalPath() + ".");
+                }
+                idFieldName = idFields.getString(0);
             }
-            final Field idField;
+            Field idField;
             if ("_id".equals(idFieldName)) {
                 // Implicit id field: create a Field named "_id"
                 idField = new Field(entity, "_id", "Primary key.", "Long", true, false, false, true, null, null, null, null);
