@@ -71,7 +71,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + PersonColumns.LAST_NAME + " TEXT NOT NULL, "
             + PersonColumns.AGE + " INTEGER NOT NULL, "
             + PersonColumns.BIRTH_DATE + " INTEGER, "
-            + PersonColumns.HAS_BLUE_EYES + " INTEGER NOT NULL DEFAULT '0', "
+            + PersonColumns.HAS_BLUE_EYES + " INTEGER NOT NULL DEFAULT 0, "
             + PersonColumns.HEIGHT + " REAL, "
             + PersonColumns.GENDER + " INTEGER NOT NULL, "
             + PersonColumns.COUNTRY_CODE + " TEXT NOT NULL "

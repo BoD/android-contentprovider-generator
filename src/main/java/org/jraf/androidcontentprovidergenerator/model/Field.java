@@ -31,8 +31,12 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.WordUtils;
+import org.jraf.androidcontentprovidergenerator.Constants;
+import org.jraf.androidcontentprovidergenerator.Log;
 
 public class Field {
+    private static final String TAG = Constants.TAG + Field.class.getSimpleName();
+
     public static class Json {
         public static final String NAME = "name";
         public static final String TYPE = "type";
@@ -244,26 +248,26 @@ public class Field {
 
     public String getDefaultValue() {
         switch (mType) {
-        case BOOLEAN:
-            if ("true".equals(mDefaultValue))
-                return Integer.toString(1, 10);
-            if ("false".equals(mDefaultValue))
-                return Integer.toString(0, 10);
-            // fallthrough
-        case INTEGER:
-        case LONG:
-        case FLOAT:
-        case DOUBLE:
-        case DATE:
-        case ENUM:
-            try {
-                Long.parseLong(mDefaultValue);
-                return mDefaultValue;
-            } catch (NumberFormatException ignored) {
-            }
-            // fallthrough
-        default:
-            return '\'' + mDefaultValue + '\'';
+            case BOOLEAN:
+                if ("true".equals(mDefaultValue)) return "1";
+                if ("false".equals(mDefaultValue)) return "0";
+                // fallthrough
+            case INTEGER:
+            case LONG:
+            case FLOAT:
+            case DOUBLE:
+            case DATE:
+            case ENUM:
+                try {
+                    Long.parseLong(mDefaultValue);
+                    return mDefaultValue;
+                } catch (NumberFormatException e) {
+                    Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
+                            + " could not be parsed as a numeric type, which is probably a problem", e);
+                }
+                // fallthrough
+            default:
+                return '\'' + mDefaultValue + '\'';
         }
     }
 

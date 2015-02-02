@@ -34,8 +34,12 @@ public class Log {
         System.out.println(FORMAT.format(new Date()) + " D/" + tag + " " + string);
     }
 
-
     public static void i(String tag, String string) {
         System.out.println(FORMAT.format(new Date()) + " I/" + tag + " " + string);
+    }
+
+    public static void w(String tag, String string, Throwable t) {
+        System.out.println(FORMAT.format(new Date()) + " W/" + tag + " " + string);
+        t.printStackTrace();
     }
 }
