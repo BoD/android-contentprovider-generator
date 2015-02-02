@@ -33,6 +33,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
     public static final String _ID = BaseColumns._ID;
             <#else>
     public static final String _ID = "${field.nameOrPrefixed}";
+
     public static final String ${field.nameUpperCase} = "${field.nameOrPrefixed}";
             </#if>
         <#else>
@@ -59,7 +60,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
         if (projection == null) return true;
         for (String c : projection) {
         <#list entity.fields as field>
-            <#if !field.isId>
+            <#if field.nameLowerCase != "_id">
             if (c == ${field.nameUpperCase} || c.contains("." + ${field.nameUpperCase})) return true;
             </#if>
         </#list>

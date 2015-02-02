@@ -59,7 +59,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
 
     <#list entity.getFieldsIncludingJoins() as field>
-    <#if !field.isId>
+    <#if field.nameLowerCase != "_id">
     <#switch field.type.name()>
     <#case "BOOLEAN">
 

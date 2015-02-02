@@ -46,6 +46,13 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
     }
 
     /**
+     * Get the {@code product_id} value.
+     */
+    public long getProductId() {
+        return getLongOrNull(ProductColumns.PRODUCT_ID);
+    }
+
+    /**
      * Get the {@code name} value.
      * Cannot be {@code null}.
      */

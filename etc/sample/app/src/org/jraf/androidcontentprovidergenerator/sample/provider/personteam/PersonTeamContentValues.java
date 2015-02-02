@@ -58,11 +58,9 @@ public class PersonTeamContentValues extends AbstractContentValues {
     }
 
 
-
     public PersonTeamContentValues putTeamId(long value) {
         mContentValues.put(PersonTeamColumns.TEAM_ID, value);
         return this;
     }
-
 
 }

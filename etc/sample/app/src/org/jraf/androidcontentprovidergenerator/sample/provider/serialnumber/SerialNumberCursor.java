@@ -40,7 +40,9 @@ public class SerialNumberCursor extends AbstractCursor implements SerialNumberMo
         super(cursor);
     }
 
-    @Override
+    /**
+     * Primary key.
+     */
     public long getId() {
         return getLongOrNull(SerialNumberColumns._ID);
     }

@@ -25,5 +25,4 @@
 package org.jraf.androidcontentprovidergenerator.sample.provider.base;
 
 public interface BaseModel {
-    long getId();
 }

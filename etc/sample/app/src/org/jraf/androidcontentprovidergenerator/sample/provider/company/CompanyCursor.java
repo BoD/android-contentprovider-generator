@@ -41,7 +41,9 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
         super(cursor);
     }
 
-    @Override
+    /**
+     * Primary key.
+     */
     public long getId() {
         return getLongOrNull(CompanyColumns._ID);
     }

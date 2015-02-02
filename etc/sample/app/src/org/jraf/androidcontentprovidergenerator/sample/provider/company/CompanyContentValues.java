@@ -62,7 +62,6 @@ public class CompanyContentValues extends AbstractContentValues {
     }
 
 
-
     /**
      * The full address of this company.
      */
@@ -76,7 +75,6 @@ public class CompanyContentValues extends AbstractContentValues {
         return this;
     }
 
-
     /**
      * The serial number of this company.
      */
@@ -84,6 +82,5 @@ public class CompanyContentValues extends AbstractContentValues {
         mContentValues.put(CompanyColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
-
 
 }

@@ -58,13 +58,11 @@ public class TeamContentValues extends AbstractContentValues {
     }
 
 
-
     public TeamContentValues putName(@NonNull String value) {
         if (value == null) throw new IllegalArgumentException("name must not be null");
         mContentValues.put(TeamColumns.NAME, value);
         return this;
     }
-
 
 
     /**
@@ -77,7 +75,6 @@ public class TeamContentValues extends AbstractContentValues {
     }
 
 
-
     /**
      * The serial number of this team.
      */
@@ -85,6 +82,5 @@ public class TeamContentValues extends AbstractContentValues {
         mContentValues.put(TeamColumns.SERIAL_NUMBER_ID, value);
         return this;
     }
-
 
 }

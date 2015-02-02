@@ -62,7 +62,6 @@ public class SerialNumberContentValues extends AbstractContentValues {
     }
 
 
-
     /**
      * Unique id, second part.
      */
@@ -71,6 +70,5 @@ public class SerialNumberContentValues extends AbstractContentValues {
         mContentValues.put(SerialNumberColumns.PART1, value);
         return this;
     }
-
 
 }
