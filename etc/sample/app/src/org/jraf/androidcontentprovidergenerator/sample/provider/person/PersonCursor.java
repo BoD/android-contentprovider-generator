@@ -40,7 +40,9 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
         super(cursor);
     }
 
-    @Override
+    /**
+     * Primary key.
+     */
     public long getId() {
         return getLongOrNull(PersonColumns._ID);
     }

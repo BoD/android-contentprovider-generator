@@ -43,7 +43,9 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
         super(cursor);
     }
 
-    @Override
+    /**
+     * Primary key.
+     */
     public long getId() {
         return getLongOrNull(TeamColumns._ID);
     }

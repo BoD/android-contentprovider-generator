@@ -43,6 +43,7 @@ public class ProductColumns implements BaseColumns {
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
     public static final String _ID = "product_id";
+
     public static final String PRODUCT_ID = "product_id";
 
     public static final String NAME = "name";
@@ -60,6 +61,7 @@ public class ProductColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
+            if (c == PRODUCT_ID || c.contains("." + PRODUCT_ID)) return true;
             if (c == NAME || c.contains("." + NAME)) return true;
         }
         return false;

@@ -93,7 +93,7 @@ public class Entity {
     private List<Field> getFieldsIncludingJoins(boolean isForeign, String path) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
-            if (field.getIsId()) continue;
+            if (field.getIsId() && isForeign) continue;
 
             if (isForeign) {
                 res.add(field.asForeignField(path));
