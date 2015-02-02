@@ -13,5 +13,5 @@
 			"nullable": false,
 		},
 	],
-	"idField": "product_id",
+	"idField": ["product_id"],
 }
