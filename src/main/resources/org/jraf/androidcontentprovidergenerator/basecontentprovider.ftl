@@ -17,6 +17,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
+<#if config.useAnnotations>
+import android.support.annotation.NonNull;
+</#if>
 import android.util.Log;
 
 public abstract class BaseContentProvider extends ContentProvider {
@@ -76,7 +79,7 @@ public abstract class BaseContentProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(Uri uri, <#if config.useAnnotations>@NonNull </#if>ContentValues[] values) {
         String table = uri.getLastPathSegment();
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         int res = 0;
@@ -149,7 +152,7 @@ public abstract class BaseContentProvider extends ContentProvider {
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+    public ContentProviderResult[] applyBatch(<#if config.useAnnotations>@NonNull </#if>ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
         HashSet<Uri> urisToNotify = new HashSet<Uri>(operations.size());
         for (ContentProviderOperation operation : operations) {
             urisToNotify.add(operation.getUri());
