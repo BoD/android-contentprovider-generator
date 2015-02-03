@@ -13,4 +13,4 @@ v1.9.0 (2015-02-??)
 - The "id" (single column primary key) can now be specified to be an arbitrary column, instead of automatically being generated as "_id" (issue #56)
 - Ability to specify a LIMIT clause in queries, via a query parameter (issue #62)
 - Better handling of default values (issue #67)
-- Ability to call notify, groupBy and limit on Selection objects.
+- Ability to call `notify`, `groupBy` and `limit` on Selection objects.
