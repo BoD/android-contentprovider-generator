@@ -19,7 +19,7 @@ import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
     }
 

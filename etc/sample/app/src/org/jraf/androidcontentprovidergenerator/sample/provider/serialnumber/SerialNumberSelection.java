@@ -37,7 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
  */
 public class SerialNumberSelection extends AbstractSelection<SerialNumberSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return SerialNumberColumns.CONTENT_URI;
     }
 

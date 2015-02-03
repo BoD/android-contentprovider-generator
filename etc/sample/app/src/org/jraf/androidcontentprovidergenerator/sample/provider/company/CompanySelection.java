@@ -38,7 +38,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
  */
 public class CompanySelection extends AbstractSelection<CompanySelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return CompanyColumns.CONTENT_URI;
     }
 

@@ -31,7 +31,7 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-public abstract class AbstractSelection <T extends AbstractSelection<?>> {
+public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String EQ = "=?";
     private static final String PAREN_OPEN = "(";
     private static final String PAREN_CLOSE = ")";
@@ -52,8 +52,12 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String STARTS = " LIKE ? || '%'";
     private static final String ENDS = " LIKE '%' || ?";
 
-    private StringBuilder mSelection = new StringBuilder();
-    private List<String> mSelectionArgs = new ArrayList<String>(5);
+    private final StringBuilder mSelection = new StringBuilder();
+    private final List<String> mSelectionArgs = new ArrayList<String>(5);
+
+    private Boolean mNotify;
+    private String mGroupBy;
+    private Integer mLimit;
 
     protected void addEquals(String column, Object[] value) {
         mSelection.append(column);
@@ -293,7 +297,15 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
-    public abstract Uri uri();
+    public Uri uri() {
+        Uri uri = baseUri();
+        if (mNotify != null) uri = BaseContentProvider.notify(uri, mNotify);
+        if (mGroupBy != null) uri = BaseContentProvider.groupBy(uri, mGroupBy);
+        if (mLimit != null) uri = BaseContentProvider.limit(uri, String.valueOf(mLimit));
+        return uri;
+    }
+
+    protected abstract Uri baseUri();
 
     /**
      * Deletes row(s) specified by this selection.
@@ -303,5 +315,23 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
      */
     public int delete(ContentResolver contentResolver) {
         return contentResolver.delete(uri(), sel(), args());
+    }
+
+    @SuppressWarnings("unchecked")
+    public T notify(boolean notify) {
+        mNotify = notify;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T groupBy(String groupBy) {
+        mGroupBy = groupBy;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T limit(int limit) {
+        mLimit = limit;
+        return (T) this;
     }
 }

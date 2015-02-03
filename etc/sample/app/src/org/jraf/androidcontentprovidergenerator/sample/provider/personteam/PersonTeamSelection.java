@@ -42,7 +42,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
  */
 public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return PersonTeamColumns.CONTENT_URI;
     }
 

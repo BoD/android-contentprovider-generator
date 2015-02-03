@@ -37,7 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
  */
 public class ProductSelection extends AbstractSelection<ProductSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return ProductColumns.CONTENT_URI;
     }
 
