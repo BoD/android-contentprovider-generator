@@ -34,9 +34,10 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private final StringBuilder mSelection = new StringBuilder();
     private final List<String> mSelectionArgs = new ArrayList<String>(5);
 
-    private Boolean mNotify;
-    private String mGroupBy;
-    private Integer mLimit;
+    Boolean mNotify;
+    String mGroupBy;
+    String mHaving;
+    Integer mLimit;
 
     protected void addEquals(String column, Object[] value) {
         mSelection.append(column);
@@ -280,6 +281,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         Uri uri = baseUri();
         if (mNotify != null) uri = BaseContentProvider.notify(uri, mNotify);
         if (mGroupBy != null) uri = BaseContentProvider.groupBy(uri, mGroupBy);
+        if (mHaving != null) uri = BaseContentProvider.having(uri, mHaving);
         if (mLimit != null) uri = BaseContentProvider.limit(uri, String.valueOf(mLimit));
         return uri;
     }
@@ -305,6 +307,12 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     @SuppressWarnings("unchecked")
     public T groupBy(String groupBy) {
         mGroupBy = groupBy;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T having(String having) {
+        mHaving = having;
         return (T) this;
     }
 
