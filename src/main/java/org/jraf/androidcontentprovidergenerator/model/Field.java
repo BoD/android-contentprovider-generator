@@ -254,8 +254,6 @@ public class Field {
                 // fallthrough
             case INTEGER:
             case LONG:
-            case FLOAT:
-            case DOUBLE:
             case DATE:
             case ENUM:
                 try {
@@ -264,6 +262,16 @@ public class Field {
                 } catch (NumberFormatException e) {
                     Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
                             + " could not be parsed as a numeric type, which is probably a problem", e);
+                }
+                // fallthrough
+            case FLOAT:
+            case DOUBLE:
+                try {
+                    Double.parseDouble(mDefaultValue);
+                    return mDefaultValue;
+                } catch (NumberFormatException e) {
+                    Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
+                            + " could not be parsed as a floating point type, which is probably a problem", e);
                 }
                 // fallthrough
             default:
