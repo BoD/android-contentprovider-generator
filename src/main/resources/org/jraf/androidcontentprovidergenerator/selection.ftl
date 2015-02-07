@@ -39,14 +39,14 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -57,7 +57,6 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
-
     <#list entity.getFieldsIncludingJoins() as field>
     <#if field.nameLowerCase != "_id">
     <#switch field.type.name()>

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.DefaultDatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
@@ -81,13 +80,12 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     /*
      * Pre Honeycomb.
      */
-
     private static ${config.sqliteOpenHelperClassName} newInstancePreHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+        return new ${config.sqliteOpenHelperClassName}(context);
     }
 
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private ${config.sqliteOpenHelperClassName}(Context context) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
@@ -96,15 +94,14 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     /*
      * Post Honeycomb.
      */
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static ${config.sqliteOpenHelperClassName} newInstancePostHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+        return new ${config.sqliteOpenHelperClassName}(context, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    private ${config.sqliteOpenHelperClassName}(Context context, DatabaseErrorHandler errorHandler) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
