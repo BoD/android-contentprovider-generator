@@ -10,6 +10,9 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+<#if config.useAnnotations>
+import android.support.annotation.NonNull;
+</#if>
 import android.util.Log;
 
 import ${config.projectPackageId}.BuildConfig;
@@ -80,7 +83,7 @@ public class ${config.providerClassName} extends BaseContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public int bulkInsert(Uri uri, <#if config.useAnnotations>@NonNull </#if>ContentValues[] values) {
         if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         return super.bulkInsert(uri, values);
     }
