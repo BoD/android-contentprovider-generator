@@ -25,6 +25,7 @@ import android.util.Log;
 public abstract class BaseContentProvider extends ContentProvider {
     public static final String QUERY_NOTIFY = "QUERY_NOTIFY";
     public static final String QUERY_GROUP_BY = "QUERY_GROUP_BY";
+    public static final String QUERY_HAVING = "QUERY_HAVING";
     public static final String QUERY_LIMIT = "QUERY_LIMIT";
 
     public static class QueryParams {
@@ -129,11 +130,12 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         String groupBy = uri.getQueryParameter(QUERY_GROUP_BY);
+        String having = uri.getQueryParameter(QUERY_HAVING);
         String limit = uri.getQueryParameter(QUERY_LIMIT);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
         projection = ensureIdIsFullyQualified(projection, queryParams.table, queryParams.idColumn);
         Cursor res = mSqLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
-                null, sortOrder == null ? queryParams.orderBy : sortOrder, limit);
+                having, sortOrder == null ? queryParams.orderBy : sortOrder, limit);
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
@@ -187,6 +189,10 @@ public abstract class BaseContentProvider extends ContentProvider {
 
     public static Uri groupBy(Uri uri, String groupBy) {
         return uri.buildUpon().appendQueryParameter(QUERY_GROUP_BY, groupBy).build();
+    }
+
+    public static Uri having(Uri uri, String having) {
+        return uri.buildUpon().appendQueryParameter(QUERY_HAVING, having).build();
     }
 
     public static Uri limit(Uri uri, String limit) {
