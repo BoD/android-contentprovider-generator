@@ -57,14 +57,14 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public SerialNumberCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public SerialNumberCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -75,7 +75,6 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
         addEquals("serial_number." + SerialNumberColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public SerialNumberSelection part0(String... value) {
         addEquals(SerialNumberColumns.PART0, value);

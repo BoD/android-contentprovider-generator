@@ -29,7 +29,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 public abstract class AbstractContentValues {
-    protected ContentValues mContentValues = new ContentValues();
+    protected final ContentValues mContentValues = new ContentValues();
 
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.

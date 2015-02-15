@@ -60,14 +60,14 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public TeamCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public TeamCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -78,7 +78,6 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         addEquals("team." + TeamColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public TeamSelection companyId(long... value) {
         addEquals(TeamColumns.COMPANY_ID, toObjectArray(value));

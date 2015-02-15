@@ -29,7 +29,6 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.DefaultDatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
@@ -142,13 +141,12 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     /*
      * Pre Honeycomb.
      */
-
     private static SampleSQLiteOpenHelper newInstancePreHoneycomb(Context context) {
-        return new SampleSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+        return new SampleSQLiteOpenHelper(context);
     }
 
-    private SampleSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private SampleSQLiteOpenHelper(Context context) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
         mOpenHelperCallbacks = new SampleSQLiteOpenHelperCallbacks();
     }
@@ -157,15 +155,14 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     /*
      * Post Honeycomb.
      */
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static SampleSQLiteOpenHelper newInstancePostHoneycomb(Context context) {
-        return new SampleSQLiteOpenHelper(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+        return new SampleSQLiteOpenHelper(context, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private SampleSQLiteOpenHelper(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    private SampleSQLiteOpenHelper(Context context, DatabaseErrorHandler errorHandler) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
         mOpenHelperCallbacks = new SampleSQLiteOpenHelperCallbacks();
     }

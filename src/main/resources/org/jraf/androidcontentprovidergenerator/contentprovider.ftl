@@ -83,7 +83,7 @@ public class ${config.providerClassName} extends BaseContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, <#if config.useAnnotations>@NonNull </#if>ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] values) {
         if (DEBUG) Log.d(TAG, "bulkInsert uri=" + uri + " values.length=" + values.length);
         return super.bulkInsert(uri, values);
     }

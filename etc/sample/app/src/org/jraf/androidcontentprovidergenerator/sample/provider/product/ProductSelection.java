@@ -57,14 +57,14 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public ProductCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public ProductCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -75,7 +75,6 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
         addEquals("product." + ProductColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public ProductSelection productId(long... value) {
         addEquals(ProductColumns.PRODUCT_ID, toObjectArray(value));
