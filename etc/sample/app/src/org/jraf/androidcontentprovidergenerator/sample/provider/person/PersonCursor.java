@@ -44,7 +44,10 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Primary key.
      */
     public long getId() {
-        return getLongOrNull(PersonColumns._ID);
+        Long res = getLongOrNull(PersonColumns._ID);
+        if (res == null)
+            throw new NullPointerException("The value of '_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -75,7 +78,10 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Get the {@code age} value.
      */
     public int getAge() {
-        return getIntegerOrNull(PersonColumns.AGE);
+        Integer res = getIntegerOrNull(PersonColumns.AGE);
+        if (res == null)
+            throw new NullPointerException("The value of 'age' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -84,14 +90,18 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      */
     @Nullable
     public Date getBirthDate() {
-        return getDateOrNull(PersonColumns.BIRTH_DATE);
+        Date res = getDateOrNull(PersonColumns.BIRTH_DATE);
+        return res;
     }
 
     /**
      * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getHasBlueEyes() {
-        return getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
+        Boolean res = getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
+        if (res == null)
+            throw new NullPointerException("The value of 'has_blue_eyes' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -100,7 +110,8 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      */
     @Nullable
     public Float getHeight() {
-        return getFloatOrNull(PersonColumns.HEIGHT);
+        Float res = getFloatOrNull(PersonColumns.HEIGHT);
+        return res;
     }
 
     /**

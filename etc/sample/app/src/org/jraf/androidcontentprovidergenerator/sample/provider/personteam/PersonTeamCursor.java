@@ -49,14 +49,20 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      * Primary key.
      */
     public long getId() {
-        return getLongOrNull(PersonTeamColumns._ID);
+        Long res = getLongOrNull(PersonTeamColumns._ID);
+        if (res == null)
+            throw new NullPointerException("The value of '_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * Get the {@code person_id} value.
      */
     public long getPersonId() {
-        return getLongOrNull(PersonTeamColumns.PERSON_ID);
+        Long res = getLongOrNull(PersonTeamColumns.PERSON_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'person_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -87,7 +93,10 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      * Get the {@code age} value.
      */
     public int getPersonAge() {
-        return getIntegerOrNull(PersonColumns.AGE);
+        Integer res = getIntegerOrNull(PersonColumns.AGE);
+        if (res == null)
+            throw new NullPointerException("The value of 'age' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -96,14 +105,18 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      */
     @Nullable
     public Date getPersonBirthDate() {
-        return getDateOrNull(PersonColumns.BIRTH_DATE);
+        Date res = getDateOrNull(PersonColumns.BIRTH_DATE);
+        return res;
     }
 
     /**
      * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
     public boolean getPersonHasBlueEyes() {
-        return getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
+        Boolean res = getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
+        if (res == null)
+            throw new NullPointerException("The value of 'has_blue_eyes' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -112,7 +125,8 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      */
     @Nullable
     public Float getPersonHeight() {
-        return getFloatOrNull(PersonColumns.HEIGHT);
+        Float res = getFloatOrNull(PersonColumns.HEIGHT);
+        return res;
     }
 
     /**
@@ -143,14 +157,20 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      * Get the {@code team_id} value.
      */
     public long getTeamId() {
-        return getLongOrNull(PersonTeamColumns.TEAM_ID);
+        Long res = getLongOrNull(PersonTeamColumns.TEAM_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'team_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * Get the {@code company_id} value.
      */
     public long getTeamCompanyId() {
-        return getLongOrNull(TeamColumns.COMPANY_ID);
+        Long res = getLongOrNull(TeamColumns.COMPANY_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'company_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -171,14 +191,18 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      */
     @Nullable
     public String getTeamCompanyAddress() {
-        return getStringOrNull(CompanyColumns.ADDRESS);
+        String res = getStringOrNull(CompanyColumns.ADDRESS);
+        return res;
     }
 
     /**
      * The serial number of this company.
      */
     public long getTeamCompanySerialNumberId() {
-        return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        Long res = getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'serial_number_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -233,7 +257,10 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
      * The serial number of this team.
      */
     public long getTeamSerialNumberId() {
-        return getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+        Long res = getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'serial_number_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**

@@ -31,6 +31,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.*;
 
 /**
  * Selection for the {@code product} table.
@@ -133,6 +134,96 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
 
     public ProductSelection nameEndsWith(String... value) {
         addEndsWith(ProductColumns.NAME, value);
+        return this;
+    }
+
+    public ProductSelection manualId(Long... value) {
+        addEquals(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualIdNot(Long... value) {
+        addNotEquals(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualIdGt(long value) {
+        addGreaterThan(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualIdGtEq(long value) {
+        addGreaterThanOrEquals(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualIdLt(long value) {
+        addLessThan(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualIdLtEq(long value) {
+        addLessThanOrEquals(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection manualTitle(String... value) {
+        addEquals(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualTitleNot(String... value) {
+        addNotEquals(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualTitleLike(String... value) {
+        addLike(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualTitleContains(String... value) {
+        addContains(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualTitleStartsWith(String... value) {
+        addStartsWith(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualTitleEndsWith(String... value) {
+        addEndsWith(ManualColumns.TITLE, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbn(String... value) {
+        addEquals(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbnNot(String... value) {
+        addNotEquals(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbnLike(String... value) {
+        addLike(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbnContains(String... value) {
+        addContains(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbnStartsWith(String... value) {
+        addStartsWith(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection manualIsbnEndsWith(String... value) {
+        addEndsWith(ManualColumns.ISBN, value);
         return this;
     }
 }

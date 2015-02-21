@@ -37,6 +37,7 @@ import android.util.Log;
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseContentProvider;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
@@ -57,20 +58,23 @@ public class SampleProvider extends BaseContentProvider {
     private static final int URI_TYPE_COMPANY = 0;
     private static final int URI_TYPE_COMPANY_ID = 1;
 
-    private static final int URI_TYPE_PERSON = 2;
-    private static final int URI_TYPE_PERSON_ID = 3;
+    private static final int URI_TYPE_MANUAL = 2;
+    private static final int URI_TYPE_MANUAL_ID = 3;
 
-    private static final int URI_TYPE_PERSON_TEAM = 4;
-    private static final int URI_TYPE_PERSON_TEAM_ID = 5;
+    private static final int URI_TYPE_PERSON = 4;
+    private static final int URI_TYPE_PERSON_ID = 5;
 
-    private static final int URI_TYPE_PRODUCT = 6;
-    private static final int URI_TYPE_PRODUCT_ID = 7;
+    private static final int URI_TYPE_PERSON_TEAM = 6;
+    private static final int URI_TYPE_PERSON_TEAM_ID = 7;
 
-    private static final int URI_TYPE_SERIAL_NUMBER = 8;
-    private static final int URI_TYPE_SERIAL_NUMBER_ID = 9;
+    private static final int URI_TYPE_PRODUCT = 8;
+    private static final int URI_TYPE_PRODUCT_ID = 9;
 
-    private static final int URI_TYPE_TEAM = 10;
-    private static final int URI_TYPE_TEAM_ID = 11;
+    private static final int URI_TYPE_SERIAL_NUMBER = 10;
+    private static final int URI_TYPE_SERIAL_NUMBER_ID = 11;
+
+    private static final int URI_TYPE_TEAM = 12;
+    private static final int URI_TYPE_TEAM_ID = 13;
 
 
 
@@ -79,6 +83,8 @@ public class SampleProvider extends BaseContentProvider {
     static {
         URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME, URI_TYPE_COMPANY);
         URI_MATCHER.addURI(AUTHORITY, CompanyColumns.TABLE_NAME + "/#", URI_TYPE_COMPANY_ID);
+        URI_MATCHER.addURI(AUTHORITY, ManualColumns.TABLE_NAME, URI_TYPE_MANUAL);
+        URI_MATCHER.addURI(AUTHORITY, ManualColumns.TABLE_NAME + "/#", URI_TYPE_MANUAL_ID);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME, URI_TYPE_PERSON);
         URI_MATCHER.addURI(AUTHORITY, PersonColumns.TABLE_NAME + "/#", URI_TYPE_PERSON_ID);
         URI_MATCHER.addURI(AUTHORITY, PersonTeamColumns.TABLE_NAME, URI_TYPE_PERSON_TEAM);
@@ -109,6 +115,11 @@ public class SampleProvider extends BaseContentProvider {
                 return TYPE_CURSOR_DIR + CompanyColumns.TABLE_NAME;
             case URI_TYPE_COMPANY_ID:
                 return TYPE_CURSOR_ITEM + CompanyColumns.TABLE_NAME;
+
+            case URI_TYPE_MANUAL:
+                return TYPE_CURSOR_DIR + ManualColumns.TABLE_NAME;
+            case URI_TYPE_MANUAL_ID:
+                return TYPE_CURSOR_ITEM + ManualColumns.TABLE_NAME;
 
             case URI_TYPE_PERSON:
                 return TYPE_CURSOR_DIR + PersonColumns.TABLE_NAME;
@@ -188,6 +199,14 @@ public class SampleProvider extends BaseContentProvider {
                 res.orderBy = CompanyColumns.DEFAULT_ORDER;
                 break;
 
+            case URI_TYPE_MANUAL:
+            case URI_TYPE_MANUAL_ID:
+                res.table = ManualColumns.TABLE_NAME;
+                res.idColumn = ManualColumns._ID;
+                res.tablesWithJoins = ManualColumns.TABLE_NAME;
+                res.orderBy = ManualColumns.DEFAULT_ORDER;
+                break;
+
             case URI_TYPE_PERSON:
             case URI_TYPE_PERSON_ID:
                 res.table = PersonColumns.TABLE_NAME;
@@ -224,6 +243,9 @@ public class SampleProvider extends BaseContentProvider {
                 res.table = ProductColumns.TABLE_NAME;
                 res.idColumn = ProductColumns._ID;
                 res.tablesWithJoins = ProductColumns.TABLE_NAME;
+                if (ManualColumns.hasColumns(projection)) {
+                    res.tablesWithJoins += " LEFT OUTER JOIN " + ManualColumns.TABLE_NAME + " AS " + ProductColumns.PREFIX_MANUAL + " ON " + ProductColumns.TABLE_NAME + "." + ProductColumns.MANUAL_ID + "=" + ProductColumns.PREFIX_MANUAL + "." + ManualColumns._ID;
+                }
                 res.orderBy = ProductColumns.DEFAULT_ORDER;
                 break;
 
@@ -258,6 +280,7 @@ public class SampleProvider extends BaseContentProvider {
 
         switch (matchedId) {
             case URI_TYPE_COMPANY_ID:
+            case URI_TYPE_MANUAL_ID:
             case URI_TYPE_PERSON_ID:
             case URI_TYPE_PERSON_TEAM_ID:
             case URI_TYPE_PRODUCT_ID:

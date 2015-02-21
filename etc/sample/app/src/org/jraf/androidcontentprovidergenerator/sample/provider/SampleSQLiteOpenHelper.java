@@ -35,6 +35,7 @@ import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
@@ -62,6 +63,13 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String SQL_CREATE_INDEX_COMPANY_NAME = "CREATE INDEX IDX_COMPANY_NAME "
             + " ON " + CompanyColumns.TABLE_NAME + " ( " + CompanyColumns.NAME + " );";
+
+    public static final String SQL_CREATE_TABLE_MANUAL = "CREATE TABLE IF NOT EXISTS "
+            + ManualColumns.TABLE_NAME + " ( "
+            + ManualColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ManualColumns.TITLE + " TEXT NOT NULL, "
+            + ManualColumns.ISBN + " TEXT NOT NULL "
+            + " );";
 
     public static final String SQL_CREATE_TABLE_PERSON = "CREATE TABLE IF NOT EXISTS "
             + PersonColumns.TABLE_NAME + " ( "
@@ -93,7 +101,9 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     public static final String SQL_CREATE_TABLE_PRODUCT = "CREATE TABLE IF NOT EXISTS "
             + ProductColumns.TABLE_NAME + " ( "
             + ProductColumns._ID + " INTEGER PRIMARY KEY, "
-            + ProductColumns.NAME + " TEXT NOT NULL "
+            + ProductColumns.NAME + " TEXT NOT NULL, "
+            + ProductColumns.MANUAL_ID + " INTEGER "
+            + ", CONSTRAINT fk_manual_id FOREIGN KEY (" + ProductColumns.MANUAL_ID + ") REFERENCES manual (_id) ON DELETE SET NULL"
             + " );";
 
     public static final String SQL_CREATE_INDEX_PRODUCT_PRODUCT_ID = "CREATE INDEX IDX_PRODUCT_PRODUCT_ID "
@@ -174,6 +184,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
         mOpenHelperCallbacks.onPreCreate(mContext, db);
         db.execSQL(SQL_CREATE_TABLE_COMPANY);
         db.execSQL(SQL_CREATE_INDEX_COMPANY_NAME);
+        db.execSQL(SQL_CREATE_TABLE_MANUAL);
         db.execSQL(SQL_CREATE_TABLE_PERSON);
         db.execSQL(SQL_CREATE_INDEX_PERSON_LAST_NAME);
         db.execSQL(SQL_CREATE_TABLE_PERSON_TEAM);
