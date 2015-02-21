@@ -124,7 +124,7 @@ A sample is available in the [etc/sample](etc/sample) folder.
 You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
 
 Here is the table shema of the sample:
-![Table shema of the sample](etc/sample/sample-schema.svg?raw=true "The sample")
+![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
 
 
 ### Get the tool
