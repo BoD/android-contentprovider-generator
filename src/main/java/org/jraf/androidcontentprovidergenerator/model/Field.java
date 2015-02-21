@@ -133,6 +133,10 @@ public class Field {
             sOnDeleteActionJsonNames.put(jsonName, this);
         }
 
+        public String toSql() {
+            return name().replace('_', ' ');
+        }
+
         public static OnDeleteAction fromJsonName(String jsonName) {
             OnDeleteAction res = sOnDeleteActionJsonNames.get(jsonName);
             if (res == null) throw new IllegalArgumentException("The onDelete value '" + jsonName + "' is unknown");
@@ -176,8 +180,9 @@ public class Field {
         mForeignKey = foreignKey;
     }
 
-    public Field asForeignField(String path) {
-        Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mIsAutoIncrement, mDefaultValue, mEnumName,
+    public Field asForeignField(String path, boolean forceNullable) {
+        boolean isNullable = forceNullable ? true : mIsNullable;
+        Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, isNullable, mIsAutoIncrement, mDefaultValue, mEnumName,
                 mEnumValues, mForeignKey);
         res.mIsForeign = true;
         res.mOriginalField = this;
