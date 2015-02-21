@@ -124,7 +124,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android_contentprovider_generator-1.9.0-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android_contentprovider_generator-1.9.1-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -224,7 +224,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.9.0-bundle.jar` in the `target` folder.
+This will produce `android-contentprovider-generator-1.9.1-bundle.jar` in the `target` folder.
 
 
 Similar tools
