@@ -107,15 +107,25 @@ Notes:
 - `nullable` is optional (true by default).
 - if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 
-A more comprehensive example is available in the [etc/sample](etc/sample) folder.
+A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
 
 You can also have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
 
-By convention, your should name your entities and fields in lower case with words separated by '_', like in the example above.
+By convention, you should name your entities and fields in lower case with words separated by '_', like in the example above.
 
 ### The `header.txt` file (optional)
 
 If a `header.txt` file is present, its contents will be inserted at the top of every generated file.
+
+### Sample
+
+A sample is available in the [etc/sample](etc/sample) folder.
+
+You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+
+Here is the table shema of the sample:
+![Table shema of the sample](etc/sample/sample-schema.svg?raw=true "The sample")
+
 
 ### Get the tool
 
