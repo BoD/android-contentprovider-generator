@@ -1,6 +1,10 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.9.1 (2015-02-21)
+------
+- Fix for issue #73.
+
 v1.9.0 (2015-02-15)
 ------
 - The config `syntaxVersion` for this release is **3**.  This means you **must** update your `_config.json` file.
