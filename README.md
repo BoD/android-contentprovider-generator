@@ -224,7 +224,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.9.1-bundle.jar` in the `target` folder.
+This will produce `android_contentprovider_generator-1.9.1-bundle.jar` in the `target` folder.
 
 
 Similar tools
