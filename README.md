@@ -117,16 +117,6 @@ By convention, you should name your entities and fields in lower case with words
 
 If a `header.txt` file is present, its contents will be inserted at the top of every generated file.
 
-### Sample
-
-A sample is available in the [etc/sample](etc/sample) folder.
-
-You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
-
-Here is the table shema of the sample:
-![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
-
-
 ### Get the tool
 
 Download the jar from here:
@@ -214,6 +204,17 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
 - **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
 - Cases such as "A has a FK to B, B has a FK to C, A has a FK to C" generate ambiguities in the queries, because C columns appear twice.  In the [sample app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/app/SampleActivity.java) you can see an example of how to deal with this case, using prefixes and aliases (SQL's `AS` keyword).
+
+
+Sample
+------
+
+A sample is available in the [etc/sample](etc/sample) folder.
+
+You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+
+Here is the table shema of the sample:
+![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
 
 
 Building
