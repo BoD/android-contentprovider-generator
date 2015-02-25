@@ -23,7 +23,7 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor implements ${e
     public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
     }
-    <#list entity.getFieldsIncludingJoins() as field>
+<#list entity.getFieldsIncludingJoins() as field>
     <#if field.isId && field.nameLowerCase != '_id'>
 
     @Override
@@ -56,63 +56,49 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor implements ${e
         </#if>
     </#if>
     public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}() {
-            <#switch field.type.name()>
-            <#case "STRING">
-                <#if field.isNullable>
-        return getStringOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-                <#else>
+    <#switch field.type.name()>
+        <#case "STRING">
         String res = getStringOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-        if (res == null)
-            throw new NullPointerException("The value of '${field.nameLowerCase}' in the database was null, which is not allowed according to the model definition");
-        return res;
-                </#if>
-            <#break>
-            <#case "INTEGER">
-        return getIntegerOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-            <#break>
-            <#case "LONG">
-        return getLongOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-            <#break>
-            <#case "FLOAT">
-        return getFloatOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-            <#break>
-            <#case "DOUBLE">
-        return getDoubleOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-            <#break>
-            <#case "BOOLEAN">
-        return getBooleanOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-            <#break>
-            <#case "DATE">
-                <#if field.isNullable>
-        return getDateOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-                <#else>
+        <#break>
+        <#case "INTEGER">
+        Integer res = getIntegerOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "LONG">
+        Long res = getLongOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "FLOAT">
+        Float res = getFloatOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "DOUBLE">
+        Double res = getDoubleOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "BOOLEAN">
+        Boolean res = getBooleanOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+        <#break>
+        <#case "DATE">
         Date res = getDateOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-        if (res == null)
-            throw new NullPointerException("The value of '${field.nameLowerCase}' in the database was null, which is not allowed according to the model definition");
-        return res;
-                </#if>
-            <#break>
-            <#case "BYTE_ARRAY">
-                <#if field.isNullable>
-        return getBlobOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-                <#else>
+        <#break>
+        <#case "BYTE_ARRAY">
         byte[] res = getBlobOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-        if (res == null)
-            throw new NullPointerException("The value of '${field.nameLowerCase}' in the database was null, which is not allowed according to the model definition");
-        return res;
-                </#if>
-            <#break>
-            <#case "ENUM">
+        <#break>
+        <#case "ENUM">
         Integer intValue = getIntegerOrNull(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
-        		<#if field.isNullable>
+            <#if field.isNullable>
         if (intValue == null) return null;
-        		<#else>
+            <#else>
         if (intValue == null)
             throw new NullPointerException("The value of '${field.nameLowerCase}' in the database was null, which is not allowed according to the model definition");
-        		</#if>
+            </#if>
         return ${field.javaTypeSimpleName}.values()[intValue];
-            <#break>
-            </#switch>
+        <#break>
+    </#switch>
+    <#if field.type.name() != "ENUM">
+        <#if !field.isNullable>
+        if (res == null)
+            throw new NullPointerException("The value of '${field.nameLowerCase}' in the database was null, which is not allowed according to the model definition");
+        </#if>
+        return res;
+    </#if>
     }
-    </#list>
+</#list>
 }

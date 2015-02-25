@@ -29,6 +29,7 @@ import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;

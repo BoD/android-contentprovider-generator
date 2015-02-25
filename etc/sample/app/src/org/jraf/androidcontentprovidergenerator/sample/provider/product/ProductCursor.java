@@ -31,6 +31,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.*;
 
 /**
  * Cursor wrapper for the {@code product} table.
@@ -49,7 +50,10 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
      * Get the {@code product_id} value.
      */
     public long getProductId() {
-        return getLongOrNull(ProductColumns.PRODUCT_ID);
+        Long res = getLongOrNull(ProductColumns.PRODUCT_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'product_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -61,6 +65,36 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
         String res = getStringOrNull(ProductColumns.NAME);
         if (res == null)
             throw new NullPointerException("The value of 'name' in the database was null, which is not allowed according to the model definition");
+        return res;
+    }
+
+    /**
+     * Optional manual id.
+     * Can be {@code null}.
+     */
+    @Nullable
+    public Long getManualId() {
+        Long res = getLongOrNull(ProductColumns.MANUAL_ID);
+        return res;
+    }
+
+    /**
+     * Get the {@code title} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    public String getManualTitle() {
+        String res = getStringOrNull(ManualColumns.TITLE);
+        return res;
+    }
+
+    /**
+     * Get the {@code isbn} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    public String getManualIsbn() {
+        String res = getStringOrNull(ManualColumns.ISBN);
         return res;
     }
 }

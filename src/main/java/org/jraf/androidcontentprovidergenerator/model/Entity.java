@@ -87,16 +87,16 @@ public class Entity {
     }
 
     public List<Field> getFieldsIncludingJoins() {
-        return getFieldsIncludingJoins(false, "");
+        return getFieldsIncludingJoins(false, "", false);
     }
 
-    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path) {
+    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path, boolean forceNullable) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
             if (field.getIsId() && isForeign) continue;
 
             if (isForeign) {
-                res.add(field.asForeignField(path));
+                res.add(field.asForeignField(path, forceNullable));
             } else {
                 res.add(field);
             }
@@ -105,8 +105,10 @@ public class Entity {
             if (foreignKey == null) continue;
 
             String newPath = path + foreignKey.getEntity().getNameCamelCase();
+            // If the field is nullable, all fields of the foreign (joined) entity must also be nullable
+            forceNullable = field.getIsNullable();
             // Recurse
-            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath));
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath, forceNullable));
         }
 
         return res;

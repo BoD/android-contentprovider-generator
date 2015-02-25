@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.product;
+package org.jraf.androidcontentprovidergenerator.sample.provider.manual;
 
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -37,22 +37,20 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.Ser
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 /**
- * A product that the company sells.
+ * A manual related to a product.
  */
-public class ProductColumns implements BaseColumns {
-    public static final String TABLE_NAME = "product";
+public class ManualColumns implements BaseColumns {
+    public static final String TABLE_NAME = "manual";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
 
-    public static final String _ID = "product_id";
-
-    public static final String PRODUCT_ID = "product_id";
-
-    public static final String NAME = "name";
-
     /**
-     * Optional manual id.
+     * Primary key.
      */
-    public static final String MANUAL_ID = "manual_id";
+    public static final String _ID = BaseColumns._ID;
+
+    public static final String TITLE = "title";
+
+    public static final String ISBN = "isbn";
 
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
@@ -60,20 +58,18 @@ public class ProductColumns implements BaseColumns {
     // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
-            NAME,
-            MANUAL_ID
+            TITLE,
+            ISBN
     };
     // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == PRODUCT_ID || c.contains("." + PRODUCT_ID)) return true;
-            if (c == NAME || c.contains("." + NAME)) return true;
-            if (c == MANUAL_ID || c.contains("." + MANUAL_ID)) return true;
+            if (c == TITLE || c.contains("." + TITLE)) return true;
+            if (c == ISBN || c.contains("." + ISBN)) return true;
         }
         return false;
     }
 
-    public static final String PREFIX_MANUAL = TABLE_NAME + "__" + ManualColumns.TABLE_NAME;
 }

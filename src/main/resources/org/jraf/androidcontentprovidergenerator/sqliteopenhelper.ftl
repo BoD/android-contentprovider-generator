@@ -40,7 +40,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
             <#if config.enableForeignKeys >
                 <#list entity.fields as field>
                     <#if field.foreignKey??>
-            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (" + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + ") REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
+            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (" + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + ") REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction.toSql()}"
                     </#if>
                 </#list>
             </#if>

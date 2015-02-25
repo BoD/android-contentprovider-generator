@@ -107,11 +107,11 @@ Notes:
 - `nullable` is optional (true by default).
 - if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 
-A more comprehensive example is available in the [etc/sample](etc/sample) folder.
+A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
 
 You can also have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
 
-By convention, your should name your entities and fields in lower case with words separated by '_', like in the example above.
+By convention, you should name your entities and fields in lower case with words separated by '_', like in the example above.
 
 ### The `header.txt` file (optional)
 
@@ -124,7 +124,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android-contentprovider-generator-1.9.0-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android_contentprovider_generator-1.9.1-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -206,6 +206,17 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - Cases such as "A has a FK to B, B has a FK to C, A has a FK to C" generate ambiguities in the queries, because C columns appear twice.  In the [sample app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/app/SampleActivity.java) you can see an example of how to deal with this case, using prefixes and aliases (SQL's `AS` keyword).
 
 
+Sample
+------
+
+A sample is available in the [etc/sample](etc/sample) folder.
+
+You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+
+Here is the table shema of the sample:
+![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
+
+
 Building
 --------
 
@@ -213,7 +224,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.9.0-bundle.jar` in the `target` folder.
+This will produce `android_contentprovider_generator-1.9.1-bundle.jar` in the `target` folder.
 
 
 Similar tools
@@ -229,6 +240,7 @@ I did not have the chance to try them out.
 - https://code.google.com/p/mdsd-android-content-provider/
 - https://github.com/hamsterksu/Android-AnnotatedSQL
 - http://robotoworks.com/mechanoid/doc/db/api.html
+- https://github.com/robUx4/android-contentprovider-generator (a fork of this project that generates more code)
 
 
 Licence

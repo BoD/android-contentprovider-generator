@@ -80,7 +80,7 @@ public abstract class BaseContentProvider extends ContentProvider {
     }
 
     @Override
-    public int bulkInsert(Uri uri, <#if config.useAnnotations>@NonNull </#if>ContentValues[] values) {
+    public int bulkInsert(Uri uri, ContentValues[] values) {
         String table = uri.getLastPathSegment();
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
         int res = 0;
@@ -154,7 +154,7 @@ public abstract class BaseContentProvider extends ContentProvider {
     }
 
     @Override
-    public ContentProviderResult[] applyBatch(<#if config.useAnnotations>@NonNull </#if>ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
+    public ContentProviderResult[] applyBatch(ArrayList<ContentProviderOperation> operations) throws OperationApplicationException {
         HashSet<Uri> urisToNotify = new HashSet<Uri>(operations.size());
         for (ContentProviderOperation operation : operations) {
             urisToNotify.add(operation.getUri());

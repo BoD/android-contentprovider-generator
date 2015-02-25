@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.product;
+package org.jraf.androidcontentprovidergenerator.sample.provider.manual;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseModel;
 
@@ -32,21 +32,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * A product that the company sells.
+ * A manual related to a product.
  */
-public interface ProductModel extends BaseModel {
+public interface ManualModel extends BaseModel {
 
     /**
-     * Get the {@code name} value.
+     * Get the {@code title} value.
      * Cannot be {@code null}.
      */
     @NonNull
-    String getName();
+    String getTitle();
 
     /**
-     * Optional manual id.
-     * Can be {@code null}.
+     * Get the {@code isbn} value.
+     * Cannot be {@code null}.
      */
-    @Nullable
-    Long getManualId();
+    @NonNull
+    String getIsbn();
 }

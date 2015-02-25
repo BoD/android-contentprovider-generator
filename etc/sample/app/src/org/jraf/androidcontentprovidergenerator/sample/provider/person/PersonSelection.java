@@ -57,14 +57,14 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public PersonCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public PersonCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -75,7 +75,6 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         addEquals("person." + PersonColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public PersonSelection firstName(String... value) {
         addEquals(PersonColumns.FIRST_NAME, value);

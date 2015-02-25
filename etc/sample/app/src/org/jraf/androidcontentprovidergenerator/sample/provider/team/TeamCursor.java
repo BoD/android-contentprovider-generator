@@ -47,14 +47,20 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
      * Primary key.
      */
     public long getId() {
-        return getLongOrNull(TeamColumns._ID);
+        Long res = getLongOrNull(TeamColumns._ID);
+        if (res == null)
+            throw new NullPointerException("The value of '_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
      * Get the {@code company_id} value.
      */
     public long getCompanyId() {
-        return getLongOrNull(TeamColumns.COMPANY_ID);
+        Long res = getLongOrNull(TeamColumns.COMPANY_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'company_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -75,14 +81,18 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
      */
     @Nullable
     public String getCompanyAddress() {
-        return getStringOrNull(CompanyColumns.ADDRESS);
+        String res = getStringOrNull(CompanyColumns.ADDRESS);
+        return res;
     }
 
     /**
      * The serial number of this company.
      */
     public long getCompanySerialNumberId() {
-        return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        Long res = getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'serial_number_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -137,7 +147,10 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
      * The serial number of this team.
      */
     public long getSerialNumberId() {
-        return getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+        Long res = getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'serial_number_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**

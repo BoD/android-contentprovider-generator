@@ -11,6 +11,7 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,7 @@ import org.jraf.androidcontentprovidergenerator.sample.R;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanySelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.Gender;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonContentValues;
@@ -28,6 +30,9 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.Perso
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductContentValues;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
@@ -55,7 +60,7 @@ public class SampleActivity extends Activity {
         findViewById(R.id.btnQueryPeopleWithTeam).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeopleWithTeamAndCompany).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryTeamsWithCompany).setOnClickListener(mOnClickListener);
-
+        findViewById(R.id.btnQueryProductsWithManual).setOnClickListener(mOnClickListener);
     }
 
     private final OnClickListener mOnClickListener = new OnClickListener() {
@@ -84,6 +89,10 @@ public class SampleActivity extends Activity {
 
                 case R.id.btnQueryTeamsWithCompany:
                     queryTeamsWithCompany();
+                    break;
+
+                case R.id.btnQueryProductsWithManual:
+                    queryProductsWithManual();
                     break;
             }
         }
@@ -191,6 +200,15 @@ public class SampleActivity extends Activity {
         c.close();
     }
 
+    private void queryProductsWithManual() {
+        ProductSelection productSelection = new ProductSelection();
+        ProductCursor c = productSelection.query(getContentResolver());
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
+        }
+        c.close();
+    }
+
     private void deleteBase() {
         // Delete person-teams first
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
@@ -262,6 +280,40 @@ public class SampleActivity extends Activity {
             }
         }
 
+        // Insert a manual
+        long manualId = insertManual("How to use product Foobar", "4242-888-11");
+
+        // Insert 2 products
+        insertProduct("Foobar", manualId);
+        insertProduct("Hectomatic", null);
+    }
+
+    /**
+     * Insert a product.
+     *
+     * @return the id of the created product.
+     */
+    private long insertProduct(@NonNull String name, @Nullable Long manualId) {
+        ProductContentValues values = new ProductContentValues();
+        values.putName(name);
+        values.putManualId(manualId);
+
+        Uri uri = values.insert(getContentResolver());
+        return ContentUris.parseId(uri);
+    }
+
+    /**
+     * Insert a manual.
+     *
+     * @return the id of the created manual.
+     */
+    private long insertManual(@NonNull String title, @NonNull String isbn) {
+        ManualContentValues values = new ManualContentValues();
+        values.putTitle(title);
+        values.putIsbn(isbn);
+
+        Uri uri = values.insert(getContentResolver());
+        return ContentUris.parseId(uri);
     }
 
     /**

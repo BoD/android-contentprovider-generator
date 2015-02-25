@@ -1,7 +1,11 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
-v1.9.0 (2015-02-??)
+v1.9.1 (2015-02-21)
+------
+- Fix for issue #73.
+
+v1.9.0 (2015-02-15)
 ------
 - The config `syntaxVersion` for this release is **3**.  This means you **must** update your `_config.json` file.
 - Generation of new "Model" interfaces (one per entity)
@@ -11,6 +15,6 @@ v1.9.0 (2015-02-??)
 - New `contains`, `startsWith`, `endsWitdh` methods on Selection objects (issue #55)
 - The `CREATE_TABLE and CREATE_INDEX` constants are now public to make upgrades easier (issue #59)
 - The "id" (single column primary key) can now be specified to be an arbitrary column, instead of automatically being generated as "_id" (issue #56)
-- Ability to specify a LIMIT clause in queries, via a query parameter (issue #62)
+- Ability to specify a LIMIT and HAVING clause in queries, via a query parameter (issues #62 and #70)
 - Better handling of default values (issue #67)
-- Ability to call `notify`, `groupBy` and `limit` on Selection objects.
+- Ability to call `notify`, `groupBy`, `limit` and `having` on Selection objects.

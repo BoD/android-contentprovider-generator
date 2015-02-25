@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
+package org.jraf.androidcontentprovidergenerator.sample.provider.manual;
 
 import java.util.Date;
 
@@ -33,10 +33,10 @@ import android.support.annotation.Nullable;
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCursor;
 
 /**
- * Cursor wrapper for the {@code serial_number} table.
+ * Cursor wrapper for the {@code manual} table.
  */
-public class SerialNumberCursor extends AbstractCursor implements SerialNumberModel {
-    public SerialNumberCursor(Cursor cursor) {
+public class ManualCursor extends AbstractCursor implements ManualModel {
+    public ManualCursor(Cursor cursor) {
         super(cursor);
     }
 
@@ -44,33 +44,33 @@ public class SerialNumberCursor extends AbstractCursor implements SerialNumberMo
      * Primary key.
      */
     public long getId() {
-        Long res = getLongOrNull(SerialNumberColumns._ID);
+        Long res = getLongOrNull(ManualColumns._ID);
         if (res == null)
             throw new NullPointerException("The value of '_id' in the database was null, which is not allowed according to the model definition");
         return res;
     }
 
     /**
-     * Unique id, first part.
+     * Get the {@code title} value.
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getPart0() {
-        String res = getStringOrNull(SerialNumberColumns.PART0);
+    public String getTitle() {
+        String res = getStringOrNull(ManualColumns.TITLE);
         if (res == null)
-            throw new NullPointerException("The value of 'part0' in the database was null, which is not allowed according to the model definition");
+            throw new NullPointerException("The value of 'title' in the database was null, which is not allowed according to the model definition");
         return res;
     }
 
     /**
-     * Unique id, second part.
+     * Get the {@code isbn} value.
      * Cannot be {@code null}.
      */
     @NonNull
-    public String getPart1() {
-        String res = getStringOrNull(SerialNumberColumns.PART1);
+    public String getIsbn() {
+        String res = getStringOrNull(ManualColumns.ISBN);
         if (res == null)
-            throw new NullPointerException("The value of 'part1' in the database was null, which is not allowed according to the model definition");
+            throw new NullPointerException("The value of 'isbn' in the database was null, which is not allowed according to the model definition");
         return res;
     }
 }

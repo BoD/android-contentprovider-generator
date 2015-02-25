@@ -45,7 +45,10 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
      * Primary key.
      */
     public long getId() {
-        return getLongOrNull(CompanyColumns._ID);
+        Long res = getLongOrNull(CompanyColumns._ID);
+        if (res == null)
+            throw new NullPointerException("The value of '_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**
@@ -66,14 +69,18 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
      */
     @Nullable
     public String getAddress() {
-        return getStringOrNull(CompanyColumns.ADDRESS);
+        String res = getStringOrNull(CompanyColumns.ADDRESS);
+        return res;
     }
 
     /**
      * The serial number of this company.
      */
     public long getSerialNumberId() {
-        return getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        Long res = getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
+        if (res == null)
+            throw new NullPointerException("The value of 'serial_number_id' in the database was null, which is not allowed according to the model definition");
+        return res;
     }
 
     /**

@@ -12,6 +12,16 @@
 			"type": "String",
 			"nullable": false,
 		},
+		{
+			"documentation": "Optional manual id.",
+			"name": "manual_id",
+			"type": "Long",
+			"nullable": true,
+			"foreignKey": {
+				"table": "manual",
+				"onDelete": "SET NULL",
+			},
+		},
 	],
 	"idField": ["product_id"],
 }

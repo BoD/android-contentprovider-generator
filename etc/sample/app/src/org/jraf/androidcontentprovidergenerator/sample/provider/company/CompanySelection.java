@@ -58,14 +58,14 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public CompanyCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public CompanyCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -76,7 +76,6 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         addEquals("company." + CompanyColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public CompanySelection name(String... value) {
         addEquals(CompanyColumns.NAME, value);
