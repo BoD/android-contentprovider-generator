@@ -61,7 +61,7 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
         for (String c : projection) {
         <#list entity.fields as field>
             <#if field.nameLowerCase != "_id">
-            if (c == ${field.nameUpperCase} || c.contains("." + ${field.nameUpperCase})) return true;
+            if (c.equals(${field.nameUpperCase}) || c.contains("." + ${field.nameUpperCase})) return true;
             </#if>
         </#list>
         }
