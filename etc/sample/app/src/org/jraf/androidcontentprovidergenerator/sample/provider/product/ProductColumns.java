@@ -68,9 +68,9 @@ public class ProductColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == PRODUCT_ID || c.contains("." + PRODUCT_ID)) return true;
-            if (c == NAME || c.contains("." + NAME)) return true;
-            if (c == MANUAL_ID || c.contains("." + MANUAL_ID)) return true;
+            if (c.equals(PRODUCT_ID) || c.contains("." + PRODUCT_ID)) return true;
+            if (c.equals(NAME) || c.contains("." + NAME)) return true;
+            if (c.equals(MANUAL_ID) || c.contains("." + MANUAL_ID)) return true;
         }
         return false;
     }

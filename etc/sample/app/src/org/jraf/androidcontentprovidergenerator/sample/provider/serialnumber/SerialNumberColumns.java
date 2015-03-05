@@ -72,8 +72,8 @@ public class SerialNumberColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == PART0 || c.contains("." + PART0)) return true;
-            if (c == PART1 || c.contains("." + PART1)) return true;
+            if (c.equals(PART0) || c.contains("." + PART0)) return true;
+            if (c.equals(PART1) || c.contains("." + PART1)) return true;
         }
         return false;
     }

@@ -93,14 +93,14 @@ public class PersonColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == FIRST_NAME || c.contains("." + FIRST_NAME)) return true;
-            if (c == LAST_NAME || c.contains("." + LAST_NAME)) return true;
-            if (c == AGE || c.contains("." + AGE)) return true;
-            if (c == BIRTH_DATE || c.contains("." + BIRTH_DATE)) return true;
-            if (c == HAS_BLUE_EYES || c.contains("." + HAS_BLUE_EYES)) return true;
-            if (c == HEIGHT || c.contains("." + HEIGHT)) return true;
-            if (c == GENDER || c.contains("." + GENDER)) return true;
-            if (c == COUNTRY_CODE || c.contains("." + COUNTRY_CODE)) return true;
+            if (c.equals(FIRST_NAME) || c.contains("." + FIRST_NAME)) return true;
+            if (c.equals(LAST_NAME) || c.contains("." + LAST_NAME)) return true;
+            if (c.equals(AGE) || c.contains("." + AGE)) return true;
+            if (c.equals(BIRTH_DATE) || c.contains("." + BIRTH_DATE)) return true;
+            if (c.equals(HAS_BLUE_EYES) || c.contains("." + HAS_BLUE_EYES)) return true;
+            if (c.equals(HEIGHT) || c.contains("." + HEIGHT)) return true;
+            if (c.equals(GENDER) || c.contains("." + GENDER)) return true;
+            if (c.equals(COUNTRY_CODE) || c.contains("." + COUNTRY_CODE)) return true;
         }
         return false;
     }

@@ -66,8 +66,8 @@ public class PersonTeamColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == PERSON_ID || c.contains("." + PERSON_ID)) return true;
-            if (c == TEAM_ID || c.contains("." + TEAM_ID)) return true;
+            if (c.equals(PERSON_ID) || c.contains("." + PERSON_ID)) return true;
+            if (c.equals(TEAM_ID) || c.contains("." + TEAM_ID)) return true;
         }
         return false;
     }

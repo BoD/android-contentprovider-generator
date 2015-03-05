@@ -1,6 +1,10 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.9.2 (2015-03-05)
+------
+- Fix for issue #77.
+
 v1.9.1 (2015-02-21)
 ------
 - Fix for issue #73.

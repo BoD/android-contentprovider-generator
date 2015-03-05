@@ -78,10 +78,10 @@ public class TeamColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == COMPANY_ID || c.contains("." + COMPANY_ID)) return true;
-            if (c == NAME || c.contains("." + NAME)) return true;
-            if (c == COUNTRY_CODE || c.contains("." + COUNTRY_CODE)) return true;
-            if (c == SERIAL_NUMBER_ID || c.contains("." + SERIAL_NUMBER_ID)) return true;
+            if (c.equals(COMPANY_ID) || c.contains("." + COMPANY_ID)) return true;
+            if (c.equals(NAME) || c.contains("." + NAME)) return true;
+            if (c.equals(COUNTRY_CODE) || c.contains("." + COUNTRY_CODE)) return true;
+            if (c.equals(SERIAL_NUMBER_ID) || c.contains("." + SERIAL_NUMBER_ID)) return true;
         }
         return false;
     }

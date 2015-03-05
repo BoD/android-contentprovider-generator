@@ -78,9 +78,9 @@ public class CompanyColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == NAME || c.contains("." + NAME)) return true;
-            if (c == ADDRESS || c.contains("." + ADDRESS)) return true;
-            if (c == SERIAL_NUMBER_ID || c.contains("." + SERIAL_NUMBER_ID)) return true;
+            if (c.equals(NAME) || c.contains("." + NAME)) return true;
+            if (c.equals(ADDRESS) || c.contains("." + ADDRESS)) return true;
+            if (c.equals(SERIAL_NUMBER_ID) || c.contains("." + SERIAL_NUMBER_ID)) return true;
         }
         return false;
     }

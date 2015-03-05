@@ -66,8 +66,8 @@ public class ManualColumns implements BaseColumns {
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
         for (String c : projection) {
-            if (c == TITLE || c.contains("." + TITLE)) return true;
-            if (c == ISBN || c.contains("." + ISBN)) return true;
+            if (c.equals(TITLE) || c.contains("." + TITLE)) return true;
+            if (c.equals(ISBN) || c.contains("." + ISBN)) return true;
         }
         return false;
     }
