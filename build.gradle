@@ -1,11 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'application'
-apply plugin: 'maven'
 
-['deploy', 'eclipse', 'idea'].each { g ->
-    if (file("${g}.gradle").exists()) {
-        apply from: "${g}.gradle"
-    }
+file('gradle.d').list().each {
+    it ==~ /.+\.gradle/ && apply(from: "gradle.d/$it")
 }
 
 group = 'org.jraf'

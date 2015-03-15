@@ -4,9 +4,7 @@ target
 # gradle
 .gradle
 build
-deploy.gradle
-idea.gradle
-eclipse.gradle
+gradle.properties
 
 # idea
 .idea

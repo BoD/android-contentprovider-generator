@@ -1,0 +1,9 @@
+apply plugin: 'idea'
+
+idea {
+    module {
+        jdkName = '1.8'
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}

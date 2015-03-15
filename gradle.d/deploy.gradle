@@ -1,0 +1,11 @@
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories.mavenDeployer {
+        repository(url: project.properties['deploy.url']) {
+            authentication(userName: project.properties['deploy.username'], password: project.properties['deploy.password'])
+        }
+    }
+}
+
+uploadArchives.dependsOn(build)
