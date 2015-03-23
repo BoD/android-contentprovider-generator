@@ -13,8 +13,13 @@ import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+<#if config.useEncryptedDatabase>
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
+<#else>
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+</#if>
 import android.net.Uri;
 import android.provider.BaseColumns;
 <#if config.useAnnotations>
@@ -39,13 +44,17 @@ public abstract class BaseContentProvider extends ContentProvider {
 
     protected abstract QueryParams getQueryParams(Uri uri, String selection, String[] projection);
     protected abstract boolean hasDebug();
+    <#if config.useEncryptedDatabase>
+    protected abstract String getPassword();
+    </#if>
 
     protected abstract SQLiteOpenHelper createSqLiteOpenHelper();
 
     protected SQLiteOpenHelper mSqLiteOpenHelper;
 
+
     @Override
-    public final boolean onCreate() {
+    public boolean onCreate() {
         if (hasDebug()) {
             // Enable logging of SQL statements as they are executed.
             try {
@@ -70,7 +79,11 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         String table = uri.getLastPathSegment();
+        <#if config.useEncryptedDatabase>
+        long rowId = mSqLiteOpenHelper.getWritableDatabase(getPassword()).insertOrThrow(table, null, values);
+        <#else>
         long rowId = mSqLiteOpenHelper.getWritableDatabase().insertOrThrow(table, null, values);
+        </#if>
         if (rowId == -1) return null;
         String notify;
         if (((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
@@ -82,7 +95,11 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
         String table = uri.getLastPathSegment();
+        <#if config.useEncryptedDatabase>
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase(getPassword());
+        <#else>
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        </#if>
         int res = 0;
         db.beginTransaction();
         try {
@@ -108,7 +125,11 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         QueryParams queryParams = getQueryParams(uri, selection, null);
+        <#if config.useEncryptedDatabase>
+        int res = mSqLiteOpenHelper.getWritableDatabase(getPassword()).update(queryParams.table, values, queryParams.selection, selectionArgs);
+        <#else>
         int res = mSqLiteOpenHelper.getWritableDatabase().update(queryParams.table, values, queryParams.selection, selectionArgs);
+        </#if>
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -119,7 +140,12 @@ public abstract class BaseContentProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         QueryParams queryParams = getQueryParams(uri, selection, null);
+        <#if config.useEncryptedDatabase>
+        int res = mSqLiteOpenHelper.getWritableDatabase(getPassword()).delete(queryParams.table, queryParams.selection, selectionArgs);
+        <#else>
         int res = mSqLiteOpenHelper.getWritableDatabase().delete(queryParams.table, queryParams.selection, selectionArgs);
+        </#if>
+        
         String notify;
         if (res != 0 && ((notify = uri.getQueryParameter(QUERY_NOTIFY)) == null || "true".equals(notify))) {
             getContext().getContentResolver().notifyChange(uri, null);
@@ -134,8 +160,14 @@ public abstract class BaseContentProvider extends ContentProvider {
         String limit = uri.getQueryParameter(QUERY_LIMIT);
         QueryParams queryParams = getQueryParams(uri, selection, projection);
         projection = ensureIdIsFullyQualified(projection, queryParams.table, queryParams.idColumn);
+        <#if config.useEncryptedDatabase>
+        Cursor res = mSqLiteOpenHelper.getReadableDatabase(getPassword()).query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs,
+                groupBy, having, sortOrder == null ? queryParams.orderBy : sortOrder, limit);
+        <#else>
         Cursor res = mSqLiteOpenHelper.getReadableDatabase().query(queryParams.tablesWithJoins, projection, queryParams.selection, selectionArgs, groupBy,
                 having, sortOrder == null ? queryParams.orderBy : sortOrder, limit);
+        </#if>
+      
         res.setNotificationUri(getContext().getContentResolver(), uri);
         return res;
     }
@@ -159,7 +191,11 @@ public abstract class BaseContentProvider extends ContentProvider {
         for (ContentProviderOperation operation : operations) {
             urisToNotify.add(operation.getUri());
         }
+        <#if config.useEncryptedDatabase>
+        SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase(getPassword());
+        <#else>
         SQLiteDatabase db = mSqLiteOpenHelper.getWritableDatabase();
+        </#if>
         db.beginTransaction();
         try {
             int numOperations = operations.size();

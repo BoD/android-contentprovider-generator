@@ -34,6 +34,7 @@ These are self-explanatory so here is an example:
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
 	"useAnnotations": true,
+	"useEncryptedDatabase": false
 }
 ```
 

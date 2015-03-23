@@ -8,7 +8,11 @@ import java.util.Arrays;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteOpenHelper;
+<#if config.useEncryptedDatabase>
+import net.sqlcipher.database.SQLiteOpenHelper;
+<#else>
+import android.database.sqlite.SQLiteDatabase;
+</#if>
 import android.net.Uri;
 <#if config.useAnnotations>
 import android.support.annotation.NonNull;
@@ -32,6 +36,11 @@ public class ${config.providerClassName} extends BaseContentProvider {
     public static final String AUTHORITY = "${config.authority}";
     public static final String CONTENT_URI_BASE = "content://" + AUTHORITY;
 
+    <#if config.useEncryptedDatabase>
+    private  ${config.providerCallbacksClassName} mProviderCallbacks;
+    </#if>
+
+
 	<#assign i=0>
     <#list model.entities as entity>
     private static final int URI_TYPE_${entity.nameUpperCase} = ${i};
@@ -42,7 +51,7 @@ public class ${config.providerClassName} extends BaseContentProvider {
     </#list>
 
 
-    private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
+    protected static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
         <#list model.entities as entity>
@@ -51,10 +60,28 @@ public class ${config.providerClassName} extends BaseContentProvider {
         </#list>
     }
 
+    <#if config.useEncryptedDatabase>
+
+     @Override
+    public final boolean onCreate() {
+        super.onCreate();
+        mProviderCallbacks = new ${config.providerCallbacksClassName}();
+        return false;
+    }
+
+    @Override
+    protected String getPassword(){
+        return mProviderCallbacks.onPasswordRequested();
+    }
+    </#if>
+
+
     @Override
     protected SQLiteOpenHelper createSqLiteOpenHelper() {
         return ${config.sqliteOpenHelperClassName}.getInstance(getContext());
     }
+
+
 
     @Override
     protected boolean hasDebug() {
