@@ -68,6 +68,8 @@ public class Main {
         public static final String PROJECT_PACKAGE_ID = "projectPackageId";
         public static final String PROVIDER_JAVA_PACKAGE = "providerJavaPackage";
         public static final String PROVIDER_CLASS_NAME = "providerClassName";
+        public static final String PROVIDER_CALLBACKS_CLASS_NAME = "providerCallbacksClassName";
+
         public static final String SQLITE_OPEN_HELPER_CLASS_NAME = "sqliteOpenHelperClassName";
         public static final String SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME = "sqliteOpenHelperCallbacksClassName";
         public static final String AUTHORITY = "authority";
@@ -75,6 +77,7 @@ public class Main {
         public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
         public static final String USE_ANNOTATIONS = "useAnnotations";
+        public static final String USE_ENCRYPTED_DATABASE = "useEncryptedDatabase";
     }
 
     private Configuration mFreemarkerConfig;
@@ -264,6 +267,9 @@ public class Main {
         ensureString(Json.PROJECT_PACKAGE_ID);
         ensureString(Json.PROVIDER_JAVA_PACKAGE);
         ensureString(Json.PROVIDER_CLASS_NAME);
+        if(ensureBoolean(Json.USE_ENCRYPTED_DATABASE)){
+            ensureString(Json.PROVIDER_CALLBACKS_CLASS_NAME);
+        }
         ensureString(Json.SQLITE_OPEN_HELPER_CLASS_NAME);
         ensureString(Json.SQLITE_OPEN_HELPER_CALLBACKS_CLASS_NAME);
         ensureString(Json.AUTHORITY);
@@ -271,6 +277,7 @@ public class Main {
         ensureInt(Json.DATABASE_VERSION);
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
         ensureBoolean(Json.USE_ANNOTATIONS);
+       
     }
 
     private void ensureString(String field) {
@@ -281,9 +288,9 @@ public class Main {
         }
     }
 
-    private void ensureBoolean(String field) {
+    private boolean ensureBoolean(String field) {
         try {
-            mConfig.getBoolean(field);
+           return mConfig.getBoolean(field);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be a boolean.");
         }
@@ -455,6 +462,32 @@ public class Main {
         template.process(root, out);
     }
 
+
+        private void generateContentProviderCallbacks(Arguments arguments) throws IOException, JSONException, TemplateException {
+        JSONObject config = getConfig(arguments.inputDir);
+        if(config.optBoolean(Json.USE_ENCRYPTED_DATABASE,false)){
+              Template template = getFreeMarkerConfig().getTemplate("contentprovidercallbacks.ftl");
+            String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+            File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+            providerDir.mkdirs();
+            File outputFile = new File(providerDir, config.getString(Json.PROVIDER_CALLBACKS_CLASS_NAME) + ".java");
+            if (outputFile.exists()) {
+                if (Config.LOGD) Log.d(TAG, "generateContentProviderCallbacks content provider callbacks class already exists: skip");
+                return;
+            }
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+            Map<String, Object> root = new HashMap<>();
+            root.put("config", config);
+            root.put("model", Model.get());
+            root.put("header", Model.get().getHeader());
+
+            template.process(root, out);
+        }
+    }
+
+
+
     private void generateSqliteOpenHelper(Arguments arguments) throws IOException, JSONException, TemplateException {
         Template template = getFreeMarkerConfig().getTemplate("sqliteopenhelper.ftl");
         JSONObject config = getConfig(arguments.inputDir);
@@ -527,6 +560,8 @@ public class Main {
         generateWrappers(arguments);
         generateModels(arguments);
         generateContentProvider(arguments);
+
+        generateContentProviderCallbacks(arguments);
         generateSqliteOpenHelper(arguments);
         generateSqliteOpenHelperCallbacks(arguments);
 

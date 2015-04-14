@@ -7,8 +7,13 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.DefaultDatabaseErrorHandler;
+<#if config.useEncryptedDatabase>
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
+<#else>
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+</#if>
 import android.os.Build;
 import android.util.Log;
 
@@ -70,19 +75,27 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     }
 
     private static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+
+        <#if config.useEncryptedDatabase>
+         return new ${config.sqliteOpenHelperClassName}(context);
+        <#else>
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
         return newInstancePostHoneycomb(context);
+        </#if>
+      
     }
 
 
+    <#if config.useEncryptedDatabase == false>
     /*
      * Pre Honeycomb.
      */
     private static ${config.sqliteOpenHelperClassName} newInstancePreHoneycomb(Context context) {
         return new ${config.sqliteOpenHelperClassName}(context);
     }
+    </#if>
 
     private ${config.sqliteOpenHelperClassName}(Context context) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
@@ -90,7 +103,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
 
-
+    <#if config.useEncryptedDatabase == false>
     /*
      * Post Honeycomb.
      */
@@ -105,6 +118,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
+    </#if>
 
 
     @Override
@@ -134,14 +148,20 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     }
 
     <#if config.enableForeignKeys >
-    private void setForeignKeyConstraintsEnabled(SQLiteDatabase db) {
+    private void setForeignKeyConstraintsEnabled(SQLiteDatabase db) {       
+        <#if config.useEncryptedDatabase>
+        db.execSQL("PRAGMA foreign_keys=ON;");
+        <#else>
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
             setForeignKeyConstraintsEnabledPreJellyBean(db);
         } else {
             setForeignKeyConstraintsEnabledPostJellyBean(db);
         }
+        </#if>
     }
 
+
+    <#if config.useEncryptedDatabase == false>
     private void setForeignKeyConstraintsEnabledPreJellyBean(SQLiteDatabase db) {
         db.execSQL("PRAGMA foreign_keys=ON;");
     }
@@ -150,10 +170,13 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private void setForeignKeyConstraintsEnabledPostJellyBean(SQLiteDatabase db) {
         db.setForeignKeyConstraintsEnabled(true);
     }
+    </#if>
 
     </#if>
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         mOpenHelperCallbacks.onUpgrade(mContext, db, oldVersion, newVersion);
     }
+
+
 }
