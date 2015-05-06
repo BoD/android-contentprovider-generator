@@ -33,7 +33,7 @@ These are self-explanatory so here is an example:
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
-	"useAnnotations": true,
+	"useAnnotations": true
 }
 ```
 
@@ -66,19 +66,19 @@ Here is a `person.json` file as an example:
 			"documentation": "First name of this person. For instance, John.",
 			"name": "first_name",
 			"type": "String",
-			"defaultValue": "John",
+			"defaultValue": "John"
 		},
 		{
 			"documentation": "Last name (a.k.a. Given name) of this person. For instance, Smith.",
 			"name": "last_name",
 			"type": "String",
 			"nullable": true,
-			"defaultValue": "Doe",
+			"defaultValue": "Doe"
 		},
 		{
 			"name": "age",
 			"type": "Integer",
-			"index": true,
+			"index": true
 		},
 		{
 			"name": "gender",
@@ -87,9 +87,9 @@ Here is a `person.json` file as an example:
 			"enumValues": [
 				"MALE",
 				"FEMALE",
-				{"OTHER": "Value to use when neither male nor female"},
+				{"OTHER": "Value to use when neither male nor female"}
 			],
-			"nullable": false,
+			"nullable": false
 		},
 	],
 
@@ -181,13 +181,13 @@ Here is an example of the syntax:
 			"nullable": false,
 			"foreignKey": {
 				"table": "team",
-				"onDelete": "CASCADE",
-			},
+				"onDelete": "CASCADE"
+			}
 		},
 		{
 			"name": "first_name",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 
 		(...)
