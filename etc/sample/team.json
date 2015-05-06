@@ -7,19 +7,19 @@
 			"nullable": false,
 			"foreignKey": {
 				"table": "company",
-				"onDelete": "CASCADE",
-			},
+				"onDelete": "CASCADE"
+			}
 		},
 		{
 			"name": "name",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"documentation": "2 letter country code where this team operates.",
 			"name": "country_code",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"documentation": "The serial number of this team.",
@@ -30,13 +30,13 @@
 				"table": "serial_number",
 				"onDelete": "CASCADE"
 			}
-		},
+		}
 	],
 
 	"constraints": [
 		{
 			"name": "unique_name",
 			"definition": "UNIQUE (team__name) ON CONFLICT REPLACE"
-		},
-	],
+		}
+	]
 }
