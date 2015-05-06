@@ -5,12 +5,12 @@
 			"name": "product_id",
 			"type": "Long",
 			"nullable": false,
-			"index": true,
+			"index": true
 		},
 		{
 			"name": "name",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"documentation": "Optional manual id.",
@@ -19,9 +19,9 @@
 			"nullable": true,
 			"foreignKey": {
 				"table": "manual",
-				"onDelete": "SET NULL",
-			},
-		},
+				"onDelete": "SET NULL"
+			}
+		}
 	],
-	"idField": ["product_id"],
+	"idField": ["product_id"]
 }
