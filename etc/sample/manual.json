@@ -4,12 +4,12 @@
 		{
 			"name": "title",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"name": "isbn",
 			"type": "String",
-			"nullable": false,
-		},
-	],
+			"nullable": false
+		}
+	]
 }

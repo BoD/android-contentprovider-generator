@@ -6,13 +6,13 @@
 			"name": "name",
 			"type": "String",
 			"nullable": false,
-			"index": true,
+			"index": true
 		},
 		{
 			"documentation": "The full address of this company.",
 			"name": "address",
 			"type": "String",
-			"nullable": true,
+			"nullable": true
 		},
 		{
 			"documentation": "The serial number of this company.",
@@ -23,6 +23,6 @@
 				"table": "serial_number",
 				"onDelete": "CASCADE"
 			}
-		},
+		}
 	]
 }
