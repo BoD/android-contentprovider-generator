@@ -90,14 +90,14 @@ Here is a `person.json` file as an example:
 				{"OTHER": "Value to use when neither male nor female"}
 			],
 			"nullable": false
-		},
+		}
 	],
 
 	"constraints": [
 		{
 			"name": "unique_name",
 			"definition": "UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
-		},
+		}
 	]
 }
 ```
