@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,7 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
  */
 public class SerialNumberSelection extends AbstractSelection<SerialNumberSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return SerialNumberColumns.CONTENT_URI;
     }
 
@@ -57,14 +57,14 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public SerialNumberCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public SerialNumberCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -75,7 +75,6 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
         addEquals("serial_number." + SerialNumberColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public SerialNumberSelection part0(String... value) {
         addEquals(SerialNumberColumns.PART0, value);
@@ -92,6 +91,21 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
         return this;
     }
 
+    public SerialNumberSelection part0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public SerialNumberSelection part0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public SerialNumberSelection part0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public SerialNumberSelection part1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -104,6 +118,21 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
 
     public SerialNumberSelection part1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection part1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 }

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.DefaultDatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
@@ -28,31 +27,19 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     // @formatter:off
     <#list model.entities as entity>
-    private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
             <#list entity.fields as field>
                 <#if field.isId>
-            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY<#if field.isAutoIncrement> AUTOINCREMENT</#if>, "
                 <#else>
-                    <#if field.isNullable>
-                        <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                        <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
-                        </#if>
-                <#else>
-                        <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                        <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
-                        </#if>
-                    </#if>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if !field.isNullable> NOT NULL</#if><#if field.hasDefaultValue> DEFAULT ${field.defaultValue}</#if><#if field_has_next>,</#if> "
                 </#if>
             </#list>
             <#if config.enableForeignKeys >
                 <#list entity.fields as field>
                     <#if field.foreignKey??>
-            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (" + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + ") REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction}"
+            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (" + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + ") REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction.toSql()}"
                     </#if>
                 </#list>
             </#if>
@@ -63,7 +50,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     <#list entity.fields as field>
     <#if field.isIndex>
-    private static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
+    public static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
             + " ON " + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( " + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " );";
 
     </#if>
@@ -92,13 +79,12 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     /*
      * Pre Honeycomb.
      */
-
     private static ${config.sqliteOpenHelperClassName} newInstancePreHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+        return new ${config.sqliteOpenHelperClassName}(context);
     }
 
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private ${config.sqliteOpenHelperClassName}(Context context) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
@@ -107,15 +93,14 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     /*
      * Post Honeycomb.
      */
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static ${config.sqliteOpenHelperClassName} newInstancePostHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+        return new ${config.sqliteOpenHelperClassName}(context, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    private ${config.sqliteOpenHelperClassName}(Context context, DatabaseErrorHandler errorHandler) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }

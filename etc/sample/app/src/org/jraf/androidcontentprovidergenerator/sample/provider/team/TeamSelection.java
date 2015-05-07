@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,7 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
  */
 public class TeamSelection extends AbstractSelection<TeamSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return TeamColumns.CONTENT_URI;
     }
 
@@ -60,14 +60,14 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public TeamCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public TeamCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -78,7 +78,6 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         addEquals("team." + TeamColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public TeamSelection companyId(long... value) {
         addEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
@@ -125,6 +124,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection companyNameContains(String... value) {
+        addContains(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameStartsWith(String... value) {
+        addStartsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection companyNameEndsWith(String... value) {
+        addEndsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
     public TeamSelection companyAddress(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
@@ -137,6 +151,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companyAddressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressContains(String... value) {
+        addContains(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressStartsWith(String... value) {
+        addStartsWith(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection companyAddressEndsWith(String... value) {
+        addEndsWith(CompanyColumns.ADDRESS, value);
         return this;
     }
 
@@ -185,6 +214,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection companySerialNumberPart0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection companySerialNumberPart0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection companySerialNumberPart0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public TeamSelection companySerialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -197,6 +241,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companySerialNumberPart1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection companySerialNumberPart1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection companySerialNumberPart1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection companySerialNumberPart1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 
@@ -215,6 +274,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection nameContains(String... value) {
+        addContains(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection nameStartsWith(String... value) {
+        addStartsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection nameEndsWith(String... value) {
+        addEndsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
     public TeamSelection countryCode(String... value) {
         addEquals(TeamColumns.COUNTRY_CODE, value);
         return this;
@@ -227,6 +301,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection countryCodeLike(String... value) {
         addLike(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection countryCodeContains(String... value) {
+        addContains(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection countryCodeStartsWith(String... value) {
+        addStartsWith(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public TeamSelection countryCodeEndsWith(String... value) {
+        addEndsWith(TeamColumns.COUNTRY_CODE, value);
         return this;
     }
 
@@ -275,6 +364,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection serialNumberPart0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public TeamSelection serialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -287,6 +391,21 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection serialNumberPart1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection serialNumberPart1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 }

@@ -5,36 +5,36 @@
 			"documentation": "First name of this person. For instance, John.",
 			"name": "first_name",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"documentation": "Last name (a.k.a. Given name) of this person. For instance, Smith.",
 			"name": "last_name",
 			"type": "String",
 			"nullable": false,
-			"index": true,
+			"index": true
 		},
 		{
-			"name": "age",
+			"name": "Age",
 			"type": "Integer",
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"name": "birth_date",
 			"type": "Date",
-			"nullable": true,
+			"nullable": true
 		},
 		{
 			"documentation": "If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.",
 			"name": "has_blue_eyes",
 			"type": "Boolean",
 			"nullable": false,
-			"defaultValue": "0",
+			"defaultValue": "0"
 		},
 		{
 			"name": "height",
 			"type": "Float",
-			"nullable": true,
+			"nullable": true
 		},
 		{
 			"name": "gender",
@@ -43,21 +43,21 @@
 			"enumValues": [
 				"MALE",
 				"FEMALE",
-				{"OTHER": "Value to use when neither male nor female"},
+				{"OTHER": "Value to use when neither male nor female"}
 			],
-			"nullable": false,
+			"nullable": false
 		},
 		{
 			"name": "country_code",
 			"type": "String",
-			"nullable": false,
-		},
+			"nullable": false
+		}
 	],
 
 	"constraints": [
 		{
 			"name": "unique_name",
 			"definition": "UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
-		},
-	],
+		}
+	]
 }

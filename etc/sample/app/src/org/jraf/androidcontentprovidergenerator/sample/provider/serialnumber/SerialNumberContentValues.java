@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,6 +28,8 @@ import java.util.Date;
 
 import android.content.ContentResolver;
 import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractContentValues;
 
@@ -46,29 +48,27 @@ public class SerialNumberContentValues extends AbstractContentValues {
      * @param contentResolver The content resolver to use.
      * @param where The selection to use (can be {@code null}).
      */
-    public int update(ContentResolver contentResolver, SerialNumberSelection where) {
+    public int update(ContentResolver contentResolver, @Nullable SerialNumberSelection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
     /**
      * Unique id, first part.
      */
-    public SerialNumberContentValues putPart0(String value) {
-        if (value == null) throw new IllegalArgumentException("value for part0 must not be null");
+    public SerialNumberContentValues putPart0(@NonNull String value) {
+        if (value == null) throw new IllegalArgumentException("part0 must not be null");
         mContentValues.put(SerialNumberColumns.PART0, value);
         return this;
     }
 
 
-
     /**
      * Unique id, second part.
      */
-    public SerialNumberContentValues putPart1(String value) {
-        if (value == null) throw new IllegalArgumentException("value for part1 must not be null");
+    public SerialNumberContentValues putPart1(@NonNull String value) {
+        if (value == null) throw new IllegalArgumentException("part1 must not be null");
         mContentValues.put(SerialNumberColumns.PART1, value);
         return this;
     }
-
 
 }

@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ import java.util.List;
 import android.content.ContentResolver;
 import android.net.Uri;
 
-public abstract class AbstractSelection <T extends AbstractSelection<?>> {
+public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String EQ = "=?";
     private static final String PAREN_OPEN = "(";
     private static final String PAREN_CLOSE = ")";
@@ -48,9 +48,17 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     private static final String LT_EQ = "<=?";
     private static final String NOT_EQ = "<>?";
     private static final String LIKE = " LIKE ?";
+    private static final String CONTAINS = " LIKE '%' || ? || '%'";
+    private static final String STARTS = " LIKE ? || '%'";
+    private static final String ENDS = " LIKE '%' || ?";
 
-    private StringBuilder mSelection = new StringBuilder();
-    private List<String> mSelectionArgs = new ArrayList<String>(5);
+    private final StringBuilder mSelection = new StringBuilder();
+    private final List<String> mSelectionArgs = new ArrayList<String>(5);
+
+    Boolean mNotify;
+    String mGroupBy;
+    String mHaving;
+    Integer mLimit;
 
     protected void addEquals(String column, Object[] value) {
         mSelection.append(column);
@@ -117,6 +125,45 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
         for (int i = 0; i < values.length; i++) {
             mSelection.append(column);
             mSelection.append(LIKE);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addContains(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(CONTAINS);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addStartsWith(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(STARTS);
+            mSelectionArgs.add(values[i]);
+            if (i < values.length - 1) {
+                mSelection.append(OR);
+            }
+        }
+        mSelection.append(PAREN_CLOSE);
+    }
+
+    protected void addEndsWith(String column, String[] values) {
+        mSelection.append(PAREN_OPEN);
+        for (int i = 0; i < values.length; i++) {
+            mSelection.append(column);
+            mSelection.append(ENDS);
             mSelectionArgs.add(values[i]);
             if (i < values.length - 1) {
                 mSelection.append(OR);
@@ -251,7 +298,16 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
-    public abstract Uri uri();
+    public Uri uri() {
+        Uri uri = baseUri();
+        if (mNotify != null) uri = BaseContentProvider.notify(uri, mNotify);
+        if (mGroupBy != null) uri = BaseContentProvider.groupBy(uri, mGroupBy);
+        if (mHaving != null) uri = BaseContentProvider.having(uri, mHaving);
+        if (mLimit != null) uri = BaseContentProvider.limit(uri, String.valueOf(mLimit));
+        return uri;
+    }
+
+    protected abstract Uri baseUri();
 
     /**
      * Deletes row(s) specified by this selection.
@@ -261,5 +317,29 @@ public abstract class AbstractSelection <T extends AbstractSelection<?>> {
      */
     public int delete(ContentResolver contentResolver) {
         return contentResolver.delete(uri(), sel(), args());
+    }
+
+    @SuppressWarnings("unchecked")
+    public T notify(boolean notify) {
+        mNotify = notify;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T groupBy(String groupBy) {
+        mGroupBy = groupBy;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T having(String having) {
+        mHaving = having;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T limit(int limit) {
+        mLimit = limit;
+        return (T) this;
     }
 }

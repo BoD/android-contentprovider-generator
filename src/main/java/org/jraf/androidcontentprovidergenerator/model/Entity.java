@@ -41,6 +41,7 @@ public class Entity {
         public static final String FIELDS = "fields";
         public static final String CONSTRAINTS = "constraints";
         public static final String DOCUMENTATION = "documentation";
+        public static final String ID_FIELD = "idField";
     }
 
     private static final String CONCAT = "res.tablesWithJoins += ";
@@ -77,21 +78,25 @@ public class Entity {
         mFields.add(field);
     }
 
+    public void addField(int index, Field field) {
+        mFields.add(index, field);
+    }
+
     public List<Field> getFields() {
         return Collections.unmodifiableList(mFields);
     }
 
     public List<Field> getFieldsIncludingJoins() {
-        return getFieldsIncludingJoins(false, "");
+        return getFieldsIncludingJoins(false, "", false);
     }
 
-    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path) {
+    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path, boolean forceNullable) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
-            if (field.getIsId()) continue;
+            if (field.getIsId() && isForeign) continue;
 
             if (isForeign) {
-                res.add(field.asForeignField(path));
+                res.add(field.asForeignField(path, forceNullable));
             } else {
                 res.add(field);
             }
@@ -100,8 +105,10 @@ public class Entity {
             if (foreignKey == null) continue;
 
             String newPath = path + foreignKey.getEntity().getNameCamelCase();
+            // If the field is nullable, all fields of the foreign (joined) entity must also be nullable
+            forceNullable = field.getIsNullable();
             // Recurse
-            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath));
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath, forceNullable));
         }
 
         return res;
@@ -124,7 +131,7 @@ public class Entity {
 
     public Field getFieldByName(String fieldName) {
         for (Field field : getFields()) {
-            if (fieldName.equals(field.getNameLowerCase())) return field;
+            if (fieldName.toLowerCase(Locale.US).equals(field.getNameLowerCase())) return field;
         }
         return null;
     }

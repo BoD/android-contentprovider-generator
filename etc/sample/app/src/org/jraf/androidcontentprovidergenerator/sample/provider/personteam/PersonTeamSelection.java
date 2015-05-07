@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -42,7 +42,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
  */
 public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return PersonTeamColumns.CONTENT_URI;
     }
 
@@ -62,14 +62,14 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public PersonTeamCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public PersonTeamCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -80,7 +80,6 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         addEquals("person_team." + PersonTeamColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public PersonTeamSelection personId(long... value) {
         addEquals(PersonTeamColumns.PERSON_ID, toObjectArray(value));
@@ -127,6 +126,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection personFirstNameContains(String... value) {
+        addContains(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personFirstNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personFirstNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
     public PersonTeamSelection personLastName(String... value) {
         addEquals(PersonColumns.LAST_NAME, value);
         return this;
@@ -139,6 +153,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection personLastNameLike(String... value) {
         addLike(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastNameContains(String... value) {
+        addContains(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection personLastNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.LAST_NAME, value);
         return this;
     }
 
@@ -268,6 +297,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection personCountryCodeContains(String... value) {
+        addContains(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personCountryCodeStartsWith(String... value) {
+        addStartsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection personCountryCodeEndsWith(String... value) {
+        addEndsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
     public PersonTeamSelection teamId(long... value) {
         addEquals(PersonTeamColumns.TEAM_ID, toObjectArray(value));
         return this;
@@ -343,6 +387,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection teamCompanyNameContains(String... value) {
+        addContains(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyNameStartsWith(String... value) {
+        addStartsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyNameEndsWith(String... value) {
+        addEndsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
     public PersonTeamSelection teamCompanyAddress(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
@@ -355,6 +414,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCompanyAddressLike(String... value) {
         addLike(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyAddressContains(String... value) {
+        addContains(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyAddressStartsWith(String... value) {
+        addStartsWith(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanyAddressEndsWith(String... value) {
+        addEndsWith(CompanyColumns.ADDRESS, value);
         return this;
     }
 
@@ -403,6 +477,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection teamCompanySerialNumberPart0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanySerialNumberPart0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanySerialNumberPart0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public PersonTeamSelection teamCompanySerialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -415,6 +504,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCompanySerialNumberPart1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanySerialNumberPart1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanySerialNumberPart1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCompanySerialNumberPart1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 
@@ -433,6 +537,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection teamNameContains(String... value) {
+        addContains(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamNameStartsWith(String... value) {
+        addStartsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamNameEndsWith(String... value) {
+        addEndsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
     public PersonTeamSelection teamCountryCode(String... value) {
         addEquals(TeamColumns.COUNTRY_CODE, value);
         return this;
@@ -445,6 +564,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCountryCodeLike(String... value) {
         addLike(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCodeContains(String... value) {
+        addContains(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCodeStartsWith(String... value) {
+        addStartsWith(TeamColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamCountryCodeEndsWith(String... value) {
+        addEndsWith(TeamColumns.COUNTRY_CODE, value);
         return this;
     }
 
@@ -493,6 +627,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection teamSerialNumberPart0Contains(String... value) {
+        addContains(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart0StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart0EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
     public PersonTeamSelection teamSerialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -505,6 +654,21 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamSerialNumberPart1Like(String... value) {
         addLike(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1Contains(String... value) {
+        addContains(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1StartsWith(String... value) {
+        addStartsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection teamSerialNumberPart1EndsWith(String... value) {
+        addEndsWith(SerialNumberColumns.PART1, value);
         return this;
     }
 }

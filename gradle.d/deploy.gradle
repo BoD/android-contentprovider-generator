@@ -1,3 +1,7 @@
+/**
+ * To deploy this library to a maven repository, add a gradle.properties and specify `deploy.url`, `deploy.username`, `deploy.password` properties,
+ * after which run `gradle upload` to perform the deploy.
+ */
 apply plugin: 'maven'
 
 uploadArchives {

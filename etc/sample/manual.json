@@ -1,0 +1,15 @@
+{
+	"documentation": "A manual related to a product.",
+	"fields": [
+		{
+			"name": "title",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"name": "isbn",
+			"type": "String",
+			"nullable": false
+		}
+	]
+}

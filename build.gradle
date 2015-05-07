@@ -6,7 +6,7 @@ file('gradle.d').list().each {
 }
 
 group = 'org.jraf'
-version = '1.9.0'
+version = '1.9.2'
 description = """GenerateAndroidProvider"""
 
 sourceCompatibility = 1.8

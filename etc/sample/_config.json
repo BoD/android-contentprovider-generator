@@ -1,5 +1,5 @@
 {
-	"syntaxVersion": "2",
+	"syntaxVersion": "3",
 	"projectPackageId": "org.jraf.androidcontentprovidergenerator.sample",
 	"authority": "org.jraf.androidcontentprovidergenerator.sample.provider",
 	"providerJavaPackage": "org.jraf.androidcontentprovidergenerator.sample.provider",
@@ -9,4 +9,5 @@
 	"databaseFileName": "sample.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
+	"useAnnotations": true
 }

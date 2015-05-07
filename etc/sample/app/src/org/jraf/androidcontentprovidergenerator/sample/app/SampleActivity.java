@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,6 +20,7 @@ import org.jraf.androidcontentprovidergenerator.sample.R;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanySelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.Gender;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonContentValues;
@@ -27,6 +30,9 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.Perso
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamSelection;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductContentValues;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductCursor;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberContentValues;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
@@ -54,7 +60,7 @@ public class SampleActivity extends Activity {
         findViewById(R.id.btnQueryPeopleWithTeam).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryPeopleWithTeamAndCompany).setOnClickListener(mOnClickListener);
         findViewById(R.id.btnQueryTeamsWithCompany).setOnClickListener(mOnClickListener);
-
+        findViewById(R.id.btnQueryProductsWithManual).setOnClickListener(mOnClickListener);
     }
 
     private final OnClickListener mOnClickListener = new OnClickListener() {
@@ -84,6 +90,10 @@ public class SampleActivity extends Activity {
                 case R.id.btnQueryTeamsWithCompany:
                     queryTeamsWithCompany();
                     break;
+
+                case R.id.btnQueryProductsWithManual:
+                    queryProductsWithManual();
+                    break;
             }
         }
     };
@@ -108,9 +118,20 @@ public class SampleActivity extends Activity {
         c.close();
 
         // Another way to query one person
+        Log.d(TAG, "---");
         Uri uri = ContentUris.withAppendedId(PersonColumns.CONTENT_URI, 2l);
         Cursor c2 = getContentResolver().query(uri, projection, null, null, null);
         c = new PersonCursor(c2);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
+        }
+        c.close();
+
+        // Like / startsWitdh / contains / endsWith
+        Log.d(TAG, "---");
+        personSelection = new PersonSelection();
+        personSelection.lastNameEndsWith("SON").or().firstNameContains("ar", "ae");
+        c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }
@@ -134,7 +155,10 @@ public class SampleActivity extends Activity {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
         // @formatter:off
-        String[] projection = { PersonTeamColumns._ID,
+        String[] projection = {
+                PersonTeamColumns._ID,
+                PersonTeamColumns.PERSON_ID,
+                PersonTeamColumns.TEAM_ID,
                 PersonColumns.FIRST_NAME,
                 PersonColumns.LAST_NAME,
                 PersonColumns.AGE,
@@ -143,6 +167,7 @@ public class SampleActivity extends Activity {
                 TeamColumns.COUNTRY_CODE,
                 TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS TEAM_SN_PART0", // In this case we need to manually prefix and alias
                 TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS TEAM_SN_PART1", // In this case we need to manually prefix and alias
+                TeamColumns.COMPANY_ID,
                 CompanyColumns.NAME,
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0", // In this case we need to manually prefix and alias
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1", // In this case we need to manually prefix and alias
@@ -155,10 +180,10 @@ public class SampleActivity extends Activity {
                     c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode() + ")"
                     + " - "
                     + "team: "
-                    + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
+                    + c.getTeamId() + " " +  c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
                     + " - "
                     + "company: "
-                    + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
+                    + c.getTeamCompanyId() + " " + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
             // @formatter:on
         }
         c.close();
@@ -171,6 +196,15 @@ public class SampleActivity extends Activity {
         TeamCursor c = teamSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " " + c.getName() + " - company: " + c.getCompanyName());
+        }
+        c.close();
+    }
+
+    private void queryProductsWithManual() {
+        ProductSelection productSelection = new ProductSelection();
+        ProductCursor c = productSelection.query(getContentResolver());
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
         }
         c.close();
     }
@@ -189,6 +223,7 @@ public class SampleActivity extends Activity {
         personSelection.delete(getContentResolver());
     }
 
+    @SuppressWarnings("null")
     private void populateBase() {
         // Insert company serial numbers
         long googleSn = insertSerialNumber("C", "GOOG");
@@ -245,6 +280,40 @@ public class SampleActivity extends Activity {
             }
         }
 
+        // Insert a manual
+        long manualId = insertManual("How to use product Foobar", "4242-888-11");
+
+        // Insert 2 products
+        insertProduct("Foobar", manualId);
+        insertProduct("Hectomatic", null);
+    }
+
+    /**
+     * Insert a product.
+     *
+     * @return the id of the created product.
+     */
+    private long insertProduct(@NonNull String name, @Nullable Long manualId) {
+        ProductContentValues values = new ProductContentValues();
+        values.putName(name);
+        values.putManualId(manualId);
+
+        Uri uri = values.insert(getContentResolver());
+        return ContentUris.parseId(uri);
+    }
+
+    /**
+     * Insert a manual.
+     *
+     * @return the id of the created manual.
+     */
+    private long insertManual(@NonNull String title, @NonNull String isbn) {
+        ManualContentValues values = new ManualContentValues();
+        values.putTitle(title);
+        values.putIsbn(isbn);
+
+        Uri uri = values.insert(getContentResolver());
+        return ContentUris.parseId(uri);
     }
 
     /**
@@ -252,7 +321,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created serialnumber.
      */
-    private long insertSerialNumber(String part0, String part1) {
+    private long insertSerialNumber(@NonNull String part0, @NonNull String part1) {
         SerialNumberContentValues values = new SerialNumberContentValues();
         values.putPart0(part0);
         values.putPart1(part1);
@@ -266,7 +335,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created company.
      */
-    private long insertCompany(String name, String address, long serialNumberId) {
+    private long insertCompany(@NonNull String name, String address, long serialNumberId) {
         CompanyContentValues values = new CompanyContentValues();
         values.putName(name);
         values.putAddress(address);
@@ -281,7 +350,7 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created team.
      */
-    private long insertTeam(long companyId, String name, String countryCode, long serialNumberId) {
+    private long insertTeam(long companyId, @NonNull String name, @NonNull String countryCode, long serialNumberId) {
         TeamContentValues values = new TeamContentValues();
         values.putCompanyId(companyId);
         values.putName(name);
@@ -297,8 +366,8 @@ public class SampleActivity extends Activity {
      *
      * @return the id of the created person.
      */
-    private long insertPerson(long mainTeamId, long secondaryTeamId, String firstName, String lastName, int age, Date birthDate, boolean hasBlueEyes,
-            Float height, Gender gender, String countryCode) {
+    private long insertPerson(long mainTeamId, long secondaryTeamId, @NonNull String firstName, @NonNull String lastName, int age, Date birthDate,
+            boolean hasBlueEyes, Float height, @NonNull Gender gender, @NonNull String countryCode) {
         PersonContentValues values = new PersonContentValues();
         values.putFirstName(firstName);
         values.putLastName(lastName);
@@ -327,11 +396,13 @@ public class SampleActivity extends Activity {
         return ContentUris.parseId(uri);
     }
 
-    private static String getRandomFirstName() {
+    @SuppressWarnings("null")
+    private static @NonNull String getRandomFirstName() {
         return FIRST_NAMES[sRandom.nextInt(FIRST_NAMES.length)];
     }
 
-    private static String getRandomLastName() {
+    @SuppressWarnings("null")
+    private static @NonNull String getRandomLastName() {
         return LAST_NAMES[sRandom.nextInt(LAST_NAMES.length)];
     }
 }

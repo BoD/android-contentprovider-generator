@@ -6,19 +6,19 @@
  * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
  *                              /___/
  * repository.
- * 
- * Copyright (C) 2012-2014 Benoit 'BoD' Lubek (BoD@JRAF.org)
- * 
+ *
+ * Copyright (C) 2012-2015 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,7 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
  */
 public class PersonSelection extends AbstractSelection<PersonSelection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return PersonColumns.CONTENT_URI;
     }
 
@@ -57,14 +57,14 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public PersonCursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public PersonCursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -75,7 +75,6 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         addEquals("person." + PersonColumns._ID, toObjectArray(value));
         return this;
     }
-
 
     public PersonSelection firstName(String... value) {
         addEquals(PersonColumns.FIRST_NAME, value);
@@ -92,6 +91,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+    public PersonSelection firstNameContains(String... value) {
+        addContains(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection firstNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection firstNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
     public PersonSelection lastName(String... value) {
         addEquals(PersonColumns.LAST_NAME, value);
         return this;
@@ -104,6 +118,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection lastNameLike(String... value) {
         addLike(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameContains(String... value) {
+        addContains(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameStartsWith(String... value) {
+        addStartsWith(PersonColumns.LAST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection lastNameEndsWith(String... value) {
+        addEndsWith(PersonColumns.LAST_NAME, value);
         return this;
     }
 
@@ -230,6 +259,21 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection countryCodeLike(String... value) {
         addLike(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeContains(String... value) {
+        addContains(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeStartsWith(String... value) {
+        addStartsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection countryCodeEndsWith(String... value) {
+        addEndsWith(PersonColumns.COUNTRY_CODE, value);
         return this;
     }
 }

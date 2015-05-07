@@ -19,7 +19,7 @@ import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
  */
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
     }
 
@@ -39,14 +39,14 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
         return query(contentResolver, projection, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null}.
+     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
         return query(contentResolver, null, null);
@@ -57,9 +57,8 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
-
     <#list entity.getFieldsIncludingJoins() as field>
-    <#if !field.isId>
+    <#if field.nameLowerCase != "_id">
     <#switch field.type.name()>
     <#case "BOOLEAN">
 
@@ -195,6 +194,21 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     <#case "STRING">
     public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Like(String... value) {
         addLike(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>Contains(String... value) {
+        addContains(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>StartsWith(String... value) {
+        addStartsWith(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection <#if field.isForeign>${field.path?uncap_first}${field.nameCamelCase}<#else>${field.nameCamelCaseLowerCase}</#if>EndsWith(String... value) {
+        addEndsWith(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, value);
         return this;
     }
     <#break>

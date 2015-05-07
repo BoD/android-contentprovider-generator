@@ -31,8 +31,12 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.WordUtils;
+import org.jraf.androidcontentprovidergenerator.Constants;
+import org.jraf.androidcontentprovidergenerator.Log;
 
 public class Field {
+    private static final String TAG = Constants.TAG + Field.class.getSimpleName();
+
     public static class Json {
         public static final String NAME = "name";
         public static final String TYPE = "type";
@@ -129,6 +133,10 @@ public class Field {
             sOnDeleteActionJsonNames.put(jsonName, this);
         }
 
+        public String toSql() {
+            return name().replace('_', ' ');
+        }
+
         public static OnDeleteAction fromJsonName(String jsonName) {
             OnDeleteAction res = sOnDeleteActionJsonNames.get(jsonName);
             if (res == null) throw new IllegalArgumentException("The onDelete value '" + jsonName + "' is unknown");
@@ -143,9 +151,10 @@ public class Field {
     private final String mName;
     private final String mDocumentation;
     private final Type mType;
-    private final boolean mIsId;
+    private boolean mIsId;
     private final boolean mIsIndex;
     private final boolean mIsNullable;
+    private final boolean mIsAutoIncrement;
     private final String mDefaultValue;
     private final String mEnumName;
     private final List<EnumValue> mEnumValues = new ArrayList<>();
@@ -155,8 +164,8 @@ public class Field {
     private Field mOriginalField;
     private String mPath;
 
-    public Field(Entity entity, String name, String documentation, String type, boolean isId, boolean isIndex, boolean isNullable, String defaultValue,
-            String enumName, List<EnumValue> enumValues, ForeignKey foreignKey) {
+    public Field(Entity entity, String name, String documentation, String type, boolean isId, boolean isIndex, boolean isNullable, boolean isAutoIncrement,
+            String defaultValue, String enumName, List<EnumValue> enumValues, ForeignKey foreignKey) {
         mEntity = entity;
         mName = name;
         mDocumentation = documentation;
@@ -164,14 +173,17 @@ public class Field {
         mIsId = isId;
         mIsIndex = isIndex;
         mIsNullable = isNullable;
+        mIsAutoIncrement = isAutoIncrement;
         mDefaultValue = defaultValue;
         mEnumName = enumName;
         if (enumValues != null) mEnumValues.addAll(enumValues);
         mForeignKey = foreignKey;
     }
 
-    public Field asForeignField(String path) {
-        Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, mIsNullable, mDefaultValue, mEnumName, mEnumValues, mForeignKey);
+    public Field asForeignField(String path, boolean forceNullable) {
+        boolean isNullable = forceNullable ? true : mIsNullable;
+        Field res = new Field(mEntity, mName, mDocumentation, mType.mJsonName, mIsId, mIsIndex, isNullable, mIsAutoIncrement, mDefaultValue, mEnumName,
+                mEnumValues, mForeignKey);
         res.mIsForeign = true;
         res.mOriginalField = this;
         res.mPath = path;
@@ -180,6 +192,10 @@ public class Field {
 
     public Entity getEntity() {
         return mEntity;
+    }
+
+    public String getName() {
+        return mName;
     }
 
     public String getNameUpperCase() {
@@ -210,9 +226,9 @@ public class Field {
         return mEntity.getNameLowerCase() + "__" + getNameLowerCase();
     }
 
-    public String getNameLowerCaseOrPrefixed() {
+    public String getNameOrPrefixed() {
         if (mIsAmbiguous) return getPrefixedName();
-        return getNameLowerCase();
+        return mName;
     }
 
     public Type getType() {
@@ -231,8 +247,41 @@ public class Field {
         return mIsNullable;
     }
 
+    public boolean getIsAutoIncrement() {
+        return mIsAutoIncrement;
+    }
+
     public String getDefaultValue() {
-        return mDefaultValue;
+        switch (mType) {
+            case BOOLEAN:
+                if ("true".equals(mDefaultValue)) return "1";
+                if ("false".equals(mDefaultValue)) return "0";
+                // fallthrough
+            case INTEGER:
+            case LONG:
+            case DATE:
+            case ENUM:
+                try {
+                    Long.parseLong(mDefaultValue);
+                    return mDefaultValue;
+                } catch (NumberFormatException e) {
+                    Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
+                            + " could not be parsed as a numeric type, which is probably a problem", e);
+                }
+                // fallthrough
+            case FLOAT:
+            case DOUBLE:
+                try {
+                    Double.parseDouble(mDefaultValue);
+                    return mDefaultValue;
+                } catch (NumberFormatException e) {
+                    Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
+                            + " could not be parsed as a floating point type, which is probably a problem", e);
+                }
+                // fallthrough
+            default:
+                return '\'' + mDefaultValue + '\'';
+        }
     }
 
     public boolean getHasDefaultValue() {
@@ -282,10 +331,14 @@ public class Field {
         return mDocumentation;
     }
 
+    public void setIsId(boolean isId) {
+        mIsId = isId;
+    }
+
     @Override
     public String toString() {
         return "Field [mName=" + mName + ", mDocumentation=" + mDocumentation + ", mType=" + mType + ", mIsId=" + mIsId + ", mIsIndex=" + mIsIndex
-                + ", mIsNullable=" + mIsNullable + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName + ", mEnumValues=" + mEnumValues
-                + ", mForeignKey=" + mForeignKey + "]";
+                + ", mIsNullable=" + mIsNullable + ", mIsAutoIncrement=" + mIsAutoIncrement + ", mDefaultValue=" + mDefaultValue + ", mEnumName=" + mEnumName
+                + ", mEnumValues=" + mEnumValues + ", mForeignKey=" + mForeignKey + "]";
     }
 }
