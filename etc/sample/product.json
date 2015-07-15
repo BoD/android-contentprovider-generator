@@ -1,0 +1,27 @@
+{
+	"documentation": "A product that the company sells.",
+	"fields": [
+		{
+			"name": "product_id",
+			"type": "Long",
+			"nullable": false,
+			"index": true
+		},
+		{
+			"name": "name",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"documentation": "Optional manual id.",
+			"name": "manual_id",
+			"type": "Long",
+			"nullable": true,
+			"foreignKey": {
+				"table": "manual",
+				"onDelete": "SET NULL"
+			}
+		}
+	],
+	"idField": ["product_id"]
+}

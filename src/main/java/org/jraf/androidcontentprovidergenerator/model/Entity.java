@@ -32,8 +32,18 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.WordUtils;
+import org.jraf.androidcontentprovidergenerator.Constants;
 
 public class Entity {
+    private static final String TAG = Constants.TAG + Entity.class.getSimpleName();
+
+    public static class Json {
+        public static final String FIELDS = "fields";
+        public static final String CONSTRAINTS = "constraints";
+        public static final String DOCUMENTATION = "documentation";
+        public static final String ID_FIELD = "idField";
+    }
+
     private static final String CONCAT = "res.tablesWithJoins += ";
     private static final String HAS_COLUMNS = ".hasColumns(projection)";
     private static final String OPEN_BRACE = ") {\n";
@@ -48,19 +58,19 @@ public class Entity {
     private static final String ON = "\" ON \"";
     private static final String EQUALS = "\"=\"";
     private static final String DOT = "\".\"";
-    private static final String QUALIFY_AMBIGUOUS = "res.projection = qualifyAmbiguousColumns(res.projection";
-    private static final String ALL_COLUMNS = "Columns.ALL_COLUMNS";
-    private static final String COMMA = ", ";
-
+    private static final String AS = "\" AS \"";
+    private static final String PREFIX = ".PREFIX_";
 
     private static final Map<String, Entity> ALL_ENTITIES = new HashMap<>();
 
     private final String mName;
     private final List<Field> mFields = new ArrayList<>();
     private final List<Constraint> mConstraints = new ArrayList<>();
+    private final String mDocumentation;
 
-    public Entity(String name) {
+    public Entity(String name, String documentation) {
         mName = name;
+        mDocumentation = documentation;
         ALL_ENTITIES.put(name, this);
     }
 
@@ -68,26 +78,37 @@ public class Entity {
         mFields.add(field);
     }
 
+    public void addField(int index, Field field) {
+        mFields.add(index, field);
+    }
+
     public List<Field> getFields() {
         return Collections.unmodifiableList(mFields);
     }
 
-    public List<Field> getFieldsIncludingJoins(boolean isForeign) {
+    public List<Field> getFieldsIncludingJoins() {
+        return getFieldsIncludingJoins(false, "", false);
+    }
+
+    private List<Field> getFieldsIncludingJoins(boolean isForeign, String path, boolean forceNullable) {
         List<Field> res = new ArrayList<>();
         for (Field field : mFields) {
+            if (field.getIsId() && isForeign) continue;
+
             if (isForeign) {
-                res.add(field.asForeignField());
+                res.add(field.asForeignField(path, forceNullable));
             } else {
                 res.add(field);
             }
-        }
 
-        for (Field field : getFields()) {
             ForeignKey foreignKey = field.getForeignKey();
             if (foreignKey == null) continue;
 
+            String newPath = path + foreignKey.getEntity().getNameCamelCase();
+            // If the field is nullable, all fields of the foreign (joined) entity must also be nullable
+            forceNullable = field.getIsNullable();
             // Recurse
-            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true));
+            res.addAll(foreignKey.getEntity().getFieldsIncludingJoins(true, newPath, forceNullable));
         }
 
         return res;
@@ -110,7 +131,7 @@ public class Entity {
 
     public Field getFieldByName(String fieldName) {
         for (Field field : getFields()) {
-            if (fieldName.equals(field.getNameLowerCase())) return field;
+            if (fieldName.toLowerCase(Locale.US).equals(field.getNameLowerCase())) return field;
         }
         return null;
     }
@@ -145,25 +166,11 @@ public class Entity {
         res.append(TABLE_NAME);
         res.append(";");
 
-        addAllJoinedClauses(this, res);
-
-        List<Entity> joinedEntities = new ArrayList<>();
-        getAllJoinedEntities(this, joinedEntities);
-        if (joinedEntities.size() > 1) {
-            res.append("\n\n");
-            res.append(INDENT1);
-            res.append(QUALIFY_AMBIGUOUS);
-            for (Entity entity : joinedEntities) {
-                res.append(COMMA);
-                res.append(entity.getNameCamelCase());
-                res.append(ALL_COLUMNS);
-            }
-            res.append(");\n");
-        }
+        addAllJoinedClauses(this, null, res);
         return res.toString();
     }
 
-    private static void addAllJoinedClauses(Entity entity, StringBuilder res) {
+    private static void addAllJoinedClauses(Entity entity, String alias, StringBuilder res) {
         List<Field> fields = entity.getFields();
         for (Field field : fields) {
             ForeignKey foreignKey = field.getForeignKey();
@@ -184,36 +191,44 @@ public class Entity {
             res.append(COLUMNS);
             res.append(TABLE_NAME);
             res.append(PLUS);
+            res.append(AS);
+            res.append(PLUS);
+            res.append(getPrefix(entity, foreignKey));
+            res.append(PLUS);
             res.append(ON);
             res.append(PLUS);
 
-            res.append(getQualifiedColumnName(entity, field));
+            res.append(getQualifiedColumnName(entity, field, alias));
 
             res.append(PLUS);
             res.append(EQUALS);
             res.append(PLUS);
 
-            res.append(getQualifiedColumnName(foreignKey.getEntity(), foreignKey.getField()));
-            res.append(";\n");
+            res.append(getPrefix(entity, foreignKey));
+            res.append(PLUS);
+            res.append(DOT);
+            res.append(PLUS);
+            res.append(foreignKey.getEntity().getNameCamelCase());
+            res.append(COLUMNS);
+            res.append(".");
+            res.append(foreignKey.getField().getNameUpperCase());
 
+            res.append(";\n");
             res.append(INDENT1);
             res.append("}");
 
             // Recurse
-            addAllJoinedClauses(foreignKey.getEntity(), res);
+            addAllJoinedClauses(foreignKey.getEntity(), getPrefix(entity, foreignKey), res);
         }
     }
 
-    private static void getAllJoinedEntities(Entity entity, List<Entity> joinedEntities) {
-        joinedEntities.add(entity);
-        List<Field> fields = entity.getFields();
-        for (Field field : fields) {
-            ForeignKey foreignKey = field.getForeignKey();
-            if (foreignKey == null) continue;
-
-            // Recurse
-            getAllJoinedEntities(foreignKey.getEntity(), joinedEntities);
-        }
+    private static String getPrefix(Entity entity, ForeignKey foreignKey) {
+        StringBuilder res = new StringBuilder();
+        res.append(entity.getNameCamelCase());
+        res.append(COLUMNS);
+        res.append(PREFIX);
+        res.append(foreignKey.getEntity().getNameUpperCase());
+        return res.toString();
     }
 
     private static void getHasColumnClauses(StringBuilder res, Entity entity) {
@@ -231,12 +246,17 @@ public class Entity {
         }
     }
 
-    private static String getQualifiedColumnName(Entity entity, Field field) {
+    private static String getQualifiedColumnName(Entity entity, Field field, String alias) {
         StringBuilder res = new StringBuilder();
-        res.append(entity.getNameCamelCase());
-        res.append(COLUMNS);
-        res.append(TABLE_NAME);
-        res.append(PLUS);
+        if (alias == null) {
+            res.append(entity.getNameCamelCase());
+            res.append(COLUMNS);
+            res.append(TABLE_NAME);
+            res.append(PLUS);
+        } else {
+            res.append(alias);
+            res.append(PLUS);
+        }
         res.append(DOT);
         res.append(PLUS);
         res.append(entity.getNameCamelCase());
@@ -246,12 +266,29 @@ public class Entity {
         return res.toString();
     }
 
+    public String getDocumentation() {
+        return mDocumentation;
+    }
+
     @Override
     public String toString() {
-        return "Entity [mName=" + mName + ", mFields=" + mFields + ", mConstraints=" + mConstraints + "]";
+        return "Entity [mName=" + mName + ", mFields=" + mFields + ", mConstraints=" + mConstraints + ", mDocumentation=" + mDocumentation + "]";
     }
 
     public static Entity getByName(String entityName) {
         return ALL_ENTITIES.get(entityName);
+    }
+
+    public void flagAmbiguousFields() {
+        List<Field> allJoinedFields = getFieldsIncludingJoins();
+        for (Field f1 : allJoinedFields) {
+            for (Field f2 : allJoinedFields) {
+                if (f1 == f2) continue;
+                if (f1.getNameLowerCase().equals(f2.getNameLowerCase())) {
+                    f1.setIsAmbiguous(true);
+                    f2.setIsAmbiguous(true);
+                }
+            }
+        }
     }
 }

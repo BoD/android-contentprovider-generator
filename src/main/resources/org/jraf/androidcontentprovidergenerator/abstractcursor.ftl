@@ -4,22 +4,21 @@ ${header}
 package ${config.providerJavaPackage}.base;
 
 import java.util.Date;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
 public abstract class AbstractCursor extends CursorWrapper {
-    private IdentityHashMap<String, Integer> mColumnIndexes = new IdentityHashMap<String, Integer>();
+    private final HashMap<String, Integer> mColumnIndexes;
 
     public AbstractCursor(Cursor cursor) {
         super(cursor);
+        mColumnIndexes = new HashMap<String, Integer>(cursor.getColumnCount() * 4 / 3, .75f);
     }
 
-    public long getId() {
-        return getLongOrNull(BaseColumns._ID);
-    }
+    public abstract long getId();
 
     protected int getCachedColumnIndexOrThrow(String colName) {
         Integer index = mColumnIndexes.get(colName);
@@ -30,39 +29,51 @@ public abstract class AbstractCursor extends CursorWrapper {
         return index;
     }
 
+    public String getStringOrNull(String colName) {
+        int index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getString(index);
+    }
+
     public Integer getIntegerOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getInt(index);
     }
 
     public Long getLongOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getLong(index);
     }
 
     public Float getFloatOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getFloat(index);
     }
 
     public Double getDoubleOrNull(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getDouble(index);
     }
 
-    public Boolean getBoolean(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+    public Boolean getBooleanOrNull(String colName) {
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return getInt(index) != 0;
     }
 
-    public Date getDate(String colName) {
-        Integer index = getCachedColumnIndexOrThrow(colName);
+    public Date getDateOrNull(String colName) {
+        int index = getCachedColumnIndexOrThrow(colName);
         if (isNull(index)) return null;
         return new Date(getLong(index));
+    }
+
+    public byte[] getBlobOrNull(String colName) {
+        int index = getCachedColumnIndexOrThrow(colName);
+        if (isNull(index)) return null;
+        return getBlob(index);
     }
 }

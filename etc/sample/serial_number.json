@@ -1,0 +1,17 @@
+{
+	"documentation": "A serial number.",
+	"fields": [
+		{
+			"documentation": "Unique id, first part.",
+			"name": "part0",
+			"type": "String",
+			"nullable": false
+		},
+		{
+			"documentation": "Unique id, second part.",
+			"name": "part1",
+			"type": "String",
+			"nullable": false
+		}
+	]
+}

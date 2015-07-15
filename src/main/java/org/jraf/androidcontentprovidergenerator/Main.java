@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class Main {
         public static final String DATABASE_FILE_NAME = "databaseFileName";
         public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
+        public static final String USE_ANNOTATIONS = "useAnnotations";
     }
 
     private Configuration mFreemarkerConfig;
@@ -94,25 +96,32 @@ public class Main {
                 return !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json");
             }
         });
+
+        // Sort the entity files (lexicographically) so they are always processed in the same order
+        Arrays.sort(entityFiles);
+
         for (File entityFile : entityFiles) {
             if (Config.LOGD) Log.d(TAG, entityFile.getCanonicalPath());
             String entityName = FilenameUtils.getBaseName(entityFile.getCanonicalPath());
             if (Config.LOGD) Log.d(TAG, "entityName=" + entityName);
-            Entity entity = new Entity(entityName);
             String fileContents = FileUtils.readFileToString(entityFile);
             JSONObject entityJson = new JSONObject(fileContents);
 
-            // Implicit _id field
-            Field field = new Field(entity, "_id", "Long", true, false, false, null, null, null, null);
-            entity.addField(field);
+            // Documentation (optional)
+            String entityDocumentation = entityJson.optString(Entity.Json.DOCUMENTATION);
+            if (entityDocumentation.isEmpty()) entityDocumentation = null;
+
+            Entity entity = new Entity(entityName, entityDocumentation);
 
             // Fields
-            JSONArray fieldsJson = entityJson.getJSONArray("fields");
+            JSONArray fieldsJson = entityJson.getJSONArray(Entity.Json.FIELDS);
             int len = fieldsJson.length();
             for (int i = 0; i < len; i++) {
                 JSONObject fieldJson = fieldsJson.getJSONObject(i);
                 if (Config.LOGD) Log.d(TAG, "fieldJson=" + fieldJson);
                 String name = fieldJson.getString(Field.Json.NAME);
+                String fieldDocumentation = fieldJson.optString(Field.Json.DOCUMENTATION);
+                if (fieldDocumentation.isEmpty()) fieldDocumentation = null;
                 String type = fieldJson.getString(Field.Json.TYPE);
                 boolean isIndex = fieldJson.optBoolean(Field.Json.INDEX, false);
                 boolean isNullable = fieldJson.optBoolean(Field.Json.NULLABLE, true);
@@ -129,11 +138,11 @@ public class Main {
                             // Name only
                             enumValues.add(new EnumValue((String) enumValue, null));
                         } else {
-                            // Name and Javadoc
+                            // Name and documentation
                             JSONObject enumValueJson = (JSONObject) enumValue;
                             String enumValueName = (String) enumValueJson.keys().next();
-                            String enumValueJavadoc = enumValueJson.getString(enumValueName);
-                            enumValues.add(new EnumValue(enumValueName, enumValueJavadoc));
+                            String enumValueDocumentation = enumValueJson.getString(enumValueName);
+                            enumValues.add(new EnumValue(enumValueName, enumValueDocumentation));
                         }
                     }
                 }
@@ -144,13 +153,54 @@ public class Main {
                     OnDeleteAction onDeleteAction = OnDeleteAction.fromJsonName(foreignKeyJson.getString(Field.Json.FOREIGN_KEY_ON_DELETE_ACTION));
                     foreignKey = new ForeignKey(table, onDeleteAction);
                 }
-                field = new Field(entity, name, type, false, isIndex, isNullable, defaultValue != null ? defaultValue : defaultValueLegacy, enumName,
-                        enumValues, foreignKey);
+                Field field = new Field(entity, name, fieldDocumentation, type, false, isIndex, isNullable, false, defaultValue != null ? defaultValue
+                        : defaultValueLegacy, enumName, enumValues, foreignKey);
                 entity.addField(field);
             }
 
+            // ID Field
+            JSONArray idFields = entityJson.optJSONArray(Entity.Json.ID_FIELD);
+            String idFieldName;
+            if (idFields == null) {
+                // Implicit id field
+                idFieldName = "_id";
+            } else {
+                if (idFields.length() != 1) {
+                    throw new IllegalArgumentException("Invalid number of idField '" + idFields + "' value in " + entityFile.getCanonicalPath() + ".");
+                }
+                idFieldName = idFields.getString(0);
+            }
+            Field idField;
+            if ("_id".equals(idFieldName)) {
+                // Implicit id field: create a Field named "_id"
+                idField = new Field(entity, "_id", "Primary key.", "Long", true, false, false, true, null, null, null, null);
+                entity.addField(0, idField);
+            } else {
+                // Explicit id field (reference)
+                idField = entity.getFieldByName(idFieldName);
+                if (idField == null) {
+                    // Referenced field not found
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' not found " + entityFile.getCanonicalPath() + ".");
+                }
+                if (idField.getType() != Field.Type.INTEGER && idField.getType() != Field.Type.LONG && idField.getType() != Field.Type.DATE
+                        && idField.getType() != Field.Type.ENUM) {
+                    // Invalid type
+                    throw new IllegalArgumentException("Invalid idField type " + idField.getType() + " in " + entityFile.getCanonicalPath() + "."
+                            + "  It must be Integer, Long, Date or Enum.");
+                }
+                if (idField.getIsNullable()) {
+                    // Referenced field is nullable
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' must not be nullable in " + entityFile.getCanonicalPath() + ".");
+                }
+                if (!idField.getIsIndex()) {
+                    // Referenced field is not an index
+                    throw new IllegalArgumentException("Invalid idField: '" + idFieldName + "' must be an index in " + entityFile.getCanonicalPath() + ".");
+                }
+                idField.setIsId(true);
+            }
+
             // Constraints (optional)
-            JSONArray constraintsJson = entityJson.optJSONArray("constraints");
+            JSONArray constraintsJson = entityJson.optJSONArray(Entity.Json.CONSTRAINTS);
             if (constraintsJson != null) {
                 len = constraintsJson.length();
                 for (int i = 0; i < len; i++) {
@@ -188,19 +238,24 @@ public class Main {
 
     private void validateConfig() {
         // Ensure the input files are compatible with this version of the tool
-        String syntaxVersion;
+        int syntaxVersion;
         try {
-            syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION);
+            syntaxVersion = mConfig.getInt(Json.SYNTAX_VERSION);
         } catch (JSONException e) {
             try {
-                // Try the old name of this attribute
-                syntaxVersion = mConfig.getString(Json.SYNTAX_VERSION_LEGACY);
-            } catch (JSONException e2) {
-                throw new IllegalArgumentException("Could not find '" + Json.SYNTAX_VERSION
-                        + "' field in _config.json, which is mandatory and must be equal to '" + Constants.SYNTAX_VERSION + "'.");
+                // For legacy reasons we also allow this attribute to be a String
+                syntaxVersion = Integer.parseInt(mConfig.getString(Json.SYNTAX_VERSION));
+            } catch (Exception e2) {
+                try {
+                    // For legacy reasons we also allow a different name for this attribute
+                    syntaxVersion = Integer.parseInt(mConfig.getString(Json.SYNTAX_VERSION_LEGACY));
+                } catch (Exception e3) {
+                    throw new IllegalArgumentException("Could not find '" + Json.SYNTAX_VERSION
+                            + "' field in _config.json, which is mandatory and must be equal to " + Constants.SYNTAX_VERSION + ".");
+                }
             }
         }
-        if (!syntaxVersion.startsWith(Constants.SYNTAX_VERSION)) {
+        if (syntaxVersion != Constants.SYNTAX_VERSION) {
             throw new IllegalArgumentException("Invalid '" + Json.SYNTAX_VERSION + "' value in _config.json: found '" + syntaxVersion + "' but expected '"
                     + Constants.SYNTAX_VERSION + "'.");
         }
@@ -215,6 +270,7 @@ public class Main {
         ensureString(Json.DATABASE_FILE_NAME);
         ensureInt(Json.DATABASE_VERSION);
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
+        ensureBoolean(Json.USE_ANNOTATIONS);
     }
 
     private void ensureString(String field) {
@@ -250,12 +306,38 @@ public class Main {
         Map<String, Object> root = new HashMap<>();
         root.put("config", getConfig(arguments.inputDir));
         root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
 
         // Entities
         for (Entity entity : Model.get().getEntities()) {
             File outputDir = new File(providerDir, entity.getPackageName());
             outputDir.mkdirs();
             File outputFile = new File(outputDir, entity.getNameCamelCase() + "Columns.java");
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+            root.put("entity", entity);
+
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    private void generateModels(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("model.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        Map<String, Object> root = new HashMap<>();
+        root.put("config", getConfig(arguments.inputDir));
+        root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
+
+        // Entities
+        for (Entity entity : Model.get().getEntities()) {
+            File outputDir = new File(providerDir, entity.getPackageName());
+            outputDir.mkdirs();
+            File outputFile = new File(outputDir, entity.getNameCamelCase() + "Model.java");
             Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
             root.put("entity", entity);
@@ -284,13 +366,6 @@ public class Main {
         template.process(root, out);
         IOUtils.closeQuietly(out);
 
-        // AliasCursor
-        template = getFreeMarkerConfig().getTemplate("aliascursor.ftl");
-        outputFile = new File(baseClassesDir, "AliasCursor.java");
-        out = new OutputStreamWriter(new FileOutputStream(outputFile));
-        template.process(root, out);
-        IOUtils.closeQuietly(out);
-
         // AbstractContentValuesWrapper
         template = getFreeMarkerConfig().getTemplate("abstractcontentvalues.ftl");
         outputFile = new File(baseClassesDir, "AbstractContentValues.java");
@@ -301,6 +376,20 @@ public class Main {
         // AbstractSelection
         template = getFreeMarkerConfig().getTemplate("abstractselection.ftl");
         outputFile = new File(baseClassesDir, "AbstractSelection.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // BaseContentProvider
+        template = getFreeMarkerConfig().getTemplate("basecontentprovider.ftl");
+        outputFile = new File(baseClassesDir, "BaseContentProvider.java");
+        out = new OutputStreamWriter(new FileOutputStream(outputFile));
+        template.process(root, out);
+        IOUtils.closeQuietly(out);
+
+        // BaseModel
+        template = getFreeMarkerConfig().getTemplate("basemodel.ftl");
+        outputFile = new File(baseClassesDir, "BaseModel.java");
         out = new OutputStreamWriter(new FileOutputStream(outputFile));
         template.process(root, out);
         IOUtils.closeQuietly(out);
@@ -414,7 +503,7 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        System.out.println("\nProvider declaration to paste in the AndroidManifest.xml file: ");
+        Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);
     }
 
@@ -431,8 +520,12 @@ public class Main {
         getConfig(arguments.inputDir);
 
         loadModel(arguments.inputDir);
+
+        Model.get().flagAmbiguousFields();
+
         generateColumns(arguments);
         generateWrappers(arguments);
+        generateModels(arguments);
         generateContentProvider(arguments);
         generateSqliteOpenHelper(arguments);
         generateSqliteOpenHelperCallbacks(arguments);

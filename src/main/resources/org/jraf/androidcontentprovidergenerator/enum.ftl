@@ -9,7 +9,7 @@ package ${config.providerJavaPackage}.${entity.packageName};
 public enum ${field.enumName} {
     <#list field.enumValues as enumValue>
     /**
-     * ${enumValue.javadoc!""}
+     * ${enumValue.documentation!""}
      */
     ${enumValue.name},
 

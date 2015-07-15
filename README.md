@@ -6,10 +6,11 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - a `ContentProvider` class
 - a `SQLiteOpenHelper` class
 - a `SQLiteOpenHelperCallbacks` class
-- one `BaseColumns` interface per entity 
+- one `Columns` class per entity
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
 - one `Selection` class per entity
+- one `Model` interface per entity
 
 
 How to use
@@ -22,7 +23,7 @@ This is where you declare a few parameters that will be used to generate the cod
 These are self-explanatory so here is an example:
 ```json
 {
-	"syntaxVersion": "1.7",
+	"syntaxVersion": 3,
 	"projectPackageId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
@@ -32,6 +33,7 @@ These are self-explanatory so here is an example:
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
+	"useAnnotations": true
 }
 ```
 
@@ -39,14 +41,14 @@ These are self-explanatory so here is an example:
 
 Create one file per entity, naming it `<entity_name>.json`.
 Inside each file, declare your fields (a.k.a "columns") with a name and a type.
-You can also optionally declare a default value, an index flag and a nullable flag.
+You can also optionally declare a default value, an index flag, a documentation and a nullable flag.
 
 Currently the type can be:
 - `String` (SQLite type: `TEXT`)
 - `Integer` (`INTEGER`)
 - `Long` (`INTEGER`)
 - `Float` (`REAL`)
-- `Double` (`REAL`) 
+- `Double` (`REAL`)
 - `Boolean` (`INTEGER`)
 - `Date` (`INTEGER`)
 - `byte[]` (`BLOB`)
@@ -58,22 +60,25 @@ Here is a `person.json` file as an example:
 
 ```json
 {
+	"documentation": "A human being which is part of a team.",
 	"fields": [
 		{
+			"documentation": "First name of this person. For instance, John.",
 			"name": "first_name",
 			"type": "String",
-			"defaultValue": "John",
+			"defaultValue": "John"
 		},
 		{
+			"documentation": "Last name (a.k.a. Given name) of this person. For instance, Smith.",
 			"name": "last_name",
 			"type": "String",
 			"nullable": true,
-			"defaultValue": "Doe",
+			"defaultValue": "Doe"
 		},
 		{
 			"name": "age",
 			"type": "Integer",
-			"index": true,
+			"index": true
 		},
 		{
 			"name": "gender",
@@ -82,17 +87,17 @@ Here is a `person.json` file as an example:
 			"enumValues": [
 				"MALE",
 				"FEMALE",
-				{"OTHER": "Value to use when neither male nor female"},
+				{"OTHER": "Value to use when neither male nor female"}
 			],
-			"nullable": false,
-		},
+			"nullable": false
+		}
 	],
-	
+
 	"constraints": [
 		{
 			"name": "unique_name",
 			"definition": "UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
-		},
+		}
 	]
 }
 ```
@@ -100,12 +105,13 @@ Here is a `person.json` file as an example:
 Notes:
 - An `_id` primary key field is automatically (implicitly) declared for all entities. It must not be declared in the json file.
 - `nullable` is optional (true by default).
+- if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 
-A more comprehensive example is available in the [etc/sample](etc/sample) folder.
+A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
 
 You can also have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
 
-By convention, your should name your entities and fields in lower case with words separated by '_', like in the example above.
+By convention, you should name your entities and fields in lower case with words separated by '_', like in the example above.
 
 ### The `header.txt` file (optional)
 
@@ -118,7 +124,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android-contentprovider-generator-1.8.0-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android_contentprovider_generator-1.9.2-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -175,15 +181,15 @@ Here is an example of the syntax:
 			"nullable": false,
 			"foreignKey": {
 				"table": "team",
-				"onDelete": "CASCADE",
-			},
+				"onDelete": "CASCADE"
+			}
 		},
 		{
 			"name": "first_name",
 			"type": "String",
-			"nullable": false,
+			"nullable": false
 		},
-		
+
 		(...)
 }
 ```
@@ -194,10 +200,21 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - Of course if `team` has foreign keys they will also be handled (and recursively).
 
 #### Limitations
-- **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
-- **Columns of joined tables must have unique names.**  In the example above there must not be a column `name` both in `person` and in `team`. You can just prefix their name with the table name (i.e. `person_name`, `team_name`).
-- **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
 - Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
+- **Only one foreign key to a particular table is allowed per table.**  In the example above only one column in `person` can point to `team`.
+- **Loops** (i.e. A has a foreign key to B and B has a foreign key to A) **aren't detected.**  The generator will infinitely loop if they exist.
+- Cases such as "A has a FK to B, B has a FK to C, A has a FK to C" generate ambiguities in the queries, because C columns appear twice.  In the [sample app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/app/SampleActivity.java) you can see an example of how to deal with this case, using prefixes and aliases (SQL's `AS` keyword).
+
+
+Sample
+------
+
+A sample is available in the [etc/sample](etc/sample) folder.
+
+You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+
+Here is the table shema of the sample:
+![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
 
 
 Building
@@ -207,12 +224,12 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android-contentprovider-generator-1.8.0-bundle.jar` in the `target` folder.
+This will produce `android_contentprovider_generator-1.9.2-bundle.jar` in the `target` folder.
 
 
 Similar tools
 -------------
-Here is a list of other tools that try to solve the same problem.
+Here is a list of other tools that try to tackle the same problem.
 
 I did not have the chance to try them out.
 
@@ -223,6 +240,8 @@ I did not have the chance to try them out.
 - https://code.google.com/p/mdsd-android-content-provider/
 - https://github.com/hamsterksu/Android-AnnotatedSQL
 - http://robotoworks.com/mechanoid/doc/db/api.html
+- https://github.com/robUx4/android-contentprovider-generator (a fork of this project that generates more code)
+- https://github.com/novoda/sqlite-analyzer (based on sql statements, not json)
 
 
 Licence

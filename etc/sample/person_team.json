@@ -1,0 +1,29 @@
+{
+	"documentation": "Entity joining people and teams.  A team contains several people, and a person can belong to several teams.",
+	"fields": [
+		{
+			"name": "person_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "person",
+				"onDelete": "RESTRICT"
+			}
+		},
+		{
+			"name": "team_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "team",
+				"onDelete": "RESTRICT"
+			}
+		}
+	],
+	"constraints": [
+		{
+			"name": "unique_person_team",
+			"definition": "UNIQUE (person_id, team_id) ON CONFLICT REPLACE"
+		}
+	]
+}
