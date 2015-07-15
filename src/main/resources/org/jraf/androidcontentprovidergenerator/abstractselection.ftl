@@ -9,6 +9,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 
 public abstract class AbstractSelection<T extends AbstractSelection<?>> {
@@ -31,6 +32,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String CONTAINS = " LIKE '%' || ? || '%'";
     private static final String STARTS = " LIKE ? || '%'";
     private static final String ENDS = " LIKE '%' || ?";
+    private static final String COUNT = "COUNT(*)";
 
     private final StringBuilder mSelection = new StringBuilder();
     private final List<String> mSelectionArgs = new ArrayList<String>(5);
@@ -331,5 +333,16 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     public T limit(int limit) {
         mLimit = limit;
         return (T) this;
+    }
+
+    public int count(ContentResolver resolver) {
+        final Cursor cursor = resolver.query(uri(), new String[]{COUNT}, sel(), args(), null);
+        if (cursor == null)
+            return 0;
+        try {
+            return cursor.moveToFirst() ? cursor.getInt(0) : 0;
+        } finally {
+            cursor.close();
+        }
     }
 }
