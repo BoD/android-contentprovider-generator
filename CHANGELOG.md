@@ -7,6 +7,7 @@ v1.9.3 (2015-07-18)
 new manifest merger build tool (thanks almilli!).
 - Fixed invalid json in sample and readme (thanks mdupierreux!).
 - Added methods that take a Context in addition to the ones that take a ContentResolver.
+- New `orderByXXX` methods in Selection classes (thanks yargray!).
 
 v1.9.2 (2015-03-05)
 ------
