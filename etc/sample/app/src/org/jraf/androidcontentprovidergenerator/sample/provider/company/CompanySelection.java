@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.company;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -47,34 +48,59 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code CompanyCursor} object, which is positioned before the first entry, or null.
      */
-    public CompanyCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public CompanyCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new CompanyCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public CompanyCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public CompanyCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code CompanyCursor} object, which is positioned before the first entry, or null.
      */
-    public CompanyCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public CompanyCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new CompanyCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public CompanyCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public CompanySelection id(long... value) {
         addEquals("company." + CompanyColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public CompanySelection idNot(long... value) {
+        addNotEquals("company." + CompanyColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public CompanySelection orderById(boolean desc) {
+        orderBy("company." + CompanyColumns._ID, desc);
+        return this;
+    }
+
+    public CompanySelection orderById() {
+        return orderById(false);
     }
 
     public CompanySelection name(String... value) {
@@ -104,6 +130,16 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection nameEndsWith(String... value) {
         addEndsWith(CompanyColumns.NAME, value);
+        return this;
+    }
+
+    public CompanySelection orderByName(boolean desc) {
+        orderBy(CompanyColumns.NAME, desc);
+        return this;
+    }
+
+    public CompanySelection orderByName() {
+        orderBy(CompanyColumns.NAME, false);
         return this;
     }
 
@@ -137,6 +173,16 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         return this;
     }
 
+    public CompanySelection orderByAddress(boolean desc) {
+        orderBy(CompanyColumns.ADDRESS, desc);
+        return this;
+    }
+
+    public CompanySelection orderByAddress() {
+        orderBy(CompanyColumns.ADDRESS, false);
+        return this;
+    }
+
     public CompanySelection serialNumberId(long... value) {
         addEquals(CompanyColumns.SERIAL_NUMBER_ID, toObjectArray(value));
         return this;
@@ -164,6 +210,16 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection serialNumberIdLtEq(long value) {
         addLessThanOrEquals(CompanyColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public CompanySelection orderBySerialNumberId(boolean desc) {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, desc);
+        return this;
+    }
+
+    public CompanySelection orderBySerialNumberId() {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, false);
         return this;
     }
 
@@ -197,6 +253,16 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
         return this;
     }
 
+    public CompanySelection orderBySerialNumberPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public CompanySelection orderBySerialNumberPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
+        return this;
+    }
+
     public CompanySelection serialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -224,6 +290,16 @@ public class CompanySelection extends AbstractSelection<CompanySelection> {
 
     public CompanySelection serialNumberPart1EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public CompanySelection orderBySerialNumberPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public CompanySelection orderBySerialNumberPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
         return this;
     }
 }

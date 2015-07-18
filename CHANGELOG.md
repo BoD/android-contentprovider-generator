@@ -1,7 +1,7 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
-v1.9.3 (not yet released)
+v1.9.3 (2015-07-18)
 ------
 - Updated content provider template to support ${applicationId} variable that is supported in the
 new manifest merger build tool (thanks almilli!).

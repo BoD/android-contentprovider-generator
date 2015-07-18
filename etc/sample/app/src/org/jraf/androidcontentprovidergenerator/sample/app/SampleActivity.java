@@ -127,10 +127,10 @@ public class SampleActivity extends Activity {
         }
         c.close();
 
-        // Like / startsWitdh / contains / endsWith
+        // Like / startsWitdh / contains / endsWith + order by
         Log.d(TAG, "---");
         personSelection = new PersonSelection();
-        personSelection.lastNameEndsWith("SON").or().firstNameContains("ar", "ae");
+        personSelection.lastNameEndsWith("SON").or().firstNameContains("ar", "ae").orderByLastName();
         c = personSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
@@ -191,7 +191,7 @@ public class SampleActivity extends Activity {
 
     private void queryTeamsWithCompany() {
         TeamSelection teamSelection = new TeamSelection();
-        teamSelection.name("Red Legends");
+        teamSelection.name("Red Legends").orderByCompanySerialNumberId(true);
         String[] projection = { TeamColumns._ID, TeamColumns.NAME, CompanyColumns.NAME, };
         TeamCursor c = teamSelection.query(getContentResolver(), projection);
         while (c.moveToNext()) {

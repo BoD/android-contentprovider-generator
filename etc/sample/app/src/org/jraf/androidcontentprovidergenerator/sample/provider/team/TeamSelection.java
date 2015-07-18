@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.team;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -49,34 +50,59 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code TeamCursor} object, which is positioned before the first entry, or null.
      */
-    public TeamCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public TeamCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new TeamCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public TeamCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public TeamCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code TeamCursor} object, which is positioned before the first entry, or null.
      */
-    public TeamCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public TeamCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new TeamCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public TeamCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public TeamSelection id(long... value) {
         addEquals("team." + TeamColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public TeamSelection idNot(long... value) {
+        addNotEquals("team." + TeamColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public TeamSelection orderById(boolean desc) {
+        orderBy("team." + TeamColumns._ID, desc);
+        return this;
+    }
+
+    public TeamSelection orderById() {
+        return orderById(false);
     }
 
     public TeamSelection companyId(long... value) {
@@ -106,6 +132,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companyIdLtEq(long value) {
         addLessThanOrEquals(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public TeamSelection orderByCompanyId(boolean desc) {
+        orderBy(TeamColumns.COMPANY_ID, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanyId() {
+        orderBy(TeamColumns.COMPANY_ID, false);
         return this;
     }
 
@@ -139,6 +175,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection orderByCompanyName(boolean desc) {
+        orderBy(CompanyColumns.NAME, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanyName() {
+        orderBy(CompanyColumns.NAME, false);
+        return this;
+    }
+
     public TeamSelection companyAddress(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
@@ -166,6 +212,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companyAddressEndsWith(String... value) {
         addEndsWith(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public TeamSelection orderByCompanyAddress(boolean desc) {
+        orderBy(CompanyColumns.ADDRESS, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanyAddress() {
+        orderBy(CompanyColumns.ADDRESS, false);
         return this;
     }
 
@@ -199,6 +255,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection orderByCompanySerialNumberId(boolean desc) {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanySerialNumberId() {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, false);
+        return this;
+    }
+
     public TeamSelection companySerialNumberPart0(String... value) {
         addEquals(SerialNumberColumns.PART0, value);
         return this;
@@ -226,6 +292,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection companySerialNumberPart0EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public TeamSelection orderByCompanySerialNumberPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanySerialNumberPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
         return this;
     }
 
@@ -259,6 +335,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection orderByCompanySerialNumberPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCompanySerialNumberPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
+        return this;
+    }
+
     public TeamSelection name(String... value) {
         addEquals(TeamColumns.NAME, value);
         return this;
@@ -286,6 +372,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection nameEndsWith(String... value) {
         addEndsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public TeamSelection orderByName(boolean desc) {
+        orderBy(TeamColumns.NAME, desc);
+        return this;
+    }
+
+    public TeamSelection orderByName() {
+        orderBy(TeamColumns.NAME, false);
         return this;
     }
 
@@ -319,6 +415,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection orderByCountryCode(boolean desc) {
+        orderBy(TeamColumns.COUNTRY_CODE, desc);
+        return this;
+    }
+
+    public TeamSelection orderByCountryCode() {
+        orderBy(TeamColumns.COUNTRY_CODE, false);
+        return this;
+    }
+
     public TeamSelection serialNumberId(long... value) {
         addEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
         return this;
@@ -346,6 +452,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection serialNumberIdLtEq(long value) {
         addLessThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public TeamSelection orderBySerialNumberId(boolean desc) {
+        orderBy(TeamColumns.SERIAL_NUMBER_ID, desc);
+        return this;
+    }
+
+    public TeamSelection orderBySerialNumberId() {
+        orderBy(TeamColumns.SERIAL_NUMBER_ID, false);
         return this;
     }
 
@@ -379,6 +495,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
         return this;
     }
 
+    public TeamSelection orderBySerialNumberPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public TeamSelection orderBySerialNumberPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
+        return this;
+    }
+
     public TeamSelection serialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -406,6 +532,16 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
 
     public TeamSelection serialNumberPart1EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public TeamSelection orderBySerialNumberPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public TeamSelection orderBySerialNumberPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
         return this;
     }
 }

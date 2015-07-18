@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,34 +47,59 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code SerialNumberCursor} object, which is positioned before the first entry, or null.
      */
-    public SerialNumberCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public SerialNumberCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new SerialNumberCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public SerialNumberCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public SerialNumberCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code SerialNumberCursor} object, which is positioned before the first entry, or null.
      */
-    public SerialNumberCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public SerialNumberCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new SerialNumberCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public SerialNumberCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public SerialNumberSelection id(long... value) {
         addEquals("serial_number." + SerialNumberColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public SerialNumberSelection idNot(long... value) {
+        addNotEquals("serial_number." + SerialNumberColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public SerialNumberSelection orderById(boolean desc) {
+        orderBy("serial_number." + SerialNumberColumns._ID, desc);
+        return this;
+    }
+
+    public SerialNumberSelection orderById() {
+        return orderById(false);
     }
 
     public SerialNumberSelection part0(String... value) {
@@ -106,6 +132,16 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
         return this;
     }
 
+    public SerialNumberSelection orderByPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public SerialNumberSelection orderByPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
+        return this;
+    }
+
     public SerialNumberSelection part1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -133,6 +169,16 @@ public class SerialNumberSelection extends AbstractSelection<SerialNumberSelecti
 
     public SerialNumberSelection part1EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public SerialNumberSelection orderByPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public SerialNumberSelection orderByPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
         return this;
     }
 }

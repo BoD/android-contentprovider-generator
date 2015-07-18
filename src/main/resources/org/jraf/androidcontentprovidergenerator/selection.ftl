@@ -29,28 +29,19 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code ${entity.nameCamelCase}Cursor} object, which is positioned before the first entry, or null.
      */
-    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new ${entity.nameCamelCase}Cursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
-     */
-    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
-    }
-
-    /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+        return query(contentResolver, null);
     }
 
     /**
@@ -58,34 +49,39 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
      *
      * @param context The context to use for the query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code ${entity.nameCamelCase}Cursor} object, which is positioned before the first entry, or null.
      */
-    public ${entity.nameCamelCase}Cursor query(Context context, String[] projection, String sortOrder) {
-        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), sortOrder);
+    public ${entity.nameCamelCase}Cursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new ${entity.nameCamelCase}Cursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(context, projection, null)}.
-     */
-    public ${entity.nameCamelCase}Cursor query(Context context, String[] projection) {
-        return query(context, projection, null);
-    }
-
-    /**
-     * Equivalent of calling {@code query(context, projection, null, null)}.
+     * Equivalent of calling {@code query(context, null)}.
      */
     public ${entity.nameCamelCase}Cursor query(Context context) {
-        return query(context, null, null);
+        return query(context, null);
     }
 
 
     public ${entity.nameCamelCase}Selection id(long... value) {
         addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
+    }
+
+    public ${entity.nameCamelCase}Selection idNot(long... value) {
+        addNotEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderById(boolean desc) {
+        orderBy("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, desc);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderById() {
+        return orderById(false);
     }
     <#list entity.getFieldsIncludingJoins() as field>
     <#if field.nameLowerCase != "_id">
@@ -243,6 +239,16 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
     <#break>
     </#switch>
+
+    public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>(boolean desc) {
+        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, desc);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>() {
+        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, false);
+        return this;
+    }
     </#if>
     </#list>
 }

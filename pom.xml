@@ -3,7 +3,7 @@
 
     <groupId>org.jraf</groupId>
     <artifactId>android_contentprovider_generator</artifactId>
-    <version>1.9.2</version> <!-- Do not forget to update README.md and CHANGELOG.md when updating this value -->
+    <version>1.9.3</version> <!-- Do not forget to update README.md and CHANGELOG.md when updating this value -->
     <packaging>jar</packaging>
 
     <name>GenerateAndroidProvider</name>

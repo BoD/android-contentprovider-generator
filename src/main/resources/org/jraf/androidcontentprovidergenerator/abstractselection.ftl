@@ -9,6 +9,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.ContentResolver;
+import android.database.Cursor;
 import android.net.Uri;
 
 public abstract class AbstractSelection<T extends AbstractSelection<?>> {
@@ -31,9 +32,13 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String CONTAINS = " LIKE '%' || ? || '%'";
     private static final String STARTS = " LIKE ? || '%'";
     private static final String ENDS = " LIKE '%' || ?";
+    private static final String COUNT = "COUNT(*)";
+    private static final String DESC = " DESC";
 
     private final StringBuilder mSelection = new StringBuilder();
     private final List<String> mSelectionArgs = new ArrayList<String>(5);
+
+    private final StringBuilder mOrderBy = new StringBuilder();
 
     Boolean mNotify;
     String mGroupBy;
@@ -274,6 +279,12 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         return mSelectionArgs.toArray(new String[size]);
     }
 
+    /**
+     * Returns the order string produced by this object.
+     */
+    public String order() {
+        return mOrderBy.length() > 0 ? mOrderBy.toString() : null;
+    }
 
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
@@ -302,7 +313,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     /**
      * Deletes row(s) specified by this selection.
      *
-     * @param Context the context to use.
+     * @param context The context to use.
      * @return The number of rows deleted.
      */
     public int delete(Context context) {
@@ -331,5 +342,35 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     public T limit(int limit) {
         mLimit = limit;
         return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T orderBy(String order, boolean desc) {
+        if (mOrderBy.length() > 0) mOrderBy.append(COMMA);
+        mOrderBy.append(order);
+        if (desc) mOrderBy.append(DESC);
+        return (T) this;
+    }
+
+    public T orderBy(String order) {
+        return orderBy(order, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public T orderBy(String... orders) {
+        for (String order : orders) {
+            orderBy(order, false);
+        }
+        return (T) this;
+    }
+
+    public int count(ContentResolver resolver) {
+        Cursor cursor = resolver.query(uri(), new String[] { COUNT }, sel(), args(), null);
+        if (cursor == null) return 0;
+        try {
+            return cursor.moveToFirst() ? cursor.getInt(0) : 0;
+        } finally {
+            cursor.close();
+        }
     }
 }
