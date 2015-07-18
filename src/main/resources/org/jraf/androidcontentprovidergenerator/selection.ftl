@@ -87,6 +87,20 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
         addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
         return this;
     }
+
+    public ${entity.nameCamelCase}Selection idNot(long... value) {
+        addNotEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderById(boolean desc) {
+        orderBy("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, desc);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderById() {
+        return orderById(false);
+    }
     <#list entity.getFieldsIncludingJoins() as field>
     <#if field.nameLowerCase != "_id">
     <#switch field.type.name()>
@@ -243,6 +257,16 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
     <#break>
     </#switch>
+
+    public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>(boolean desc) {
+        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, desc);
+        return this;
+    }
+
+    public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>() {
+        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, false);
+        return this;
+    }
     </#if>
     </#list>
 }

@@ -33,9 +33,12 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String STARTS = " LIKE ? || '%'";
     private static final String ENDS = " LIKE '%' || ?";
     private static final String COUNT = "COUNT(*)";
+    private static final String DESC = " DESC";
 
     private final StringBuilder mSelection = new StringBuilder();
     private final List<String> mSelectionArgs = new ArrayList<String>(5);
+
+    private final StringBuilder mOrderBy = new StringBuilder();
 
     Boolean mNotify;
     String mGroupBy;
@@ -276,6 +279,12 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         return mSelectionArgs.toArray(new String[size]);
     }
 
+    /**
+     * Returns the order string produced by this object.
+     */
+    public String order() {
+        return mOrderBy.length() > 0 ? mOrderBy.toString() : null;
+    }
 
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
@@ -335,10 +344,21 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
+    public T orderBy(String order, boolean desc) {
+        if (mOrderBy.length() > 0) mOrderBy.append(COMMA);
+        mOrderBy.append(order);
+        if (desc) mOrderBy.append(DESC);
+        return (T) this;
+    }
+
+    public T orderBy(String order) {
+        return orderBy(order, false);
+    }
+
     public int count(ContentResolver resolver) {
         final Cursor cursor = resolver.query(uri(), new String[]{COUNT}, sel(), args(), null);
-        if (cursor == null)
-            return 0;
+        if (cursor == null) return 0;
         try {
             return cursor.moveToFirst() ? cursor.getInt(0) : 0;
         } finally {
