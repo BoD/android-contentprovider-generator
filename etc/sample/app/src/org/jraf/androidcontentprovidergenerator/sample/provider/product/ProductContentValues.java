@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -50,6 +51,16 @@ public class ProductContentValues extends AbstractContentValues {
      */
     public int update(ContentResolver contentResolver, @Nullable ProductSelection where) {
         return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
+    }
+
+    /**
+     * Update row(s) using the values stored by this object and the given selection.
+     *
+     * @param contentResolver The content resolver to use.
+     * @param where The selection to use (can be {@code null}).
+     */
+    public int update(Context context, @Nullable ProductSelection where) {
+        return context.getContentResolver().update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
     public ProductContentValues putProductId(long value) {

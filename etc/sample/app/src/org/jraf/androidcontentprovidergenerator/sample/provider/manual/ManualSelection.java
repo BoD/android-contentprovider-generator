@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.manual;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,34 +47,59 @@ public class ManualSelection extends AbstractSelection<ManualSelection> {
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code ManualCursor} object, which is positioned before the first entry, or null.
      */
-    public ManualCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public ManualCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new ManualCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public ManualCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public ManualCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code ManualCursor} object, which is positioned before the first entry, or null.
      */
-    public ManualCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public ManualCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new ManualCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public ManualCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public ManualSelection id(long... value) {
         addEquals("manual." + ManualColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public ManualSelection idNot(long... value) {
+        addNotEquals("manual." + ManualColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public ManualSelection orderById(boolean desc) {
+        orderBy("manual." + ManualColumns._ID, desc);
+        return this;
+    }
+
+    public ManualSelection orderById() {
+        return orderById(false);
     }
 
     public ManualSelection title(String... value) {
@@ -106,6 +132,16 @@ public class ManualSelection extends AbstractSelection<ManualSelection> {
         return this;
     }
 
+    public ManualSelection orderByTitle(boolean desc) {
+        orderBy(ManualColumns.TITLE, desc);
+        return this;
+    }
+
+    public ManualSelection orderByTitle() {
+        orderBy(ManualColumns.TITLE, false);
+        return this;
+    }
+
     public ManualSelection isbn(String... value) {
         addEquals(ManualColumns.ISBN, value);
         return this;
@@ -133,6 +169,16 @@ public class ManualSelection extends AbstractSelection<ManualSelection> {
 
     public ManualSelection isbnEndsWith(String... value) {
         addEndsWith(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ManualSelection orderByIsbn(boolean desc) {
+        orderBy(ManualColumns.ISBN, desc);
+        return this;
+    }
+
+    public ManualSelection orderByIsbn() {
+        orderBy(ManualColumns.ISBN, false);
         return this;
     }
 }

@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -51,34 +52,59 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code PersonTeamCursor} object, which is positioned before the first entry, or null.
      */
-    public PersonTeamCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public PersonTeamCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new PersonTeamCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public PersonTeamCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public PersonTeamCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code PersonTeamCursor} object, which is positioned before the first entry, or null.
      */
-    public PersonTeamCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public PersonTeamCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new PersonTeamCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public PersonTeamCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public PersonTeamSelection id(long... value) {
         addEquals("person_team." + PersonTeamColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public PersonTeamSelection idNot(long... value) {
+        addNotEquals("person_team." + PersonTeamColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection orderById(boolean desc) {
+        orderBy("person_team." + PersonTeamColumns._ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderById() {
+        return orderById(false);
     }
 
     public PersonTeamSelection personId(long... value) {
@@ -108,6 +134,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection personIdLtEq(long value) {
         addLessThanOrEquals(PersonTeamColumns.PERSON_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonId(boolean desc) {
+        orderBy(PersonTeamColumns.PERSON_ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonId() {
+        orderBy(PersonTeamColumns.PERSON_ID, false);
         return this;
     }
 
@@ -141,6 +177,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByPersonFirstName(boolean desc) {
+        orderBy(PersonColumns.FIRST_NAME, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonFirstName() {
+        orderBy(PersonColumns.FIRST_NAME, false);
+        return this;
+    }
+
     public PersonTeamSelection personLastName(String... value) {
         addEquals(PersonColumns.LAST_NAME, value);
         return this;
@@ -171,6 +217,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByPersonLastName(boolean desc) {
+        orderBy(PersonColumns.LAST_NAME, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonLastName() {
+        orderBy(PersonColumns.LAST_NAME, false);
+        return this;
+    }
+
     public PersonTeamSelection personAge(int... value) {
         addEquals(PersonColumns.AGE, toObjectArray(value));
         return this;
@@ -198,6 +254,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection personAgeLtEq(int value) {
         addLessThanOrEquals(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonAge(boolean desc) {
+        orderBy(PersonColumns.AGE, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonAge() {
+        orderBy(PersonColumns.AGE, false);
         return this;
     }
 
@@ -236,8 +302,28 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByPersonBirthDate(boolean desc) {
+        orderBy(PersonColumns.BIRTH_DATE, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonBirthDate() {
+        orderBy(PersonColumns.BIRTH_DATE, false);
+        return this;
+    }
+
     public PersonTeamSelection personHasBlueEyes(boolean value) {
         addEquals(PersonColumns.HAS_BLUE_EYES, toObjectArray(value));
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonHasBlueEyes(boolean desc) {
+        orderBy(PersonColumns.HAS_BLUE_EYES, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonHasBlueEyes() {
+        orderBy(PersonColumns.HAS_BLUE_EYES, false);
         return this;
     }
 
@@ -271,6 +357,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByPersonHeight(boolean desc) {
+        orderBy(PersonColumns.HEIGHT, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonHeight() {
+        orderBy(PersonColumns.HEIGHT, false);
+        return this;
+    }
+
     public PersonTeamSelection personGender(Gender... value) {
         addEquals(PersonColumns.GENDER, value);
         return this;
@@ -281,6 +377,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+
+    public PersonTeamSelection orderByPersonGender(boolean desc) {
+        orderBy(PersonColumns.GENDER, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonGender() {
+        orderBy(PersonColumns.GENDER, false);
+        return this;
+    }
 
     public PersonTeamSelection personCountryCode(String... value) {
         addEquals(PersonColumns.COUNTRY_CODE, value);
@@ -309,6 +415,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection personCountryCodeEndsWith(String... value) {
         addEndsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonCountryCode(boolean desc) {
+        orderBy(PersonColumns.COUNTRY_CODE, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByPersonCountryCode() {
+        orderBy(PersonColumns.COUNTRY_CODE, false);
         return this;
     }
 
@@ -342,6 +458,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamId(boolean desc) {
+        orderBy(PersonTeamColumns.TEAM_ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamId() {
+        orderBy(PersonTeamColumns.TEAM_ID, false);
+        return this;
+    }
+
     public PersonTeamSelection teamCompanyId(long... value) {
         addEquals(TeamColumns.COMPANY_ID, toObjectArray(value));
         return this;
@@ -369,6 +495,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCompanyIdLtEq(long value) {
         addLessThanOrEquals(TeamColumns.COMPANY_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanyId(boolean desc) {
+        orderBy(TeamColumns.COMPANY_ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanyId() {
+        orderBy(TeamColumns.COMPANY_ID, false);
         return this;
     }
 
@@ -402,6 +538,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamCompanyName(boolean desc) {
+        orderBy(CompanyColumns.NAME, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanyName() {
+        orderBy(CompanyColumns.NAME, false);
+        return this;
+    }
+
     public PersonTeamSelection teamCompanyAddress(String... value) {
         addEquals(CompanyColumns.ADDRESS, value);
         return this;
@@ -429,6 +575,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCompanyAddressEndsWith(String... value) {
         addEndsWith(CompanyColumns.ADDRESS, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanyAddress(boolean desc) {
+        orderBy(CompanyColumns.ADDRESS, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanyAddress() {
+        orderBy(CompanyColumns.ADDRESS, false);
         return this;
     }
 
@@ -462,6 +618,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamCompanySerialNumberId(boolean desc) {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanySerialNumberId() {
+        orderBy(CompanyColumns.SERIAL_NUMBER_ID, false);
+        return this;
+    }
+
     public PersonTeamSelection teamCompanySerialNumberPart0(String... value) {
         addEquals(SerialNumberColumns.PART0, value);
         return this;
@@ -489,6 +655,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamCompanySerialNumberPart0EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART0, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanySerialNumberPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanySerialNumberPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
         return this;
     }
 
@@ -522,6 +698,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamCompanySerialNumberPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCompanySerialNumberPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
+        return this;
+    }
+
     public PersonTeamSelection teamName(String... value) {
         addEquals(TeamColumns.NAME, value);
         return this;
@@ -549,6 +735,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamNameEndsWith(String... value) {
         addEndsWith(TeamColumns.NAME, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamName(boolean desc) {
+        orderBy(TeamColumns.NAME, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamName() {
+        orderBy(TeamColumns.NAME, false);
         return this;
     }
 
@@ -582,6 +778,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamCountryCode(boolean desc) {
+        orderBy(TeamColumns.COUNTRY_CODE, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamCountryCode() {
+        orderBy(TeamColumns.COUNTRY_CODE, false);
+        return this;
+    }
+
     public PersonTeamSelection teamSerialNumberId(long... value) {
         addEquals(TeamColumns.SERIAL_NUMBER_ID, toObjectArray(value));
         return this;
@@ -609,6 +815,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamSerialNumberIdLtEq(long value) {
         addLessThanOrEquals(TeamColumns.SERIAL_NUMBER_ID, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamSerialNumberId(boolean desc) {
+        orderBy(TeamColumns.SERIAL_NUMBER_ID, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamSerialNumberId() {
+        orderBy(TeamColumns.SERIAL_NUMBER_ID, false);
         return this;
     }
 
@@ -642,6 +858,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
         return this;
     }
 
+    public PersonTeamSelection orderByTeamSerialNumberPart0(boolean desc) {
+        orderBy(SerialNumberColumns.PART0, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamSerialNumberPart0() {
+        orderBy(SerialNumberColumns.PART0, false);
+        return this;
+    }
+
     public PersonTeamSelection teamSerialNumberPart1(String... value) {
         addEquals(SerialNumberColumns.PART1, value);
         return this;
@@ -669,6 +895,16 @@ public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> 
 
     public PersonTeamSelection teamSerialNumberPart1EndsWith(String... value) {
         addEndsWith(SerialNumberColumns.PART1, value);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamSerialNumberPart1(boolean desc) {
+        orderBy(SerialNumberColumns.PART1, desc);
+        return this;
+    }
+
+    public PersonTeamSelection orderByTeamSerialNumberPart1() {
+        orderBy(SerialNumberColumns.PART1, false);
         return this;
     }
 }

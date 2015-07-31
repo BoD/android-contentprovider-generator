@@ -313,7 +313,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     /**
      * Deletes row(s) specified by this selection.
      *
-     * @param Context the context to use.
+     * @param context The context to use.
      * @return The number of rows deleted.
      */
     public int delete(Context context) {
@@ -356,8 +356,16 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         return orderBy(order, false);
     }
 
+    @SuppressWarnings("unchecked")
+    public T orderBy(String... orders) {
+        for (String order : orders) {
+            orderBy(order, false);
+        }
+        return (T) this;
+    }
+
     public int count(ContentResolver resolver) {
-        final Cursor cursor = resolver.query(uri(), new String[]{COUNT}, sel(), args(), null);
+        Cursor cursor = resolver.query(uri(), new String[] { COUNT }, sel(), args(), null);
         if (cursor == null) return 0;
         try {
             return cursor.moveToFirst() ? cursor.getInt(0) : 0;
