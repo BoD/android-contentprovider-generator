@@ -242,6 +242,7 @@ I did not have the chance to try them out.
 - http://robotoworks.com/mechanoid/doc/db/api.html
 - https://github.com/robUx4/android-contentprovider-generator (a fork of this project that generates more code)
 - https://github.com/novoda/sqlite-analyzer (based on sql statements, not json)
+- https://github.com/ckurtm/simple-sql-provider
 
 
 Licence
