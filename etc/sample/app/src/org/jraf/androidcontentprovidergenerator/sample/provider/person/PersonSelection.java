@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.person;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -46,34 +47,59 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code PersonCursor} object, which is positioned before the first entry, or null.
      */
-    public PersonCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public PersonCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new PersonCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public PersonCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public PersonCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code PersonCursor} object, which is positioned before the first entry, or null.
      */
-    public PersonCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public PersonCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new PersonCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public PersonCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public PersonSelection id(long... value) {
         addEquals("person." + PersonColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public PersonSelection idNot(long... value) {
+        addNotEquals("person." + PersonColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public PersonSelection orderById(boolean desc) {
+        orderBy("person." + PersonColumns._ID, desc);
+        return this;
+    }
+
+    public PersonSelection orderById() {
+        return orderById(false);
     }
 
     public PersonSelection firstName(String... value) {
@@ -103,6 +129,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection firstNameEndsWith(String... value) {
         addEndsWith(PersonColumns.FIRST_NAME, value);
+        return this;
+    }
+
+    public PersonSelection orderByFirstName(boolean desc) {
+        orderBy(PersonColumns.FIRST_NAME, desc);
+        return this;
+    }
+
+    public PersonSelection orderByFirstName() {
+        orderBy(PersonColumns.FIRST_NAME, false);
         return this;
     }
 
@@ -136,6 +172,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+    public PersonSelection orderByLastName(boolean desc) {
+        orderBy(PersonColumns.LAST_NAME, desc);
+        return this;
+    }
+
+    public PersonSelection orderByLastName() {
+        orderBy(PersonColumns.LAST_NAME, false);
+        return this;
+    }
+
     public PersonSelection age(int... value) {
         addEquals(PersonColumns.AGE, toObjectArray(value));
         return this;
@@ -163,6 +209,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection ageLtEq(int value) {
         addLessThanOrEquals(PersonColumns.AGE, value);
+        return this;
+    }
+
+    public PersonSelection orderByAge(boolean desc) {
+        orderBy(PersonColumns.AGE, desc);
+        return this;
+    }
+
+    public PersonSelection orderByAge() {
+        orderBy(PersonColumns.AGE, false);
         return this;
     }
 
@@ -201,8 +257,28 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+    public PersonSelection orderByBirthDate(boolean desc) {
+        orderBy(PersonColumns.BIRTH_DATE, desc);
+        return this;
+    }
+
+    public PersonSelection orderByBirthDate() {
+        orderBy(PersonColumns.BIRTH_DATE, false);
+        return this;
+    }
+
     public PersonSelection hasBlueEyes(boolean value) {
         addEquals(PersonColumns.HAS_BLUE_EYES, toObjectArray(value));
+        return this;
+    }
+
+    public PersonSelection orderByHasBlueEyes(boolean desc) {
+        orderBy(PersonColumns.HAS_BLUE_EYES, desc);
+        return this;
+    }
+
+    public PersonSelection orderByHasBlueEyes() {
+        orderBy(PersonColumns.HAS_BLUE_EYES, false);
         return this;
     }
 
@@ -236,6 +312,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+    public PersonSelection orderByHeight(boolean desc) {
+        orderBy(PersonColumns.HEIGHT, desc);
+        return this;
+    }
+
+    public PersonSelection orderByHeight() {
+        orderBy(PersonColumns.HEIGHT, false);
+        return this;
+    }
+
     public PersonSelection gender(Gender... value) {
         addEquals(PersonColumns.GENDER, value);
         return this;
@@ -246,6 +332,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
         return this;
     }
 
+
+    public PersonSelection orderByGender(boolean desc) {
+        orderBy(PersonColumns.GENDER, desc);
+        return this;
+    }
+
+    public PersonSelection orderByGender() {
+        orderBy(PersonColumns.GENDER, false);
+        return this;
+    }
 
     public PersonSelection countryCode(String... value) {
         addEquals(PersonColumns.COUNTRY_CODE, value);
@@ -274,6 +370,16 @@ public class PersonSelection extends AbstractSelection<PersonSelection> {
 
     public PersonSelection countryCodeEndsWith(String... value) {
         addEndsWith(PersonColumns.COUNTRY_CODE, value);
+        return this;
+    }
+
+    public PersonSelection orderByCountryCode(boolean desc) {
+        orderBy(PersonColumns.COUNTRY_CODE, desc);
+        return this;
+    }
+
+    public PersonSelection orderByCountryCode() {
+        orderBy(PersonColumns.COUNTRY_CODE, false);
         return this;
     }
 }

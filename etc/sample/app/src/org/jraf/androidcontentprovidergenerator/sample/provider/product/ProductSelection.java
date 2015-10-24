@@ -26,6 +26,7 @@ package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
 import java.util.Date;
 
+import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -47,34 +48,59 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
      *
      * @param contentResolver The content resolver to query.
      * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
-     * @param sortOrder How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort
-     *            order, which may be unordered.
      * @return A {@code ProductCursor} object, which is positioned before the first entry, or null.
      */
-    public ProductCursor query(ContentResolver contentResolver, String[] projection, String sortOrder) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), sortOrder);
+    public ProductCursor query(ContentResolver contentResolver, String[] projection) {
+        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
         if (cursor == null) return null;
         return new ProductCursor(cursor);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null)}.
+     * Equivalent of calling {@code query(contentResolver, null)}.
      */
-    public ProductCursor query(ContentResolver contentResolver, String[] projection) {
-        return query(contentResolver, projection, null);
+    public ProductCursor query(ContentResolver contentResolver) {
+        return query(contentResolver, null);
     }
 
     /**
-     * Equivalent of calling {@code query(contentResolver, projection, null, null)}.
+     * Query the given content resolver using this selection.
+     *
+     * @param context The context to use for the query.
+     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
+     * @return A {@code ProductCursor} object, which is positioned before the first entry, or null.
      */
-    public ProductCursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null, null);
+    public ProductCursor query(Context context, String[] projection) {
+        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+        if (cursor == null) return null;
+        return new ProductCursor(cursor);
+    }
+
+    /**
+     * Equivalent of calling {@code query(context, null)}.
+     */
+    public ProductCursor query(Context context) {
+        return query(context, null);
     }
 
 
     public ProductSelection id(long... value) {
         addEquals("product." + ProductColumns._ID, toObjectArray(value));
         return this;
+    }
+
+    public ProductSelection idNot(long... value) {
+        addNotEquals("product." + ProductColumns._ID, toObjectArray(value));
+        return this;
+    }
+
+    public ProductSelection orderById(boolean desc) {
+        orderBy("product." + ProductColumns._ID, desc);
+        return this;
+    }
+
+    public ProductSelection orderById() {
+        return orderById(false);
     }
 
     public ProductSelection productId(long... value) {
@@ -104,6 +130,16 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
 
     public ProductSelection productIdLtEq(long value) {
         addLessThanOrEquals(ProductColumns.PRODUCT_ID, value);
+        return this;
+    }
+
+    public ProductSelection orderByProductId(boolean desc) {
+        orderBy(ProductColumns.PRODUCT_ID, desc);
+        return this;
+    }
+
+    public ProductSelection orderByProductId() {
+        orderBy(ProductColumns.PRODUCT_ID, false);
         return this;
     }
 
@@ -137,6 +173,16 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
         return this;
     }
 
+    public ProductSelection orderByName(boolean desc) {
+        orderBy(ProductColumns.NAME, desc);
+        return this;
+    }
+
+    public ProductSelection orderByName() {
+        orderBy(ProductColumns.NAME, false);
+        return this;
+    }
+
     public ProductSelection manualId(Long... value) {
         addEquals(ProductColumns.MANUAL_ID, value);
         return this;
@@ -164,6 +210,16 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
 
     public ProductSelection manualIdLtEq(long value) {
         addLessThanOrEquals(ProductColumns.MANUAL_ID, value);
+        return this;
+    }
+
+    public ProductSelection orderByManualId(boolean desc) {
+        orderBy(ProductColumns.MANUAL_ID, desc);
+        return this;
+    }
+
+    public ProductSelection orderByManualId() {
+        orderBy(ProductColumns.MANUAL_ID, false);
         return this;
     }
 
@@ -197,6 +253,16 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
         return this;
     }
 
+    public ProductSelection orderByManualTitle(boolean desc) {
+        orderBy(ManualColumns.TITLE, desc);
+        return this;
+    }
+
+    public ProductSelection orderByManualTitle() {
+        orderBy(ManualColumns.TITLE, false);
+        return this;
+    }
+
     public ProductSelection manualIsbn(String... value) {
         addEquals(ManualColumns.ISBN, value);
         return this;
@@ -224,6 +290,16 @@ public class ProductSelection extends AbstractSelection<ProductSelection> {
 
     public ProductSelection manualIsbnEndsWith(String... value) {
         addEndsWith(ManualColumns.ISBN, value);
+        return this;
+    }
+
+    public ProductSelection orderByManualIsbn(boolean desc) {
+        orderBy(ManualColumns.ISBN, desc);
+        return this;
+    }
+
+    public ProductSelection orderByManualIsbn() {
+        orderBy(ManualColumns.ISBN, false);
         return this;
     }
 }
