@@ -1,0 +1,7 @@
+/**
+ * Use gradle's application plugin to distribute this project as a command-line application, by running `gradle installDist`.
+ */
+
+apply plugin: 'application'
+
+mainClassName = 'org.jraf.androidcontentprovidergenerator.Main'

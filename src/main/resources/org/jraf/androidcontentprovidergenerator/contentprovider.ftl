@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 </#if>
 import android.util.Log;
 
-import ${config.projectPackageId}.BuildConfig;
 import ${config.providerJavaPackage}.base.BaseContentProvider;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
@@ -24,7 +23,7 @@ import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCas
 public class ${config.providerClassName} extends BaseContentProvider {
     private static final String TAG = ${config.providerClassName}.class.getSimpleName();
 
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = Boolean.parseBoolean("${debug?c}");
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";

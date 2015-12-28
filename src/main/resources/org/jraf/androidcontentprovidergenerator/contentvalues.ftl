@@ -31,17 +31,17 @@ public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues 
      * @param where The selection to use (can be {@code null}).
      */
     public int update(ContentResolver contentResolver, <#if config.useAnnotations>@Nullable</#if> ${entity.nameCamelCase}Selection where) {
-        return contentResolver.update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
+        return contentResolver.update(where.uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
 
     /**
      * Update row(s) using the values stored by this object and the given selection.
      *
-     * @param contentResolver The content resolver to use.
+     * @param context The content resolver from which to use.
      * @param where The selection to use (can be {@code null}).
      */
     public int update(Context context, <#if config.useAnnotations>@Nullable</#if> ${entity.nameCamelCase}Selection where) {
-        return context.getContentResolver().update(uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
+        return context.getContentResolver().update(where.uri(), values(), where == null ? null : where.sel(), where == null ? null : where.args());
     }
     <#list entity.fields as field>
         <#if field.nameLowerCase != "_id">
