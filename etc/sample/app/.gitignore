@@ -1,1 +1,4 @@
-/bin
+*.iml
+local.properties
+.gradle
+build
