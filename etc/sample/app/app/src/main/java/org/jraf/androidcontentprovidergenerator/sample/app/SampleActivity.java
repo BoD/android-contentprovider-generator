@@ -43,9 +43,9 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamSelecti
 public class SampleActivity extends Activity {
     private static final String TAG = SampleActivity.class.getSimpleName();
 
-    private static final String[] FIRST_NAMES = { "James", "John", "Robert", "Michael", "William", "David", "Richard", "Charles", "Joseph", "Thomas", };
-    private static final String[] LAST_NAMES = { "SMITH", "JOHNSON", "WILLIAMS", "BROWN", "JONES", "MILLER", "DAVIS", "GARCIA", "RODRIGUEZ", "WILSON", };
-    private static final String[] COUNTRY_CODES = { "fr", "uk", "us", "de", "be", };
+    private static final String[] FIRST_NAMES = {"James", "John", "Robert", "Michael", "William", "David", "Richard", "Charles", "Joseph", "Thomas",};
+    private static final String[] LAST_NAMES = {"SMITH", "JOHNSON", "WILLIAMS", "BROWN", "JONES", "MILLER", "DAVIS", "GARCIA", "RODRIGUEZ", "WILSON",};
+    private static final String[] COUNTRY_CODES = {"fr", "uk", "us", "de", "be",};
     private static long YEAR_IN_MS = 365 * 24 * 60 * 60 * 1000 * 1000L;
     private static final Random sRandom = new Random();
 
@@ -99,19 +99,20 @@ public class SampleActivity extends Activity {
     };
 
     private void queryPeople() {
+        // Query one person by some criteria
         PersonSelection personSelection = new PersonSelection();
         personSelection.firstName("James", "John").and().hasBlueEyes(true);
-        String[] projection = { PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE };
-        PersonCursor c = personSelection.query(getContentResolver(), projection);
+        String[] projection = {PersonColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE};
+        PersonCursor c = personSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }
         c.close();
 
-        // Query one person
+        // Query one person by id
         personSelection = new PersonSelection();
         personSelection.id(2);
-        c = personSelection.query(getContentResolver(), projection);
+        c = personSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }
@@ -131,7 +132,7 @@ public class SampleActivity extends Activity {
         Log.d(TAG, "---");
         personSelection = new PersonSelection();
         personSelection.lastNameEndsWith("SON").or().firstNameContains("ar", "ae").orderByLastName();
-        c = personSelection.query(getContentResolver(), projection);
+        c = personSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " - " + c.getFirstName() + " " + c.getLastName() + " (age: " + c.getAge() + ")");
         }
@@ -141,9 +142,9 @@ public class SampleActivity extends Activity {
     private void queryPeopleWithTeam() {
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
-        String[] projection = { PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
-                TeamColumns.NAME, TeamColumns.COUNTRY_CODE };
-        PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);
+        String[] projection = {PersonTeamColumns._ID, PersonColumns.FIRST_NAME, PersonColumns.LAST_NAME, PersonColumns.AGE, PersonColumns.COUNTRY_CODE,
+                TeamColumns.NAME, TeamColumns.COUNTRY_CODE};
+        PersonTeamCursor c = personTeamSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG, c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode()
                     + " ) - team: " + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ")");
@@ -152,9 +153,9 @@ public class SampleActivity extends Activity {
     }
 
     private void queryPeopleWithTeamAndCompany() {
+        // @formatter:off
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
         personTeamSelection.personFirstName("James", "John");
-        // @formatter:off
         String[] projection = {
                 PersonTeamColumns._ID,
                 PersonTeamColumns.PERSON_ID,
@@ -172,11 +173,9 @@ public class SampleActivity extends Activity {
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0", // In this case we need to manually prefix and alias
                 CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1", // In this case we need to manually prefix and alias
         };
-        // @formatter:on
-        PersonTeamCursor c = personTeamSelection.query(getContentResolver(), projection);
+        PersonTeamCursor c = personTeamSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG,
-                    // @formatter:off
                     c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode() + ")"
                     + " - "
                     + "team: "
@@ -184,16 +183,35 @@ public class SampleActivity extends Activity {
                     + " - "
                     + "company: "
                     + c.getTeamCompanyId() + " " + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
-            // @formatter:on
         }
         c.close();
+        // @formatter:on
     }
 
     private void queryTeamsWithCompany() {
+        // All teams, with all columns (null projection)
+        Log.d(TAG, "---");
         TeamSelection teamSelection = new TeamSelection();
+        TeamCursor c = teamSelection.query(this);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getName());
+        }
+        c.close();
+
+        // Teams with specific name (projection contains company columns)
+        teamSelection = new TeamSelection();
         teamSelection.name("Red Legends").orderByCompanySerialNumberId(true);
-        String[] projection = { TeamColumns._ID, TeamColumns.NAME, CompanyColumns.NAME, };
-        TeamCursor c = teamSelection.query(getContentResolver(), projection);
+        String[] projection = {TeamColumns._ID, TeamColumns.NAME, CompanyColumns.NAME,};
+        c = teamSelection.query(this, projection);
+        while (c.moveToNext()) {
+            Log.d(TAG, c.getId() + " " + c.getName() + " - company: " + c.getCompanyName());
+        }
+        c.close();
+
+        // Teams with specific id (null projection)
+        teamSelection = new TeamSelection();
+        teamSelection.id(0);
+        c = teamSelection.query(this);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " " + c.getName() + " - company: " + c.getCompanyName());
         }
@@ -202,7 +220,7 @@ public class SampleActivity extends Activity {
 
     private void queryProductsWithManual() {
         ProductSelection productSelection = new ProductSelection();
-        ProductCursor c = productSelection.query(getContentResolver());
+        ProductCursor c = productSelection.query(this);
         while (c.moveToNext()) {
             Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
         }
@@ -212,15 +230,15 @@ public class SampleActivity extends Activity {
     private void deleteBase() {
         // Delete person-teams first
         PersonTeamSelection personTeamSelection = new PersonTeamSelection();
-        personTeamSelection.delete(getContentResolver());
+        personTeamSelection.delete(this);
 
         // Now delete companies (which should also delete teams because of the "on delete cascade" constraint
         CompanySelection companySelection = new CompanySelection();
-        companySelection.delete(getContentResolver());
+        companySelection.delete(this);
 
         // Now delete persons
         PersonSelection personSelection = new PersonSelection();
-        personSelection.delete(getContentResolver());
+        personSelection.delete(this);
     }
 
     @SuppressWarnings("null")
@@ -298,7 +316,7 @@ public class SampleActivity extends Activity {
         values.putName(name);
         values.putManualId(manualId);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -312,7 +330,7 @@ public class SampleActivity extends Activity {
         values.putTitle(title);
         values.putIsbn(isbn);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -326,7 +344,7 @@ public class SampleActivity extends Activity {
         values.putPart0(part0);
         values.putPart1(part1);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -341,7 +359,7 @@ public class SampleActivity extends Activity {
         values.putAddress(address);
         values.putSerialNumberId(serialNumberId);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -357,7 +375,7 @@ public class SampleActivity extends Activity {
         values.putCountryCode(countryCode);
         values.putSerialNumberId(serialNumberId);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -367,7 +385,7 @@ public class SampleActivity extends Activity {
      * @return the id of the created person.
      */
     private long insertPerson(long mainTeamId, long secondaryTeamId, @NonNull String firstName, @NonNull String lastName, int age, Date birthDate,
-            boolean hasBlueEyes, Float height, @NonNull Gender gender, @NonNull String countryCode) {
+                              boolean hasBlueEyes, Float height, @NonNull Gender gender, @NonNull String countryCode) {
         PersonContentValues values = new PersonContentValues();
         values.putFirstName(firstName);
         values.putLastName(lastName);
@@ -378,7 +396,7 @@ public class SampleActivity extends Activity {
         values.putGender(gender);
         values.putCountryCode(countryCode);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
@@ -392,17 +410,21 @@ public class SampleActivity extends Activity {
         values.putPersonId(personId);
         values.putTeamId(teamId);
 
-        Uri uri = values.insert(getContentResolver());
+        Uri uri = values.insert(this);
         return ContentUris.parseId(uri);
     }
 
     @SuppressWarnings("null")
-    private static @NonNull String getRandomFirstName() {
+    private static
+    @NonNull
+    String getRandomFirstName() {
         return FIRST_NAMES[sRandom.nextInt(FIRST_NAMES.length)];
     }
 
     @SuppressWarnings("null")
-    private static @NonNull String getRandomLastName() {
+    private static
+    @NonNull
+    String getRandomLastName() {
         return LAST_NAMES[sRandom.nextInt(LAST_NAMES.length)];
     }
 }
