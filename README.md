@@ -135,7 +135,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 ```java
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42);
-Cursor c = context.getContentResolver().query(PersonColumns.CONTENT_URI, projection,
+Cursor c = context.getContentResolver().query(where.uri(), projection,
         where.sel(), where.args(), null);
 ```
 - When using the results of a query, wrap the resulting `Cursor` in the corresponding wrapper class.  You can then use
@@ -151,7 +151,7 @@ Long age = person.getAge();
 ```java
 PersonSelection where = new PersonSelection();
 where.firstName("John").or().age(42).orderByFirstName();
-PersonCursor person = where.query(getContentResolver());
+PersonCursor person = where.query(context);
 person.moveToNext();
 String lastName = person.getLastName();
 Long age = person.getAge();
@@ -161,7 +161,11 @@ Long age = person.getAge();
 ```java
 PersonContentValues values = new PersonContentValues();
 values.putFirstName("John").putAge(42);
-context.getContentResolver().update(personUri, values.values(), null, null);
+context.getContentResolver().update(values.uri(), values.values(), null, null);
+```
+or
+```
+values.insert(context);
 ```
 
 
@@ -195,9 +199,12 @@ Here is an example of the syntax:
 ```
 In this example, the field `main_team_id` is a foreign key referencing the primary key of the `team` table.
 - The appropriate `FOREIGN KEY` SQL constraint is generated (if `enableForeignKeys` is set to `true` in `_config.json`).
-- The `team` table will be automatically joined when querying the `person` table (only if any `team` columns are included in the projection).
+- The `team` table will be automatically joined when querying the `person` table `[1]`.
 - Getters for `team` columns are generated in the `PersonCursor` wrapper.
 - Of course if `team` has foreign keys they will also be handled (and recursively).
+
+`[1]` A table is automatically joined if at least one of its columns is included in the projection.
+If the projection is `null` (i.e. all columns), all the tables are joined.
 
 #### Limitations
 - Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
