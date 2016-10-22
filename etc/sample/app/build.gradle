@@ -1,49 +1,27 @@
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
-}
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
 allprojects {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
-apply plugin: 'com.android.application'
-
-android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
-
-    defaultConfig {
-        applicationId 'org.jraf.androidcontentprovidergenerator'
-        minSdkVersion 7
-        targetSdkVersion 25
-        versionCode 1
-        versionName '1.0'
-    }
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
-        }
-    }
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
 
-dependencies {
-    compile 'com.android.support:support-annotations:25.0.0'
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
 }
