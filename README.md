@@ -204,7 +204,8 @@ In this example, the field `main_team_id` is a foreign key referencing the prima
 - Of course if `team` has foreign keys they will also be handled (and recursively).
 
 `[1]` A table is automatically joined if at least one of its columns is included in the projection.
-If the projection is `null` (i.e. all columns), all the tables are joined.
+If the projection is `null` (i.e. all columns), all the tables are joined. Caution: you should be extra careful when using a `null` projection
+with joins because you will get several columns named `_id` in the results!
 
 #### Limitations
 - Foreign keys always reference the `_id` column (the implicit primary key of all tables) and thus must always be of type `Long`  - by design.
