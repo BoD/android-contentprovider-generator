@@ -1,5 +1,5 @@
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.2'
 }
 
 buildscript {
@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.0.0'
+        classpath 'com.android.tools.build:gradle:2.2.2'
     }
 }
 
@@ -20,15 +20,15 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.2"
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "org.jraf.androidcontentprovidergenerator"
+        applicationId 'org.jraf.androidcontentprovidergenerator'
         minSdkVersion 7
-        targetSdkVersion 21
+        targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName '1.0'
     }
 
     sourceSets {
@@ -45,5 +45,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-annotations:21.0.3'
+    compile 'com.android.support:support-annotations:25.0.0'
 }
