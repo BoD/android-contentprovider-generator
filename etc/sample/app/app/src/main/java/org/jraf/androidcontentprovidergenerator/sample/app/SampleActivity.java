@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-import android.app.Activity;
 import android.content.ContentUris;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -12,6 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,7 +42,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamContent
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamCursor;
 import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamSelection;
 
-public class SampleActivity extends Activity {
+public class SampleActivity extends AppCompatActivity {
     private static final String TAG = SampleActivity.class.getSimpleName();
 
     private static final String[] FIRST_NAMES = {"James", "John", "Robert", "Michael", "William", "David", "Richard", "Charles", "Joseph", "Thomas",};
@@ -219,12 +221,26 @@ public class SampleActivity extends Activity {
     }
 
     private void queryProductsWithManual() {
-        ProductSelection productSelection = new ProductSelection();
-        ProductCursor c = productSelection.query(this);
-        while (c.moveToNext()) {
-            Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
-        }
-        c.close();
+        // Demonstrate the getCursorLoader convenience method of Selection
+        getSupportLoaderManager().initLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+                ProductSelection productSelection = new ProductSelection();
+                return productSelection.getCursorLoader(SampleActivity.this);
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+                ProductCursor c = new ProductCursor(cursor);
+                while (c.moveToNext()) {
+                    Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
+                }
+                c.close();
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {}
+        });
     }
 
     private void deleteBase() {

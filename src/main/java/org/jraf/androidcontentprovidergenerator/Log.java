@@ -40,6 +40,10 @@ public class Log {
 
     public static void w(String tag, String string, Throwable t) {
         System.out.println(FORMAT.format(new Date()) + " W/" + tag + " " + string);
-        t.printStackTrace();
+        if (t != null) t.printStackTrace();
+    }
+
+    public static void w(String tag, String string) {
+        w(tag, string, null);
     }
 }

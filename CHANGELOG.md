@@ -1,6 +1,12 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.10.0 (2016-10-23)
+------
+- Fix for issue #91.
+- New `useSupportLibrary` boolean parameter in config, to choose which implementation of `CursorLoader` to use.
+- Minor log cleanup.
+
 v1.9.3 (2015-07-18)
 ------
 - Updated content provider template to support ${applicationId} variable that is supported in the

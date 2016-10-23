@@ -33,7 +33,8 @@ These are self-explanatory so here is an example:
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
-	"useAnnotations": true
+	"useAnnotations": true,
+	"useSupportLibrary": true
 }
 ```
 
@@ -124,7 +125,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android_contentprovider_generator-1.9.3-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android_contentprovider_generator-1.10.0-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -232,7 +233,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android_contentprovider_generator-1.9.3-bundle.jar` in the `target` folder.
+This will produce `android_contentprovider_generator-1.10.0-bundle.jar` in the `target` folder.
 
 
 Similar tools

@@ -9,5 +9,6 @@
 	"databaseFileName": "sample.db",
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
-	"useAnnotations": true
+	"useAnnotations": true,
+	"useSupportLibrary": true
 }

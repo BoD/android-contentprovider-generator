@@ -75,6 +75,7 @@ public class Main {
         public static final String DATABASE_VERSION = "databaseVersion";
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
         public static final String USE_ANNOTATIONS = "useAnnotations";
+        public static final String USE_SUPPORT_LIBRARY = "useSupportLibrary";
     }
 
     private Configuration mFreemarkerConfig;
@@ -118,7 +119,6 @@ public class Main {
             int len = fieldsJson.length();
             for (int i = 0; i < len; i++) {
                 JSONObject fieldJson = fieldsJson.getJSONObject(i);
-                if (Config.LOGD) Log.d(TAG, "fieldJson=" + fieldJson);
                 String name = fieldJson.getString(Field.Json.NAME);
                 String fieldDocumentation = fieldJson.optString(Field.Json.DOCUMENTATION);
                 if (fieldDocumentation.isEmpty()) fieldDocumentation = null;
@@ -205,7 +205,6 @@ public class Main {
                 len = constraintsJson.length();
                 for (int i = 0; i < len; i++) {
                     JSONObject constraintJson = constraintsJson.getJSONObject(i);
-                    if (Config.LOGD) Log.d(TAG, "constraintJson=" + constraintJson);
                     String name = constraintJson.getString(Constraint.Json.NAME);
                     String definition = constraintJson.getString(Constraint.Json.DEFINITION);
                     Constraint constraint = new Constraint(name, definition);
@@ -221,7 +220,6 @@ public class Main {
             String header = FileUtils.readFileToString(headerFile).trim();
             Model.get().setHeader(header);
         }
-        if (Config.LOGD) Log.d(TAG, Model.get().toString());
     }
 
     private JSONObject getConfig(File inputDir) throws IOException, JSONException {
@@ -271,6 +269,7 @@ public class Main {
         ensureInt(Json.DATABASE_VERSION);
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
         ensureBoolean(Json.USE_ANNOTATIONS);
+        ensureBoolean(Json.USE_SUPPORT_LIBRARY, false);
     }
 
     private void ensureString(String field) {
@@ -286,6 +285,15 @@ public class Main {
             mConfig.getBoolean(field);
         } catch (JSONException e) {
             throw new IllegalArgumentException("Could not find '" + field + "' field in _config.json, which is mandatory and must be a boolean.");
+        }
+    }
+
+    private void ensureBoolean(String field, boolean defaultValue) {
+        try {
+            mConfig.getBoolean(field);
+        } catch (JSONException e) {
+            Log.w(TAG, "Could not find '" + field + "' field in _config.json (or it cannot be parsed as a boolean): assuming " + defaultValue + ".");
+            mConfig.put(field, defaultValue);
         }
     }
 
@@ -503,7 +511,7 @@ public class Main {
         root.put("model", Model.get());
         root.put("header", Model.get().getHeader());
 
-        Log.i(TAG, "\nProvider declaration to paste in the AndroidManifest.xml file: ");
+        Log.i(TAG, "\n\n\nProvider declaration to paste in the AndroidManifest.xml file: ");
         template.process(root, out);
     }
 
