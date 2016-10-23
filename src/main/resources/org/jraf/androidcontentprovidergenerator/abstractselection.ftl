@@ -39,6 +39,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private final List<String> mSelectionArgs = new ArrayList<String>(5);
 
     private final StringBuilder mOrderBy = new StringBuilder();
+    private final List<String> mProjection = new ArrayList<String>(5);
 
     Boolean mNotify;
     String mGroupBy;
@@ -287,6 +288,13 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     }
 
     /**
+     * Returns the projection produced by this object.
+     */
+    public String[] proj() {
+        return mProjection.isEmpty() ? null : mProjection.toArray(new String[mProjection.size()]);
+    }
+
+    /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
     public Uri uri() {
@@ -360,6 +368,14 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     public T orderBy(String... orders) {
         for (String order : orders) {
             orderBy(order, false);
+        }
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T forColumn(String... columns) {
+        for (String column : columns) {
+            mProjection.add(column);
         }
         return (T) this;
     }

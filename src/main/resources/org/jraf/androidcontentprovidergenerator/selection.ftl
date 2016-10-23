@@ -28,42 +28,39 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
      * Query the given content resolver using this selection.
      *
      * @param contentResolver The content resolver to query.
-     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
      * @return A {@code ${entity.nameCamelCase}Cursor} object, which is positioned before the first entry, or null.
      */
-    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver, String[] projection) {
-        Cursor cursor = contentResolver.query(uri(), projection, sel(), args(), order());
+    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
+        Cursor cursor = contentResolver.query(uri(), proj(), sel(), args(), order());
         if (cursor == null) return null;
         return new ${entity.nameCamelCase}Cursor(cursor);
-    }
-
-    /**
-     * Equivalent of calling {@code query(contentResolver, null)}.
-     */
-    public ${entity.nameCamelCase}Cursor query(ContentResolver contentResolver) {
-        return query(contentResolver, null);
     }
 
     /**
      * Query the given content resolver using this selection.
      *
      * @param context The context to use for the query.
-     * @param projection A list of which columns to return. Passing null will return all columns, which is inefficient.
      * @return A {@code ${entity.nameCamelCase}Cursor} object, which is positioned before the first entry, or null.
      */
-    public ${entity.nameCamelCase}Cursor query(Context context, String[] projection) {
-        Cursor cursor = context.getContentResolver().query(uri(), projection, sel(), args(), order());
+    public ${entity.nameCamelCase}Cursor query(Context context) {
+        Cursor cursor = context.getContentResolver().query(uri(), proj(), sel(), args(), order());
         if (cursor == null) return null;
         return new ${entity.nameCamelCase}Cursor(cursor);
     }
 
-    /**
-     * Equivalent of calling {@code query(context, null)}.
-     */
-    public ${entity.nameCamelCase}Cursor query(Context context) {
-        return query(context, null);
+    @Override
+    public String[] proj() {
+        String[] projection = super.proj();
+        return projection == null ? ${entity.nameCamelCase}Columns.ALL_COLUMNS : projection;
     }
 
+    public ${entity.nameCamelCase}Selection forAll${entity.nameCamelCase}Columns() {
+        return forColumn(${entity.nameCamelCase}Columns.ALL_COLUMNS);
+    }
+
+    public ${entity.nameCamelCase}Selection forId() {
+        return forColumn(${entity.nameCamelCase}Columns._ID);
+    }
 
     public ${entity.nameCamelCase}Selection id(long... value) {
         addEquals("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, toObjectArray(value));
@@ -76,8 +73,7 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     }
 
     public ${entity.nameCamelCase}Selection orderById(boolean desc) {
-        orderBy("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, desc);
-        return this;
+        return orderBy("${entity.nameLowerCase}." + ${entity.nameCamelCase}Columns._ID, desc);
     }
 
     public ${entity.nameCamelCase}Selection orderById() {
@@ -240,14 +236,16 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
     <#break>
     </#switch>
 
+    public ${entity.nameCamelCase}Selection for<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>() {
+        return forColumn(${field.entity.nameCamelCase}Columns.${field.nameUpperCase});
+    }
+
     public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>(boolean desc) {
-        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, desc);
-        return this;
+        return orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, desc);
     }
 
     public ${entity.nameCamelCase}Selection orderBy<#if field.isForeign>${field.path}${field.nameCamelCase}<#else>${field.nameCamelCase}</#if>() {
-        orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, false);
-        return this;
+        return orderBy(${field.entity.nameCamelCase}Columns.${field.nameUpperCase}, false);
     }
     </#if>
     </#list>
