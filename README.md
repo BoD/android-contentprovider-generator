@@ -139,6 +139,7 @@ where.firstName("John").or().age(42);
 Cursor c = context.getContentResolver().query(where.uri(), projection,
         where.sel(), where.args(), null);
 ```
+
 - When using the results of a query, wrap the resulting `Cursor` in the corresponding wrapper class.  You can then use
 the generated getters directly as shown in this example:
 
@@ -147,6 +148,7 @@ PersonCursor person = new PersonCursor(c);
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
+
 - You can also conveniently combine these two facilities by using the `query` (or `delete`) method:
 
 ```java
@@ -157,6 +159,11 @@ person.moveToNext();
 String lastName = person.getLastName();
 Long age = person.getAge();
 ```
+or, use a `CursorLoader`:
+```java
+where.getCursorLoader(context);
+```
+
 - When updating or inserting into a table, use the corresponding `ContentValues` class as shown in this example:
 
 ```java
@@ -165,7 +172,7 @@ values.putFirstName("John").putAge(42);
 context.getContentResolver().update(values.uri(), values.values(), null, null);
 ```
 or
-```
+```java
 values.insert(context);
 ```
 
