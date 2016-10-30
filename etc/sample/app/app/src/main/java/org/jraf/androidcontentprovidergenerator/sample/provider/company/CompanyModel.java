@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A commercial business.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface CompanyModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * The commercial name of this company.

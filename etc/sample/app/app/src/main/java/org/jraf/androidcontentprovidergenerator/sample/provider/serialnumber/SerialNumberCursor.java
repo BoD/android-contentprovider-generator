@@ -36,6 +36,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCur
 /**
  * Cursor wrapper for the {@code serial_number} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class SerialNumberCursor extends AbstractCursor implements SerialNumberModel {
     public SerialNumberCursor(Cursor cursor) {
         super(cursor);
@@ -44,6 +45,7 @@ public class SerialNumberCursor extends AbstractCursor implements SerialNumberMo
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(SerialNumberColumns._ID);
         if (res == null)
@@ -56,6 +58,7 @@ public class SerialNumberCursor extends AbstractCursor implements SerialNumberMo
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getPart0() {
         String res = getStringOrNull(SerialNumberColumns.PART0);
         if (res == null)
@@ -68,6 +71,7 @@ public class SerialNumberCursor extends AbstractCursor implements SerialNumberMo
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getPart1() {
         String res = getStringOrNull(SerialNumberColumns.PART1);
         if (res == null)

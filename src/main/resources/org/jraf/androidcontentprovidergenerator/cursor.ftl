@@ -20,6 +20,7 @@ import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
 /**
  * Cursor wrapper for the {@code ${entity.nameLowerCase}} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class ${entity.nameCamelCase}Cursor extends AbstractCursor implements ${entity.nameCamelCase}Model {
     public ${entity.nameCamelCase}Cursor(Cursor cursor) {
         super(cursor);
@@ -55,6 +56,9 @@ public class ${entity.nameCamelCase}Cursor extends AbstractCursor implements ${e
     @NonNull
             </#if>
         </#if>
+    </#if>
+    <#if !field.isForeign>
+    @Override
     </#if>
     public ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}() {
     <#switch field.type.name()>

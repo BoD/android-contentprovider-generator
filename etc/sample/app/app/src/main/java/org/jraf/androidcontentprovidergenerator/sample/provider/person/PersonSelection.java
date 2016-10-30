@@ -37,6 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
 /**
  * Selection for the {@code person} table.
  */
+@SuppressWarnings({"unused", "WeakerAccess", "Recycle"})
 public class PersonSelection extends AbstractSelection<PersonSelection> {
     @Override
     protected Uri baseUri() {

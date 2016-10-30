@@ -36,6 +36,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCur
 /**
  * Cursor wrapper for the {@code manual} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class ManualCursor extends AbstractCursor implements ManualModel {
     public ManualCursor(Cursor cursor) {
         super(cursor);
@@ -44,6 +45,7 @@ public class ManualCursor extends AbstractCursor implements ManualModel {
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(ManualColumns._ID);
         if (res == null)
@@ -56,6 +58,7 @@ public class ManualCursor extends AbstractCursor implements ManualModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getTitle() {
         String res = getStringOrNull(ManualColumns.TITLE);
         if (res == null)
@@ -68,6 +71,7 @@ public class ManualCursor extends AbstractCursor implements ManualModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getIsbn() {
         String res = getStringOrNull(ManualColumns.ISBN);
         if (res == null)

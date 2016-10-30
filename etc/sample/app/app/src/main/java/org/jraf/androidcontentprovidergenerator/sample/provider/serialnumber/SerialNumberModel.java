@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A serial number.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface SerialNumberModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * Unique id, first part.

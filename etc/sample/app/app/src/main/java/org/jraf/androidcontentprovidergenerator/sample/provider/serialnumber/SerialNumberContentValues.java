@@ -38,6 +38,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCon
 /**
  * Content values wrapper for the {@code serial_number} table.
  */
+@SuppressWarnings({"ConstantConditions", "unused"})
 public class SerialNumberContentValues extends AbstractContentValues {
     @Override
     public Uri uri() {
@@ -57,7 +58,7 @@ public class SerialNumberContentValues extends AbstractContentValues {
     /**
      * Update row(s) using the values stored by this object and the given selection.
      *
-     * @param contentResolver The content resolver to use.
+     * @param context The context to use.
      * @param where The selection to use (can be {@code null}).
      */
     public int update(Context context, @Nullable SerialNumberSelection where) {

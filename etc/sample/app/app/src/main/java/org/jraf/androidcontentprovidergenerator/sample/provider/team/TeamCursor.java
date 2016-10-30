@@ -39,6 +39,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Cursor wrapper for the {@code team} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class TeamCursor extends AbstractCursor implements TeamModel {
     public TeamCursor(Cursor cursor) {
         super(cursor);
@@ -47,6 +48,7 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(TeamColumns._ID);
         if (res == null)
@@ -57,6 +59,7 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
     /**
      * Get the {@code company_id} value.
      */
+    @Override
     public long getCompanyId() {
         Long res = getLongOrNull(TeamColumns.COMPANY_ID);
         if (res == null)
@@ -125,6 +128,7 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getName() {
         String res = getStringOrNull(TeamColumns.NAME);
         if (res == null)
@@ -137,6 +141,7 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getCountryCode() {
         String res = getStringOrNull(TeamColumns.COUNTRY_CODE);
         if (res == null)
@@ -147,6 +152,7 @@ public class TeamCursor extends AbstractCursor implements TeamModel {
     /**
      * The serial number of this team.
      */
+    @Override
     public long getSerialNumberId() {
         Long res = getLongOrNull(TeamColumns.SERIAL_NUMBER_ID);
         if (res == null)

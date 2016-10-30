@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * A manual related to a product.
  */
+@SuppressWarnings("unused")
 public class ManualColumns implements BaseColumns {
     public static final String TABLE_NAME = "manual";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

@@ -29,10 +29,18 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
+import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 /**
  * A human being which is part of a team.
  */
+@SuppressWarnings("unused")
 public class PersonColumns implements BaseColumns {
     public static final String TABLE_NAME = "person";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

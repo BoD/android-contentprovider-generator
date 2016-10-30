@@ -19,6 +19,7 @@ import ${config.providerJavaPackage}.${joinedEntity.packageName}.*;
 /**
  * Selection for the {@code ${entity.nameLowerCase}} table.
  */
+@SuppressWarnings({"unused", "WeakerAccess", "Recycle"})
 public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity.nameCamelCase}Selection> {
     @Override
     protected Uri baseUri() {

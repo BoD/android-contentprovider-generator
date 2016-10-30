@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
+@SuppressWarnings("unused")
 public abstract class AbstractContentValues {
     protected final ContentValues mContentValues = new ContentValues();
 

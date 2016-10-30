@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A product that the company sells.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface ProductModel extends BaseModel {
+
+    /**
+     * Get the {@code product_id} value.
+     */
+    long getProductId();
 
     /**
      * Get the {@code name} value.

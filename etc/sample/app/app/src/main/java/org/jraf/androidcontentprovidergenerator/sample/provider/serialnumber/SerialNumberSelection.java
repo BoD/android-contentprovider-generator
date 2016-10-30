@@ -37,6 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSel
 /**
  * Selection for the {@code serial_number} table.
  */
+@SuppressWarnings({"unused", "WeakerAccess", "Recycle"})
 public class SerialNumberSelection extends AbstractSelection<SerialNumberSelection> {
     @Override
     protected Uri baseUri() {

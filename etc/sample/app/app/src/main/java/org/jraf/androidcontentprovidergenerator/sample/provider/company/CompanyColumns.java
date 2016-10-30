@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * A commercial business.
  */
+@SuppressWarnings("unused")
 public class CompanyColumns implements BaseColumns {
     public static final String TABLE_NAME = "company";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

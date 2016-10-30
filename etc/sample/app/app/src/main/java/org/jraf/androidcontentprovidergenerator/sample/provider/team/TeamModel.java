@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A group of people who work together.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface TeamModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * Get the {@code company_id} value.

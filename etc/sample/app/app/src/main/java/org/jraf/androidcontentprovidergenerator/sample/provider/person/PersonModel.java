@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A human being which is part of a team.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface PersonModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * First name of this person. For instance, John.

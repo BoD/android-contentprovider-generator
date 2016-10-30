@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface PersonTeamModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * Get the {@code person_id} value.

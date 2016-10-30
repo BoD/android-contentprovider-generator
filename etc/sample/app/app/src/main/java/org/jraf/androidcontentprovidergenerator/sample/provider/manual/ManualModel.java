@@ -35,7 +35,13 @@ import android.support.annotation.Nullable;
 /**
  * A manual related to a product.
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface ManualModel extends BaseModel {
+
+    /**
+     * Primary key.
+     */
+    long getId();
 
     /**
      * Get the {@code title} value.

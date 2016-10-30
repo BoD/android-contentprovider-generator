@@ -41,6 +41,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Cursor wrapper for the {@code person_team} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel {
     public PersonTeamCursor(Cursor cursor) {
         super(cursor);
@@ -49,6 +50,7 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(PersonTeamColumns._ID);
         if (res == null)
@@ -59,6 +61,7 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
     /**
      * Get the {@code person_id} value.
      */
+    @Override
     public long getPersonId() {
         Long res = getLongOrNull(PersonTeamColumns.PERSON_ID);
         if (res == null)
@@ -157,6 +160,7 @@ public class PersonTeamCursor extends AbstractCursor implements PersonTeamModel 
     /**
      * Get the {@code team_id} value.
      */
+    @Override
     public long getTeamId() {
         Long res = getLongOrNull(PersonTeamColumns.TEAM_ID);
         if (res == null)

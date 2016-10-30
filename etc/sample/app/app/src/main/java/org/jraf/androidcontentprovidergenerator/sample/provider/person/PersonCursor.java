@@ -36,6 +36,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCur
 /**
  * Cursor wrapper for the {@code person} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class PersonCursor extends AbstractCursor implements PersonModel {
     public PersonCursor(Cursor cursor) {
         super(cursor);
@@ -44,6 +45,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(PersonColumns._ID);
         if (res == null)
@@ -56,6 +58,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getFirstName() {
         String res = getStringOrNull(PersonColumns.FIRST_NAME);
         if (res == null)
@@ -68,6 +71,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getLastName() {
         String res = getStringOrNull(PersonColumns.LAST_NAME);
         if (res == null)
@@ -78,6 +82,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
     /**
      * Get the {@code age} value.
      */
+    @Override
     public int getAge() {
         Integer res = getIntegerOrNull(PersonColumns.AGE);
         if (res == null)
@@ -90,6 +95,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Can be {@code null}.
      */
     @Nullable
+    @Override
     public Date getBirthDate() {
         Date res = getDateOrNull(PersonColumns.BIRTH_DATE);
         return res;
@@ -98,6 +104,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
     /**
      * If {@code true}, this person has blue eyes. Otherwise, this person doesn't have blue eyes.
      */
+    @Override
     public boolean getHasBlueEyes() {
         Boolean res = getBooleanOrNull(PersonColumns.HAS_BLUE_EYES);
         if (res == null)
@@ -110,6 +117,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Can be {@code null}.
      */
     @Nullable
+    @Override
     public Float getHeight() {
         Float res = getFloatOrNull(PersonColumns.HEIGHT);
         return res;
@@ -120,6 +128,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public Gender getGender() {
         Integer intValue = getIntegerOrNull(PersonColumns.GENDER);
         if (intValue == null)
@@ -132,6 +141,7 @@ public class PersonCursor extends AbstractCursor implements PersonModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getCountryCode() {
         String res = getStringOrNull(PersonColumns.COUNTRY_CODE);
         if (res == null)

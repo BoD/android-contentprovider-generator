@@ -20,9 +20,9 @@ import android.support.annotation.Nullable;
  * Data model for the {@code ${entity.nameLowerCase}} table.
 </#if>
  */
+@SuppressWarnings({"WeakerAccess", "unused"})
 public interface ${entity.nameCamelCase}Model extends BaseModel {
     <#list entity.getFields() as field>
-        <#if !field.isId>
 
     /**
     <#if field.documentation??>
@@ -48,6 +48,5 @@ public interface ${entity.nameCamelCase}Model extends BaseModel {
         </#if>
      </#if>
     ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}();
-        </#if>
     </#list>
 }

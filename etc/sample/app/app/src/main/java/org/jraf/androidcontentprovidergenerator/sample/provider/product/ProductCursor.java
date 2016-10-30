@@ -37,6 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.manual.*;
 /**
  * Cursor wrapper for the {@code product} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class ProductCursor extends AbstractCursor implements ProductModel {
     public ProductCursor(Cursor cursor) {
         super(cursor);
@@ -50,6 +51,7 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
     /**
      * Get the {@code product_id} value.
      */
+    @Override
     public long getProductId() {
         Long res = getLongOrNull(ProductColumns.PRODUCT_ID);
         if (res == null)
@@ -62,6 +64,7 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getName() {
         String res = getStringOrNull(ProductColumns.NAME);
         if (res == null)
@@ -74,6 +77,7 @@ public class ProductCursor extends AbstractCursor implements ProductModel {
      * Can be {@code null}.
      */
     @Nullable
+    @Override
     public Long getManualId() {
         Long res = getLongOrNull(ProductColumns.MANUAL_ID);
         return res;

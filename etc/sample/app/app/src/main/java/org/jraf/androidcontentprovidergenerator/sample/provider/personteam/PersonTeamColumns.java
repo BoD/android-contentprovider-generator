@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * Entity joining people and teams.  A team contains several people, and a person can belong to several teams.
  */
+@SuppressWarnings("unused")
 public class PersonTeamColumns implements BaseColumns {
     public static final String TABLE_NAME = "person_team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

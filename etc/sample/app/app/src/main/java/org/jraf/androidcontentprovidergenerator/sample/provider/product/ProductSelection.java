@@ -38,6 +38,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.manual.*;
 /**
  * Selection for the {@code product} table.
  */
+@SuppressWarnings({"unused", "WeakerAccess", "Recycle"})
 public class ProductSelection extends AbstractSelection<ProductSelection> {
     @Override
     protected Uri baseUri() {

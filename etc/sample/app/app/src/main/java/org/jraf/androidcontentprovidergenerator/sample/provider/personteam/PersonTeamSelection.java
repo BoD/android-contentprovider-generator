@@ -42,6 +42,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Selection for the {@code person_team} table.
  */
+@SuppressWarnings({"unused", "WeakerAccess", "Recycle"})
 public class PersonTeamSelection extends AbstractSelection<PersonTeamSelection> {
     @Override
     protected Uri baseUri() {

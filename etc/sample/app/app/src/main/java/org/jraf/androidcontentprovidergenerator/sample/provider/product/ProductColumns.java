@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * A product that the company sells.
  */
+@SuppressWarnings("unused")
 public class ProductColumns implements BaseColumns {
     public static final String TABLE_NAME = "product";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

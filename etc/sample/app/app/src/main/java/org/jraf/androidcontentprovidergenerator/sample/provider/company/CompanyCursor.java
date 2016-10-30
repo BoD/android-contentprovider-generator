@@ -37,6 +37,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.*;
 /**
  * Cursor wrapper for the {@code company} table.
  */
+@SuppressWarnings({"WeakerAccess", "unused", "UnnecessaryLocalVariable"})
 public class CompanyCursor extends AbstractCursor implements CompanyModel {
     public CompanyCursor(Cursor cursor) {
         super(cursor);
@@ -45,6 +46,7 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
     /**
      * Primary key.
      */
+    @Override
     public long getId() {
         Long res = getLongOrNull(CompanyColumns._ID);
         if (res == null)
@@ -57,6 +59,7 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
      * Cannot be {@code null}.
      */
     @NonNull
+    @Override
     public String getName() {
         String res = getStringOrNull(CompanyColumns.NAME);
         if (res == null)
@@ -69,6 +72,7 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
      * Can be {@code null}.
      */
     @Nullable
+    @Override
     public String getAddress() {
         String res = getStringOrNull(CompanyColumns.ADDRESS);
         return res;
@@ -77,6 +81,7 @@ public class CompanyCursor extends AbstractCursor implements CompanyModel {
     /**
      * The serial number of this company.
      */
+    @Override
     public long getSerialNumberId() {
         Long res = getLongOrNull(CompanyColumns.SERIAL_NUMBER_ID);
         if (res == null)

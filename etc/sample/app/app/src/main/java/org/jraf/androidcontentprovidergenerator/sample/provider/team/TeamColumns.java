@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * A group of people who work together.
  */
+@SuppressWarnings("unused")
 public class TeamColumns implements BaseColumns {
     public static final String TABLE_NAME = "team";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);

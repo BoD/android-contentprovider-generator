@@ -40,6 +40,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 /**
  * A serial number.
  */
+@SuppressWarnings("unused")
 public class SerialNumberColumns implements BaseColumns {
     public static final String TABLE_NAME = "serial_number";
     public static final Uri CONTENT_URI = Uri.parse(SampleProvider.CONTENT_URI_BASE + "/" + TABLE_NAME);
