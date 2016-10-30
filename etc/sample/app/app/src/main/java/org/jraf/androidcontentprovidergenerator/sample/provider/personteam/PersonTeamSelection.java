@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
+// @formatter:off
 import java.util.Date;
 
 import android.content.Context;

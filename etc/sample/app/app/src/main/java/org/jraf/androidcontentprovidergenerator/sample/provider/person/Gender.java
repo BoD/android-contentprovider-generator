@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.person;
 
+// @formatter:off
 /**
  * Possible values for the {@code gender} column of the {@code person} table.
  */

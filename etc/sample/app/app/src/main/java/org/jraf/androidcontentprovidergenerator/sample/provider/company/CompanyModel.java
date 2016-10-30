@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.company;
 
+// @formatter:off
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseModel;
 
 import java.util.Date;

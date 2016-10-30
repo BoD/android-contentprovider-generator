@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
+// @formatter:off
 /**
  * Possible values for the {@code ${field.nameLowerCase}} column of the {@code ${entity.nameLowerCase}} table.
  */

@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.base;
 
+// @formatter:off
 import java.util.Date;
 import java.util.HashMap;
 

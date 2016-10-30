@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber;
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -61,13 +62,11 @@ public class SerialNumberColumns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             PART0,
             PART1
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;

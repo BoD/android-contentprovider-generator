@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.team;
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -65,7 +66,6 @@ public class TeamColumns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             COMPANY_ID,
@@ -73,7 +73,6 @@ public class TeamColumns implements BaseColumns {
             COUNTRY_CODE,
             SERIAL_NUMBER_ID
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;

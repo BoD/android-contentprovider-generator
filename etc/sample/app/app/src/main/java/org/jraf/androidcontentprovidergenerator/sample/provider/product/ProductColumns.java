@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -57,13 +58,11 @@ public class ProductColumns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             NAME,
             MANUAL_ID
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;

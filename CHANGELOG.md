@@ -4,6 +4,7 @@ Android ContentProvider Generator Changelog
 v1.10.0 (2016-10-23)
 ------
 - Fix for issue #91.
+- Fix for issue #102.
 - New `useSupportLibrary` boolean parameter in config, to choose which implementation of `CursorLoader` to use.
 - Minor log cleanup.
 

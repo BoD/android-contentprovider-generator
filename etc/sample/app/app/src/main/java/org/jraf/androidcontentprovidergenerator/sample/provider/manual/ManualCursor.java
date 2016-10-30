@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.manual;
 
+// @formatter:off
 import java.util.Date;
 
 import android.database.Cursor;

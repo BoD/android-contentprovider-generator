@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider;
 
+// @formatter:off
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
@@ -51,7 +52,6 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
     private final Context mContext;
     private final SampleSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
-    // @formatter:off
     public static final String SQL_CREATE_TABLE_COMPANY = "CREATE TABLE IF NOT EXISTS "
             + CompanyColumns.TABLE_NAME + " ( "
             + CompanyColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -128,7 +128,6 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
             + ", CONSTRAINT unique_name UNIQUE (team__name) ON CONFLICT REPLACE"
             + " );";
 
-    // @formatter:on
 
     public static SampleSQLiteOpenHelper getInstance(Context context) {
         // Use the application context, which will ensure that you

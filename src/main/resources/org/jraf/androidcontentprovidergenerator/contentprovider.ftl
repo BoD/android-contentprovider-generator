@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage};
 
+// @formatter:off
 import java.util.Arrays;
 
 import android.content.ContentValues;

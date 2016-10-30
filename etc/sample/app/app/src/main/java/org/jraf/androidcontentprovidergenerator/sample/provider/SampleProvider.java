@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider;
 
+// @formatter:off
 import java.util.Arrays;
 
 import android.content.ContentValues;
@@ -31,7 +32,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;

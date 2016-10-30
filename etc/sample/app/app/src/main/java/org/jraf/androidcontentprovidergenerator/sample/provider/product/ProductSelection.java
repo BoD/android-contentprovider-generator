@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.product;
 
+// @formatter:off
 import java.util.Date;
 
 import android.content.Context;

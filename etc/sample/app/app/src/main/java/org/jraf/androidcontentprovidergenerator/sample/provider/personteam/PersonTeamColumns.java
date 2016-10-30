@@ -24,6 +24,7 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.personteam;
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -55,13 +56,11 @@ public class PersonTeamColumns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             PERSON_ID,
             TEAM_ID
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;

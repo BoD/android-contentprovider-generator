@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
+// @formatter:off
 import java.util.Date;
 
 import android.content.Context;

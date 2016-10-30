@@ -24,5 +24,6 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.base;
 
+// @formatter:off
 public interface BaseModel {
 }

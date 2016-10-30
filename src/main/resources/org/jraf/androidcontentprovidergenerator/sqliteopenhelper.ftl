@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage};
 
+// @formatter:off
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
@@ -26,7 +27,6 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private final Context mContext;
     private final ${config.sqliteOpenHelperCallbacksClassName} mOpenHelperCallbacks;
 
-    // @formatter:off
     <#list model.entities as entity>
     public static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
@@ -57,7 +57,6 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     </#if>
     </#list>
     </#list>
-    // @formatter:on
 
     public static ${config.sqliteOpenHelperClassName} getInstance(Context context) {
         // Use the application context, which will ensure that you

@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
+// @formatter:off
 import ${config.providerJavaPackage}.base.BaseModel;
 
 import java.util.Date;

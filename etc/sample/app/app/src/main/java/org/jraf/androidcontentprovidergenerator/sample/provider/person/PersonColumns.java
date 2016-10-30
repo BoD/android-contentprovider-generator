@@ -24,17 +24,11 @@
  */
 package org.jraf.androidcontentprovidergenerator.sample.provider.person;
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
-import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.personteam.PersonTeamColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.product.ProductColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.serialnumber.SerialNumberColumns;
-import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns;
 
 /**
  * A human being which is part of a team.
@@ -76,7 +70,6 @@ public class PersonColumns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
             FIRST_NAME,
@@ -88,7 +81,6 @@ public class PersonColumns implements BaseColumns {
             GENDER,
             COUNTRY_CODE
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;

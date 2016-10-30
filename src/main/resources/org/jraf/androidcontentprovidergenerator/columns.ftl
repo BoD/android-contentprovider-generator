@@ -3,6 +3,7 @@ ${header}
 </#if>
 package ${config.providerJavaPackage}.${entity.packageName};
 
+// @formatter:off
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -44,7 +45,6 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
-    // @formatter:off
     public static final String[] ALL_COLUMNS = new String[] {
         <#list entity.fields as field>
             <#if field.isId>
@@ -54,7 +54,6 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
             </#if>
         </#list>
     };
-    // @formatter:on
 
     public static boolean hasColumns(String[] projection) {
         if (projection == null) return true;
