@@ -99,7 +99,9 @@ Here is a `person.json` file as an example:
 			"name": "unique_name",
 			"definition": "UNIQUE (first_name, last_name) ON CONFLICT REPLACE"
 		}
-	]
+	],
+	
+	"defaultOrder": "first_name, last_name, age DESC"
 }
 ```
 
@@ -107,6 +109,7 @@ Notes:
 - An `_id` primary key field is automatically (implicitly) declared for all entities. It must not be declared in the json file.
 - `nullable` is optional (true by default).
 - if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
+- the `constraints` and `defaultOrder` sections are optional
 
 A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
 

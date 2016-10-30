@@ -40,7 +40,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String STARTS = " LIKE ? || '%'";
     private static final String ENDS = " LIKE '%' || ?";
     private static final String COUNT = "COUNT(*)";
-    private static final String DESC = " DESC";
+    public static final String DESC = " DESC";
 
     private final StringBuilder mSelection = new StringBuilder();
     private final List<String> mSelectionArgs = new ArrayList<>(5);

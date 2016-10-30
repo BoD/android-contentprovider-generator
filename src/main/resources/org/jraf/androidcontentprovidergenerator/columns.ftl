@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import ${config.providerJavaPackage}.${config.providerClassName};
+import ${config.providerJavaPackage}.base.AbstractSelection;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
@@ -44,7 +45,8 @@ public class ${entity.nameCamelCase}Columns implements BaseColumns {
 
     </#list>
 
-    public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
+    public static final String DEFAULT_ORDER = <#if !entity.sortOrders?has_content>null<#else><#list entity.sortOrders as sortOrder>TABLE_NAME + "." + ${sortOrder.field.nameUpperCase}<#if sortOrder.isDescending()> + AbstractSelection.DESC</#if><#if sortOrder_has_next> + ","
+            + </#if></#list></#if>;
 
     public static final String[] ALL_COLUMNS = new String[] {
         <#list entity.fields as field>

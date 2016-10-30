@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -209,6 +210,44 @@ public class Main {
                     String definition = constraintJson.getString(Constraint.Json.DEFINITION);
                     Constraint constraint = new Constraint(name, definition);
                     entity.addConstraint(constraint);
+                }
+            }
+
+            // Default order (optional)
+            String defaultOrder = entityJson.optString(Entity.Json.DEFAULT_ORDER);
+            if (defaultOrder.isEmpty()) defaultOrder = null;
+            if (defaultOrder != null) {
+                String[] defaultOrderParts = defaultOrder.split(",");
+                for (String defaultOrderPart : defaultOrderParts) {
+                    defaultOrderPart = defaultOrderPart.trim();
+                    String[] defaultOrderPartsParts = defaultOrderPart.split(" ");
+                    if (defaultOrderPartsParts.length != 1 && defaultOrderPartsParts.length != 2) {
+                        throw new IllegalArgumentException(
+                                "Invalid syntax in defaultOrder!  Valid syntax is 'columnName [ASC|DESC] [,columnName [ASC|DESC]]*'");
+                    }
+                    if (defaultOrderPartsParts.length == 2) {
+                        String ascDesc = defaultOrderPartsParts[1].trim().toLowerCase(Locale.US);
+                        if (!Entity.Json.DEFAULT_ORDER_ASC.equals(ascDesc) && !Entity.Json.DEFAULT_ORDER_DESC.equals(ascDesc))
+                            throw new IllegalArgumentException(
+                                    "Invalid syntax in defaultOrder, near '" + ascDesc +
+                                            "'!  Valid syntax is 'columnName [ASC|DESC] [,columnName [ASC|DESC]]*'");
+
+                        String columnName = defaultOrderPartsParts[0].trim();
+                        Field field = entity.getFieldByName(columnName);
+                        if (field == null) {
+                            throw new IllegalArgumentException("Invalid defaultOrder!  Could not find column '" + columnName + "'");
+                        }
+
+                        entity.addSortOrder(field, ascDesc);
+                    } else {
+                        String columnName = defaultOrderPartsParts[0].trim();
+                        Field field = entity.getFieldByName(columnName);
+                        if (field == null) {
+                            throw new IllegalArgumentException("Invalid defaultOrder!  Could not find column '" + columnName + "'");
+                        }
+
+                        entity.addSortOrder(field, "asc");
+                    }
                 }
             }
 

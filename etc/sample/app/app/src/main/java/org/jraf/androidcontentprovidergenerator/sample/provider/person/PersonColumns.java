@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
@@ -60,7 +61,7 @@ public class PersonColumns implements BaseColumns {
      */
     public static final String LAST_NAME = "last_name";
 
-    public static final String AGE = "Age";
+    public static final String AGE = "age";
 
     public static final String BIRTH_DATE = "birth_date";
 
@@ -76,7 +77,9 @@ public class PersonColumns implements BaseColumns {
     public static final String COUNTRY_CODE = "person__country_code";
 
 
-    public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
+    public static final String DEFAULT_ORDER = TABLE_NAME + "." + FIRST_NAME + ","
+            + TABLE_NAME + "." + LAST_NAME + ","
+            + TABLE_NAME + "." + AGE + AbstractSelection.DESC;
 
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,

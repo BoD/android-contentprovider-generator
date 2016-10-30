@@ -24,5 +24,7 @@
 				"onDelete": "CASCADE"
 			}
 		}
-	]
+	],
+
+	"defaultOrder": "name"
 }

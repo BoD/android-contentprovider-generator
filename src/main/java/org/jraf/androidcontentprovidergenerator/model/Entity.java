@@ -42,6 +42,9 @@ public class Entity {
         public static final String CONSTRAINTS = "constraints";
         public static final String DOCUMENTATION = "documentation";
         public static final String ID_FIELD = "idField";
+        public static final String DEFAULT_ORDER = "defaultOrder";
+        public static final String DEFAULT_ORDER_ASC = "asc";
+        public static final String DEFAULT_ORDER_DESC = "desc";
     }
 
     private static final String CONCAT = "res.tablesWithJoins += ";
@@ -67,6 +70,7 @@ public class Entity {
     private final List<Field> mFields = new ArrayList<>();
     private final List<Constraint> mConstraints = new ArrayList<>();
     private final String mDocumentation;
+    private final List<SortOrder> mSortOrders = new ArrayList<>();
 
     public Entity(String name, String documentation) {
         mName = name;
@@ -145,7 +149,7 @@ public class Entity {
     }
 
     public String getNameCamelCase() {
-        return WordUtils.capitalizeFully(mName, new char[] { '_' }).replaceAll("_", "");
+        return WordUtils.capitalizeFully(mName, new char[] {'_'}).replaceAll("_", "");
     }
 
     public String getPackageName() {
@@ -290,5 +294,14 @@ public class Entity {
                 }
             }
         }
+    }
+
+    public void addSortOrder(Field field, String ascDesc) {
+        boolean descending = Json.DEFAULT_ORDER_DESC.equalsIgnoreCase(ascDesc);
+        mSortOrders.add(new SortOrder(field, descending));
+    }
+
+    public List<SortOrder> getSortOrders() {
+        return Collections.unmodifiableList(mSortOrders);
     }
 }

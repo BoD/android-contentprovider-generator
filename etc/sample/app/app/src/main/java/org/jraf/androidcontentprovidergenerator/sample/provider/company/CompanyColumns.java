@@ -29,6 +29,7 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.SampleProvider;
+import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.person.PersonColumns;
@@ -66,7 +67,7 @@ public class CompanyColumns implements BaseColumns {
     public static final String SERIAL_NUMBER_ID = "company__serial_number_id";
 
 
-    public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
+    public static final String DEFAULT_ORDER = TABLE_NAME + "." + NAME;
 
     public static final String[] ALL_COLUMNS = new String[] {
             _ID,
