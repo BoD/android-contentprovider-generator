@@ -77,6 +77,7 @@ public class Main {
         public static final String ENABLE_FOREIGN_KEY = "enableForeignKeys";
         public static final String USE_ANNOTATIONS = "useAnnotations";
         public static final String USE_SUPPORT_LIBRARY = "useSupportLibrary";
+        public static final String GENERATE_BEANS = "generateBeans";
     }
 
     private Configuration mFreemarkerConfig;
@@ -309,6 +310,7 @@ public class Main {
         ensureBoolean(Json.ENABLE_FOREIGN_KEY);
         ensureBoolean(Json.USE_ANNOTATIONS);
         ensureBoolean(Json.USE_SUPPORT_LIBRARY, false);
+        ensureBoolean(Json.GENERATE_BEANS, true);
     }
 
     private void ensureString(String field) {
@@ -385,6 +387,31 @@ public class Main {
             File outputDir = new File(providerDir, entity.getPackageName());
             outputDir.mkdirs();
             File outputFile = new File(outputDir, entity.getNameCamelCase() + "Model.java");
+            Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
+
+            root.put("entity", entity);
+
+            template.process(root, out);
+            IOUtils.closeQuietly(out);
+        }
+    }
+
+    private void generateBeans(Arguments arguments) throws IOException, JSONException, TemplateException {
+        Template template = getFreeMarkerConfig().getTemplate("bean.ftl");
+        JSONObject config = getConfig(arguments.inputDir);
+        String providerJavaPackage = config.getString(Json.PROVIDER_JAVA_PACKAGE);
+
+        File providerDir = new File(arguments.outputDir, providerJavaPackage.replace('.', '/'));
+        Map<String, Object> root = new HashMap<>();
+        root.put("config", getConfig(arguments.inputDir));
+        root.put("header", Model.get().getHeader());
+        root.put("model", Model.get());
+
+        // Entities
+        for (Entity entity : Model.get().getEntities()) {
+            File outputDir = new File(providerDir, entity.getPackageName());
+            outputDir.mkdirs();
+            File outputFile = new File(outputDir, entity.getNameCamelCase() + "Bean.java");
             Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
             root.put("entity", entity);
@@ -573,6 +600,9 @@ public class Main {
         generateColumns(arguments);
         generateWrappers(arguments);
         generateModels(arguments);
+        if (mConfig.getBoolean(Json.GENERATE_BEANS)) {
+            generateBeans(arguments);
+        }
         generateContentProvider(arguments);
         generateSqliteOpenHelper(arguments);
         generateSqliteOpenHelperCallbacks(arguments);

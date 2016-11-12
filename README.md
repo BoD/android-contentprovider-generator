@@ -11,6 +11,7 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - one `ContentValues` class per entity
 - one `Selection` class per entity
 - one `Model` interface per entity
+- one `Bean` class per entity (optionally)
 
 
 How to use
@@ -34,7 +35,8 @@ These are self-explanatory so here is an example:
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
 	"useAnnotations": true,
-	"useSupportLibrary": true
+	"useSupportLibrary": true,
+	"generateBeans": true
 }
 ```
 
@@ -128,7 +130,7 @@ https://github.com/BoD/android-contentprovider-generator/releases/latest
 
 ### Run the tool
 
-`java -jar android_contentprovider_generator-1.10.0-bundle.jar -i <input folder> -o <output folder>`
+`java -jar android_contentprovider_generator-1.11.0-bundle.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 
@@ -243,7 +245,7 @@ You need maven to build this tool.
 
 `mvn package`
 
-This will produce `android_contentprovider_generator-1.10.0-bundle.jar` in the `target` folder.
+This will produce `android_contentprovider_generator-1.11.0-bundle.jar` in the `target` folder.
 
 
 Similar tools

@@ -140,6 +140,13 @@ public class Entity {
         return null;
     }
 
+    public Field getIdField() {
+        for (Field field : getFields()) {
+            if (field.getIsId()) return field;
+        }
+        return null;
+    }
+
     public void addConstraint(Constraint constraint) {
         mConstraints.add(constraint);
     }

@@ -1,6 +1,10 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.11.0 (2016-11-12)
+------
+- Beans generation (if new `generateBeans` boolean parameter in config is true) - fix for issue #43.
+
 v1.10.0 (2016-10-30)
 ------
 - Fix for issue #91.

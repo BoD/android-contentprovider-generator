@@ -10,5 +10,6 @@
 	"databaseVersion": 1,
 	"enableForeignKeys": true,
 	"useAnnotations": true,
-	"useSupportLibrary": true
+	"useSupportLibrary": true,
+	"generateBeans": true
 }

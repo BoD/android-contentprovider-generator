@@ -30,15 +30,15 @@ public interface ${entity.nameCamelCase}Model extends BaseModel {
     <#else>
      * Get the {@code ${field.nameLowerCase}} value.
     </#if>
-        <#if field.isNullable>
+    <#if field.isNullable>
      * Can be {@code null}.
-        <#else>
-            <#if !field.type.hasNotNullableJavaType()>
+    <#else>
+        <#if !field.type.hasNotNullableJavaType()>
      * Cannot be {@code null}.
-            </#if>
         </#if>
+    </#if>
      */
-     <#if config.useAnnotations>
+    <#if config.useAnnotations>
         <#if field.isNullable>
     @Nullable
         <#else>
@@ -46,7 +46,7 @@ public interface ${entity.nameCamelCase}Model extends BaseModel {
     @NonNull
             </#if>
         </#if>
-     </#if>
-    ${field.javaTypeSimpleName} get<#if field.isForeign>${field.path}</#if>${field.nameCamelCase}();
+    </#if>
+    ${field.javaTypeSimpleName} get${field.nameCamelCase}();
     </#list>
 }
