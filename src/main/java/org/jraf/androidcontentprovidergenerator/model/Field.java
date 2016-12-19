@@ -256,7 +256,9 @@ public class Field {
             case BOOLEAN:
                 if ("true".equals(mDefaultValue)) return "1";
                 if ("false".equals(mDefaultValue)) return "0";
-                // fallthrough
+                Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
+                        + " could not be parsed as a boolean type, which is probably a problem");
+                return "0";
             case INTEGER:
             case LONG:
             case DATE:
@@ -268,7 +270,7 @@ public class Field {
                     Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
                             + " could not be parsed as a numeric type, which is probably a problem", e);
                 }
-                // fallthrough
+                return "0";
             case FLOAT:
             case DOUBLE:
                 try {
@@ -278,14 +280,14 @@ public class Field {
                     Log.w(TAG, "The default value for field " + mEntity.getNameLowerCase() + "." + getName()
                             + " could not be parsed as a floating point type, which is probably a problem", e);
                 }
-                // fallthrough
+                return "0.0";
             default:
                 return '\'' + mDefaultValue + '\'';
         }
     }
 
     public boolean getHasDefaultValue() {
-        return mDefaultValue != null && mDefaultValue.length() > 0;
+        return mDefaultValue != null;
     }
 
     public String getJavaTypeSimpleName() {
