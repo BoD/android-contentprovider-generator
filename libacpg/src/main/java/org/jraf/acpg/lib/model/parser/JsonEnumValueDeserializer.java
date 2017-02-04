@@ -22,3 +22,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.jraf.acpg.lib.model.parser;
+
+import java.lang.reflect.Type;
+import java.util.Map;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
+
+public class JsonEnumValueDeserializer implements JsonDeserializer<JsonEnumValue> {
+    public JsonEnumValue deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        JsonEnumValue res = new JsonEnumValue();
+        if (json.isJsonObject()) {
+            Map.Entry<String, JsonElement> entry = json.getAsJsonObject().entrySet().iterator().next();
+            res.name = entry.getKey();
+            res.documentation = entry.getValue().getAsJsonPrimitive().getAsString();
+        } else {
+            res.name = json.getAsJsonPrimitive().getAsString();
+        }
+        return res;
+    }
+}

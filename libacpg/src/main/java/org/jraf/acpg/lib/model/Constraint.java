@@ -22,3 +22,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.acpg.lib.model;
+
+public class Constraint {
+    private final String mName;
+    private final String mDefinition;
+
+    public Constraint(String name, String definition) {
+        mName = name;
+        mDefinition = definition;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public String getDefinition() {
+        return mDefinition;
+    }
+
+    @Override
+    public String toString() {
+        return "Constraint [mName=" + mName + ", mDefinition=" + mDefinition + "]";
+    }
+}

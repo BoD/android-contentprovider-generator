@@ -22,3 +22,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.jraf.acpg.lib.model.parser;
+
+import java.util.List;
+
+public class JsonField {
+    public String documentation;
+    public String name;
+    public String type;
+    public Boolean nullable;
+    public Boolean index;
+    public JsonForeignKey foreignKey;
+    public String defaultValue;
+    public String enumName;
+    public List<JsonEnumValue> enumValues;
+}

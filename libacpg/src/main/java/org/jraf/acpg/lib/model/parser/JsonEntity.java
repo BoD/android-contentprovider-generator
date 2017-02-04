@@ -22,3 +22,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package org.jraf.acpg.lib.model.parser;
+
+import java.util.List;
+
+public class JsonEntity {
+    public String documentation;
+    public List<JsonField> fields;
+    public List<JsonConstraint> constraints;
+    public String defaultOrder;
+    public List<String> idField;
+}

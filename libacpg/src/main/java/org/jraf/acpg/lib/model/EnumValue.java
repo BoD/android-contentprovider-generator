@@ -22,3 +22,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.acpg.lib.model;
+
+public class EnumValue {
+    private final String mName;
+    private final String mDocumentation;
+
+    public EnumValue(String name, String documentation) {
+        mName = name;
+        mDocumentation = documentation;
+    }
+
+    public String getName() {
+        return mName;
+    }
+
+    public String getDocumentation() {
+        return mDocumentation;
+    }
+}

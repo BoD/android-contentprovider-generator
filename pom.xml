@@ -2,12 +2,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jraf</groupId>
-    <artifactId>android_contentprovider_generator</artifactId>
-    <version>1.11.0</version> <!-- Do not forget to update README.md and CHANGELOG.md when updating this value -->
-    <packaging>jar</packaging>
+    <artifactId>acpg</artifactId>
+    <version>1.12.0</version> <!-- Do not forget to update README.md and CHANGELOG.md when updating this value -->
+    <packaging>pom</packaging>
 
-    <name>GenerateAndroidProvider</name>
-    <url>http://JRAF.org/code</url>
+    <name>Android ContentProvider Generator</name>
+    <url>https://github.com/BoD/android-contentprovider-generator</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,61 +17,14 @@
         <maven>3.3.1</maven>
     </prerequisites>
 
-    <dependencies>
-        <!-- Test scope. -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
-
-
-        <!-- Compile scope. -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20131018</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>2.3.20</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.beust</groupId>
-            <artifactId>jcommander</artifactId>
-            <version>1.32</version>
-        </dependency>
-
-    </dependencies>
-
+    <modules>
+        <module>libacpg</module>
+        <module>cli</module>
+        <module>gradle-plugin</module>
+    </modules>
 
     <build>
         <plugins>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
 
             <!-- Use mvn versions:display-dependency-updates to show new versions of dependencies, or mvn versions:use-latest-versions to update the pom. -->
             <plugin>
@@ -80,31 +33,6 @@
                 <version>2.1</version>
             </plugin>
 
-            <!-- Use mvn package to generate the jar -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>assembly-single</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>org.jraf.androidcontentprovidergenerator.Main</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <finalName>android_contentprovider_generator-${project.version}-bundle</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

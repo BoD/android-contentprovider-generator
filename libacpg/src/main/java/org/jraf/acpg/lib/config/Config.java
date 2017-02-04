@@ -22,3 +22,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.acpg.lib.config;
+
+public class Config {
+    public Integer syntaxVersion;
+    public String projectPackageId;
+    public String authority;
+    public String providerJavaPackage;
+    public String providerClassName;
+    public String sqliteOpenHelperClassName;
+    public String sqliteOpenHelperCallbacksClassName;
+    public String databaseFileName;
+    public Integer databaseVersion;
+    public Boolean enableForeignKeys;
+    public Boolean useAnnotations;
+    public Boolean useSupportLibrary;
+    public Boolean generateBeans;
+}

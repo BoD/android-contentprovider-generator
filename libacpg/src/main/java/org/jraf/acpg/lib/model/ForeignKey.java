@@ -22,3 +22,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.acpg.lib.model;
+
+public class ForeignKey {
+    private final String mEntityName;
+    private final Field.OnDeleteAction mOnDeleteAction;
+
+    public ForeignKey(String entityName, Field.OnDeleteAction onDeleteAction) {
+        mEntityName = entityName;
+        mOnDeleteAction = onDeleteAction;
+    }
+
+    public String getEntityName() {
+        return mEntityName;
+    }
+
+    public Entity getEntity() {
+        return Entity.getByName(mEntityName);
+    }
+
+    public Field getField() {
+        return getEntity().getFieldByName("_id");
+    }
+
+    public Field.OnDeleteAction getOnDeleteAction() {
+        return mOnDeleteAction;
+    }
+
+    @Override
+    public String toString() {
+        return "ForeignKey [mEntityName=" + mEntityName + ", mOnDeleteAction=" + mOnDeleteAction + "]";
+    }
+}

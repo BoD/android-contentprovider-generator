@@ -22,3 +22,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jraf.acpg.lib.model;
+
+public class SortOrder {
+    private final Field mField;
+    private final boolean mDescending;
+
+    public SortOrder(Field field, boolean descending) {
+        mField = field;
+        mDescending = descending;
+    }
+
+    public Field getField() {
+        return mField;
+    }
+
+    public boolean isDescending() {
+        return mDescending;
+    }
+}
