@@ -244,7 +244,7 @@ public class Field {
                 if ("true".equals(mDefaultValue)) return "1";
                 if ("false".equals(mDefaultValue)) return "0";
                 LOG.warn("The default value for field " + mEntity.getNameLowerCase() + "." + getName()
-                        + " could not be parsed as a boolean type, which is probably a problem");
+                        + " could not be parsed as a boolean type, which is probably a problem - assuming 'false'.");
                 return "0";
             case INTEGER:
             case LONG:
@@ -255,7 +255,7 @@ public class Field {
                     return mDefaultValue;
                 } catch (NumberFormatException e) {
                     LOG.warn("The default value for field " + mEntity.getNameLowerCase() + "." + getName()
-                            + " could not be parsed as a numeric type, which is probably a problem", e);
+                            + " could not be parsed as a numeric type, which is probably a problem - assuming '0'.", e);
                 }
                 return "0";
             case FLOAT:
@@ -265,7 +265,7 @@ public class Field {
                     return mDefaultValue;
                 } catch (NumberFormatException e) {
                     LOG.warn("The default value for field " + mEntity.getNameLowerCase() + "." + getName()
-                            + " could not be parsed as a floating point type, which is probably a problem", e);
+                            + " could not be parsed as a floating point type, which is probably a problem - assuming '0.0'.", e);
                 }
                 return "0.0";
             default:

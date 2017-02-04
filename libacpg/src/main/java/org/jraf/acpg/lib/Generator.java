@@ -37,8 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
@@ -50,8 +49,6 @@ import org.jraf.acpg.lib.config.ConfigParser;
 import org.jraf.acpg.lib.model.Entity;
 import org.jraf.acpg.lib.model.Field;
 import org.jraf.acpg.lib.model.Model;
-import org.jraf.acpg.lib.model.parser.JsonEnumValue;
-import org.jraf.acpg.lib.model.parser.JsonEnumValueDeserializer;
 import org.jraf.acpg.lib.model.parser.ModelParser;
 
 public class Generator {
@@ -275,13 +272,10 @@ public class Generator {
 
     public Generator(File inputDir, File outputDir) throws GeneratorException {
         File configFile = new File(inputDir, FILE_CONFIG);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(JsonEnumValue.class, new JsonEnumValueDeserializer());
-        Gson gson = gsonBuilder.create();
-
-        mConfig = new ConfigParser().parseConfig(gson, configFile);
+        ObjectMapper objectMapper = new ObjectMapper();
+        mConfig = new ConfigParser().parseConfig(objectMapper, configFile);
         mProviderDir = new File(outputDir, mConfig.providerJavaPackage.replace('.', '/'));
         mProviderDir.mkdirs();
-        mModel = new ModelParser().parseModel(gson, inputDir);
+        mModel = new ModelParser().parseModel(objectMapper, inputDir);
     }
 }

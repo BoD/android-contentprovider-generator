@@ -25,7 +25,6 @@
 package org.jraf.acpg.lib.model.parser;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,8 +36,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jraf.acpg.lib.GeneratorException;
 import org.jraf.acpg.lib.model.Constraint;
@@ -51,7 +49,7 @@ import org.jraf.acpg.lib.model.Model;
 public class ModelParser {
     private static final Logger LOG = LogManager.getLogger(ModelParser.class);
 
-    public Model parseModel(Gson gson, File inputDir) throws GeneratorException {
+    public Model parseModel(ObjectMapper objectMapper, File inputDir) throws GeneratorException {
         if (!inputDir.exists()) throw new GeneratorException("Could not find the directory at this location: '" + inputDir.getAbsolutePath() + "'.");
 
         Model model = new Model();
@@ -64,8 +62,8 @@ public class ModelParser {
             LOG.debug(entityFile.getAbsolutePath());
             String entityName = FilenameUtils.getBaseName(entityFile.getAbsolutePath());
             JsonEntity jsonEntity;
-            try (JsonReader jsonReader = new JsonReader(new FileReader(entityFile))) {
-                jsonEntity = gson.fromJson(jsonReader, JsonEntity.class);
+            try {
+                jsonEntity = objectMapper.readValue(entityFile, JsonEntity.class);
             } catch (Exception e) {
                 throw new GeneratorException("Error while parsing file " + entityFile.getAbsolutePath(), e);
             }

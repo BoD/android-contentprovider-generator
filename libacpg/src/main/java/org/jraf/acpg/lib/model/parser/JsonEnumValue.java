@@ -25,6 +25,9 @@
 
 package org.jraf.acpg.lib.model.parser;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonDeserialize(using = JsonEnumValueDeserializer.class)
 public class JsonEnumValue {
     public String name;
     public String documentation;

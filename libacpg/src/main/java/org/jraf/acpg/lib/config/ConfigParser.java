@@ -25,13 +25,11 @@
 package org.jraf.acpg.lib.config;
 
 import java.io.File;
-import java.io.FileReader;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.jraf.acpg.lib.GeneratorException;
 
@@ -39,11 +37,11 @@ public class ConfigParser {
     private static final Logger LOG = LogManager.getLogger(ConfigParser.class);
     private static final int SYNTAX_VERSION = 3;
 
-    public Config parseConfig(Gson gson, File configFile) throws GeneratorException {
+    public Config parseConfig(ObjectMapper objectMapper, File configFile) throws GeneratorException {
         if (!configFile.exists()) throw new IllegalArgumentException("Could not find a config file at this location: '" + configFile.getAbsolutePath() + "'.");
         Config config;
-        try (JsonReader jsonReader = new JsonReader(new FileReader(configFile))) {
-            config = gson.fromJson(jsonReader, Config.class);
+        try {
+            config = objectMapper.readValue(configFile, Config.class);
         } catch (Exception e) {
             throw new GeneratorException("Error while parsing _config.json file", e);
         }
