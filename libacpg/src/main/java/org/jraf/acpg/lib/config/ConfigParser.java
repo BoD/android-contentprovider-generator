@@ -38,7 +38,7 @@ public class ConfigParser {
     private static final int SYNTAX_VERSION = 3;
 
     public Config parseConfig(ObjectMapper objectMapper, File configFile) throws GeneratorException {
-        if (!configFile.exists()) throw new IllegalArgumentException("Could not find a config file at this location: '" + configFile.getAbsolutePath() + "'.");
+        if (!configFile.exists()) throw new GeneratorException("Could not find a config file at this location: '" + configFile.getAbsolutePath() + "'.");
         Config config;
         try {
             config = objectMapper.readValue(configFile, Config.class);
