@@ -1,0 +1,9 @@
+description = 'libacpg (Android ContentProvider Generator Library)'
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'org.freemarker:freemarker:2.3.20'
+    compile 'org.apache.logging.log4j:log4j-api:2.8'
+    compile 'org.apache.logging.log4j:log4j-core:2.8'
+}
