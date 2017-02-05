@@ -1,5 +1,5 @@
 rootProject.name = 'acpg'
-include ':libacpg'
+include ':lib'
 include ':cli'
 include ':gradle-plugin'
 include ':sample-app'

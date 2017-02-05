@@ -1,4 +1,4 @@
-description = 'libacpg (Android ContentProvider Generator Library)'
+description = 'lib (Android ContentProvider Generator Library)'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -19,7 +19,7 @@ dependencies {
 publishing {
     publications {
         maven(MavenPublication) {
-            artifactId 'libacpg'
+            artifactId 'acpg-lib'
 
             from components.java
         }

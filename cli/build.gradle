@@ -19,7 +19,7 @@ targetCompatibility = 1.8
 mainClassName = "org.jraf.acpg.cli.Cli"
 
 dependencies {
-    compile project(':libacpg')
+    compile project(':lib')
     compile 'commons-lang:commons-lang:2.6'
     compile 'com.beust:jcommander:1.32'
 }
