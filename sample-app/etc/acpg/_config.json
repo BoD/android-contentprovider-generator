@@ -1,6 +1,6 @@
 {
-	"syntaxVersion": "3",
-	"projectPackageId": "org.jraf.androidcontentprovidergenerator.sample",
+	"syntaxVersion": "4",
+	"applicationId": "org.jraf.androidcontentprovidergenerator.sample",
 	"authority": "org.jraf.androidcontentprovidergenerator.sample.provider",
 	"providerJavaPackage": "org.jraf.androidcontentprovidergenerator.sample.provider",
 	"providerClassName": "SampleProvider",

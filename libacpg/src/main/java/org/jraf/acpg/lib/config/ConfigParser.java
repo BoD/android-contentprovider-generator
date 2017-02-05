@@ -35,51 +35,67 @@ import org.jraf.acpg.lib.GeneratorException;
 
 public class ConfigParser {
     private static final Logger LOG = LogManager.getLogger(ConfigParser.class);
-    private static final int SYNTAX_VERSION = 3;
+    private static final int SYNTAX_VERSION = 4;
 
-    public Config parseConfig(ObjectMapper objectMapper, File configFile) throws GeneratorException {
+    public Config parseConfig(File configFile) throws GeneratorException {
         if (!configFile.exists()) throw new GeneratorException("Could not find a config file at this location: '" + configFile.getAbsolutePath() + "'.");
+        ObjectMapper objectMapper = new ObjectMapper();
         Config config;
         try {
             config = objectMapper.readValue(configFile, Config.class);
         } catch (Exception e) {
             throw new GeneratorException("Error while parsing _config.json file", e);
         }
-        validateConfig(config);
         return config;
     }
 
-    private void validateConfig(Config config) throws GeneratorException {
+    public void validateConfig(Config config) throws GeneratorException {
         // Ensure the input files are compatible with this version of the tool
-        if (config.syntaxVersion != SYNTAX_VERSION) {
+        if (config.syntaxVersion == null || config.syntaxVersion != SYNTAX_VERSION) {
             throw new GeneratorException(
-                    "Invalid 'syntaxVersion' value in _config.json: found '" + config.syntaxVersion + "' but expected '" + SYNTAX_VERSION + "'.");
+                    "Invalid 'syntaxVersion' value in configuration: found '" + config.syntaxVersion + "' but expected '" + SYNTAX_VERSION + "'.");
         }
 
         // Ensure mandatory fields are present
-        ensureNotNull(config.projectPackageId, "projectPackageId");
+        ensureNotNull(config.applicationId, "applicationId");
         ensureNotNull(config.providerJavaPackage, "providerJavaPackage");
         ensureNotNull(config.providerClassName, "providerClassName");
-        ensureNotNull(config.sqliteOpenHelperClassName, "sqliteOpenHelperClassName");
-        ensureNotNull(config.sqliteOpenHelperCallbacksClassName, "sqliteOpenHelperCallbacksClassName");
-        ensureNotNull(config.authority, "authority");
         ensureNotNull(config.databaseFileName, "databaseFileName");
         ensureNotNull(config.databaseVersion, "databaseVersion");
-        ensureNotNull(config.enableForeignKeys, "enableForeignKeys");
-        ensureNotNull(config.useAnnotations, "useAnnotations");
 
         // Default values
+        if (config.authority == null) {
+            String defaultValue = config.applicationId;
+            LOG.info("'authority' not set in configuration: assuming '" + defaultValue + "'.");
+            config.authority = defaultValue;
+        }
+        if (config.sqliteOpenHelperClassName == null) {
+            String defaultValue = config.providerClassName + "SQLiteOpenHelper";
+            LOG.info("'sqliteOpenHelperClassName' not set in configuration: assuming '" + defaultValue + "'.");
+            config.sqliteOpenHelperClassName = defaultValue;
+        }
+        if (config.sqliteOpenHelperCallbacksClassName == null) {
+            LOG.info("'sqliteOpenHelperCallbacksClassName' not set in configuration: will use default BaseSQLiteOpenHelperCallbacks.");
+        }
+        if (config.enableForeignKeys == null) {
+            LOG.info("'enableForeignKeys' not set in configuration: assuming false.");
+            config.enableForeignKeys = true;
+        }
+        if (config.useAnnotations == null) {
+            LOG.info("'useAnnotations' not set in configuration: assuming false.");
+            config.useAnnotations = false;
+        }
         if (config.useSupportLibrary == null) {
-            LOG.warn("Could not find 'useSupportLibrary' field in _config.json: assuming false.");
+            LOG.info("'useSupportLibrary' not set in configuration: assuming false.");
             config.useSupportLibrary = false;
         }
         if (config.generateBeans == null) {
-            LOG.warn("Could not find 'generateBeans' field in _config.json: assuming true.");
+            LOG.info("'generateBeans' not set in configuration: assuming true.");
             config.generateBeans = true;
         }
     }
 
     private void ensureNotNull(Object value, String fieldName) throws GeneratorException {
-        if (value == null) throw new GeneratorException("Could not find mandatory '" + fieldName + "' field in _config.json.");
+        if (value == null) throw new GeneratorException("Mandatory property '" + fieldName + "' not set in configuration.");
     }
 }

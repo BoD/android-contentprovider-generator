@@ -13,7 +13,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.util.Log;
 
-import ${config.projectPackageId}.BuildConfig;
+import ${config.providerJavaPackage}.base.BaseSQLiteOpenHelperCallbacks;
+<#if (config.sqliteOpenHelperCallbacksClassName)??>
+import ${config.providerJavaPackage}.${config.sqliteOpenHelperCallbacksClassName}
+</#if>
+import ${config.applicationId}.BuildConfig;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
@@ -25,7 +29,7 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = ${config.databaseVersion};
     private static ${config.sqliteOpenHelperClassName} sInstance;
     private final Context mContext;
-    private final ${config.sqliteOpenHelperCallbacksClassName} mOpenHelperCallbacks;
+    private final BaseSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
 
     <#list model.entities as entity>
     public static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
@@ -86,7 +90,11 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private ${config.sqliteOpenHelperClassName}(Context context) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
+        <#if (config.sqliteOpenHelperCallbacksClassName)??>
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
+        <#else>
+        mOpenHelperCallbacks = new BaseSQLiteOpenHelperCallbacks();
+        </#if>
     }
 
 
@@ -102,7 +110,11 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
     private ${config.sqliteOpenHelperClassName}(Context context, DatabaseErrorHandler errorHandler) {
         super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
+        <#if (config.sqliteOpenHelperCallbacksClassName)??>
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
+        <#else>
+        mOpenHelperCallbacks = new BaseSQLiteOpenHelperCallbacks();
+        </#if>
     }
 
 

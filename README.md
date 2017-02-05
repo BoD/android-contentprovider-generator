@@ -25,7 +25,7 @@ These are self-explanatory so here is an example:
 ```json
 {
 	"syntaxVersion": 3,
-	"projectPackageId": "com.example.app",
+	"applicationId": "com.example.app",
 	"authority": "com.example.app.provider",
 	"providerJavaPackage": "com.example.app.provider",
 	"providerClassName": "ExampleProvider",

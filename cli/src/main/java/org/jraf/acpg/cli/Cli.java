@@ -31,6 +31,7 @@ import com.beust.jcommander.JCommander;
 
 import org.jraf.acpg.lib.Generator;
 import org.jraf.acpg.lib.GeneratorException;
+import org.jraf.acpg.lib.config.Config;
 
 public class Cli {
     private static final Logger LOG = LogManager.getLogger(Cli.class);
@@ -45,8 +46,15 @@ public class Cli {
             return;
         }
 
+        Config config = null;
         try {
-            new Generator(arguments.inputDir, arguments.outputDir).generate();
+            config = Generator.parseConfig(arguments.inputDir);
+        } catch (GeneratorException e) {
+            LOG.error("Problem while parsing the _config.json file.", e);
+        }
+
+        try {
+            new Generator(config, arguments.inputDir, arguments.outputDir).generate();
         } catch (GeneratorException e) {
             LOG.error("Problem while generating the ContentProvider.", e);
         }

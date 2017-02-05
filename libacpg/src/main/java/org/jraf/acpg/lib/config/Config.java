@@ -24,9 +24,11 @@
  */
 package org.jraf.acpg.lib.config;
 
-public class Config {
+import java.io.Serializable;
+
+public class Config implements Serializable, Cloneable {
     public Integer syntaxVersion;
-    public String projectPackageId;
+    public String applicationId;
     public String authority;
     public String providerJavaPackage;
     public String providerClassName;
@@ -38,4 +40,51 @@ public class Config {
     public Boolean useAnnotations;
     public Boolean useSupportLibrary;
     public Boolean generateBeans;
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Config config = (Config) o;
+
+        if (syntaxVersion != null ? !syntaxVersion.equals(config.syntaxVersion) : config.syntaxVersion != null) return false;
+        if (applicationId != null ? !applicationId.equals(config.applicationId) : config.applicationId != null) return false;
+        if (authority != null ? !authority.equals(config.authority) : config.authority != null) return false;
+        if (providerJavaPackage != null ? !providerJavaPackage.equals(config.providerJavaPackage) : config.providerJavaPackage != null) return false;
+        if (providerClassName != null ? !providerClassName.equals(config.providerClassName) : config.providerClassName != null) return false;
+        if (sqliteOpenHelperClassName != null ? !sqliteOpenHelperClassName.equals(config.sqliteOpenHelperClassName) : config.sqliteOpenHelperClassName != null)
+            return false;
+        if (sqliteOpenHelperCallbacksClassName != null ? !sqliteOpenHelperCallbacksClassName.equals(config.sqliteOpenHelperCallbacksClassName) :
+                config.sqliteOpenHelperCallbacksClassName != null) return false;
+        if (databaseFileName != null ? !databaseFileName.equals(config.databaseFileName) : config.databaseFileName != null) return false;
+        if (databaseVersion != null ? !databaseVersion.equals(config.databaseVersion) : config.databaseVersion != null) return false;
+        if (enableForeignKeys != null ? !enableForeignKeys.equals(config.enableForeignKeys) : config.enableForeignKeys != null) return false;
+        if (useAnnotations != null ? !useAnnotations.equals(config.useAnnotations) : config.useAnnotations != null) return false;
+        if (useSupportLibrary != null ? !useSupportLibrary.equals(config.useSupportLibrary) : config.useSupportLibrary != null) return false;
+        return generateBeans != null ? generateBeans.equals(config.generateBeans) : config.generateBeans == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = syntaxVersion != null ? syntaxVersion.hashCode() : 0;
+        result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
+        result = 31 * result + (authority != null ? authority.hashCode() : 0);
+        result = 31 * result + (providerJavaPackage != null ? providerJavaPackage.hashCode() : 0);
+        result = 31 * result + (providerClassName != null ? providerClassName.hashCode() : 0);
+        result = 31 * result + (sqliteOpenHelperClassName != null ? sqliteOpenHelperClassName.hashCode() : 0);
+        result = 31 * result + (sqliteOpenHelperCallbacksClassName != null ? sqliteOpenHelperCallbacksClassName.hashCode() : 0);
+        result = 31 * result + (databaseFileName != null ? databaseFileName.hashCode() : 0);
+        result = 31 * result + (databaseVersion != null ? databaseVersion.hashCode() : 0);
+        result = 31 * result + (enableForeignKeys != null ? enableForeignKeys.hashCode() : 0);
+        result = 31 * result + (useAnnotations != null ? useAnnotations.hashCode() : 0);
+        result = 31 * result + (useSupportLibrary != null ? useSupportLibrary.hashCode() : 0);
+        result = 31 * result + (generateBeans != null ? generateBeans.hashCode() : 0);
+        return result;
+    }
 }

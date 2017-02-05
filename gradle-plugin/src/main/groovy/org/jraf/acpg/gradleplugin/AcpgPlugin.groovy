@@ -1,3 +1,28 @@
+/*
+ * This source is part of the
+ *      _____  ___   ____
+ *  __ / / _ \/ _ | / __/___  _______ _
+ * / // / , _/ __ |/ _/_/ _ \/ __/ _ `/
+ * \___/_/|_/_/ |_/_/ (_)___/_/  \_, /
+ *                              /___/
+ * repository.
+ *
+ * Copyright (C) 2012-2017 Benoit 'BoD' Lubek (BoD@JRAF.org)
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package org.jraf.acpg.gradleplugin
 
 import org.gradle.api.Plugin
@@ -11,18 +36,16 @@ class AcpgPlugin implements Plugin<Project> {
 
         def acgpExtension = project.extensions.create('acgp', AcpgPluginExtension, project)
 
-//        project.task('generateContentProvider') {
-//            doLast {
-//                println 'Hello, World!'
-//            }
-//        }
-
         project.afterEvaluate {
             project.android[variants(project)].all { variant ->
                 File sourceFolder = project.file("${project.buildDir}/generated/source/acgp/${variant.dirName}")
-                def javaGenerationTask = project.tasks.create(name: "acpgGenerate${variant.name.capitalize()}ContentProvider", type: GenerateContentProvider) {
-                    inputDir acgpExtension.inputDir
+                // Get the variant's applicationId and pass it to the config
+                def applicationId = [variant.mergedFlavor.applicationId, variant.buildType.applicationIdSuffix].findAll().join()
+                acgpExtension.applicationId applicationId
+                def javaGenerationTask = project.tasks.create(name: "acpgGenerate${variant.name.capitalize()}ContentProvider", type: GenerateContentProviderTask) {
+                    modelsDir acgpExtension.modelsDir
                     outputDir sourceFolder
+                    config acgpExtension.config
                 }
                 variant.registerJavaGeneratingTask(javaGenerationTask, sourceFolder)
             }

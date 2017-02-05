@@ -49,15 +49,16 @@ import org.jraf.acpg.lib.model.Model;
 public class ModelParser {
     private static final Logger LOG = LogManager.getLogger(ModelParser.class);
 
-    public Model parseModel(ObjectMapper objectMapper, File inputDir) throws GeneratorException {
-        if (!inputDir.exists()) throw new GeneratorException("Could not find the directory at this location: '" + inputDir.getAbsolutePath() + "'.");
+    public Model parseModel(File modelsDir) throws GeneratorException {
+        if (!modelsDir.exists()) throw new GeneratorException("Could not find the directory at this location: '" + modelsDir.getAbsolutePath() + "'.");
 
         Model model = new Model();
-        File[] entityFiles = inputDir.listFiles(pathname -> !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json"));
+        File[] entityFiles = modelsDir.listFiles(pathname -> !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json"));
 
         // Sort the entity files (lexicographically) so they are always processed in the same order
         Arrays.sort(entityFiles);
 
+        ObjectMapper objectMapper = new ObjectMapper();
         for (File entityFile : entityFiles) {
             LOG.debug(entityFile.getAbsolutePath());
             String entityName = FilenameUtils.getBaseName(entityFile.getAbsolutePath());
@@ -185,7 +186,7 @@ public class ModelParser {
             model.addEntity(entity);
         }
         // Header (optional)
-        File headerFile = new File(inputDir, "header.txt");
+        File headerFile = new File(modelsDir, "header.txt");
         if (headerFile.exists()) {
             String header;
             try {

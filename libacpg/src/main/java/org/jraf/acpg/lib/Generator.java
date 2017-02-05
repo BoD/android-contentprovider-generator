@@ -37,8 +37,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import freemarker.template.Configuration;
 import freemarker.template.DefaultObjectWrapper;
 import freemarker.template.Template;
@@ -56,7 +54,7 @@ public class Generator {
     private static String FILE_CONFIG = "_config.json";
 
     private final File mProviderDir;
-    private final Config mConfig;
+    private Config mConfig = null;
     private final Model mModel;
     private Configuration mFreemarkerConfig;
 
@@ -224,12 +222,10 @@ public class Generator {
     }
 
     private void generateSqliteOpenHelperCallbacks() throws IOException, TemplateException {
-        Template template = getFreeMarkerConfig().getTemplate("sqliteopenhelpercallbacks.ftl");
-        File outputFile = new File(mProviderDir, mConfig.sqliteOpenHelperCallbacksClassName + ".java");
-        if (outputFile.exists()) {
-            LOG.info("Open helper callbacks class already exists and won't be overwritten.");
-            return;
-        }
+        File baseClassesDir = new File(mProviderDir, "base");
+        baseClassesDir.mkdirs();
+        Template template = getFreeMarkerConfig().getTemplate("basesqliteopenhelpercallbacks.ftl");
+        File outputFile = new File(baseClassesDir, "BaseSQLiteOpenHelperCallbacks.java");
         Writer out = new OutputStreamWriter(new FileOutputStream(outputFile));
 
         Map<String, Object> root = new HashMap<>();
@@ -264,18 +260,25 @@ public class Generator {
             generateSqliteOpenHelperCallbacks();
             printManifest();
         } catch (TemplateException e) {
-            throw new GeneratorException("Problem while generating the code", e);
+            throw new GeneratorException("Problem while generating the code.", e);
         } catch (IOException e) {
-            throw new GeneratorException("Problem while trying to read a template file", e);
+            throw new GeneratorException("Problem while trying to read a template file.", e);
         }
     }
 
-    public Generator(File inputDir, File outputDir) throws GeneratorException {
+    public static Config parseConfig(File inputDir) throws GeneratorException {
         File configFile = new File(inputDir, FILE_CONFIG);
-        ObjectMapper objectMapper = new ObjectMapper();
-        mConfig = new ConfigParser().parseConfig(objectMapper, configFile);
+        return new ConfigParser().parseConfig(configFile);
+    }
+
+    public Generator(Config config, File modelsDir, File outputDir) throws GeneratorException {
+        // We modify the given config, so clone it first
+        try {
+            mConfig = (Config) config.clone();
+        } catch (CloneNotSupportedException ignored) {}
+        new ConfigParser().validateConfig(mConfig);
         mProviderDir = new File(outputDir, mConfig.providerJavaPackage.replace('.', '/'));
         mProviderDir.mkdirs();
-        mModel = new ModelParser().parseModel(objectMapper, inputDir);
+        mModel = new ModelParser().parseModel(modelsDir);
     }
 }

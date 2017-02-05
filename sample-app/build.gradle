@@ -25,7 +25,15 @@ android {
 }
 
 acgp {
-    inputDir file('etc/acpg')
+    modelsDir file('etc/acpg')
+    providerJavaPackage 'org.jraf.androidcontentprovidergenerator.sample.provider'
+    authority '${applicationId}.provider'
+    providerClassName 'SampleProvider'
+    databaseFileName 'sample.db'
+    databaseVersion 1
+    enableForeignKeys true
+    useAnnotations true
+    useSupportLibrary true
 }
 
 dependencies {
