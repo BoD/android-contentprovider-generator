@@ -1,3 +1,5 @@
+description = 'cli (Android ContentProvider Generator Command Line Interface)'
+
 buildscript {
     repositories {
         jcenter()
@@ -7,10 +9,12 @@ buildscript {
     }
 }
 
+apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-description = 'cli (Android ContentProvider Generator Command Line Interface)'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 mainClassName = "org.jraf.acpg.cli.Cli"
 

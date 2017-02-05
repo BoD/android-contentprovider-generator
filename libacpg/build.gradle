@@ -1,4 +1,11 @@
 description = 'libacpg (Android ContentProvider Generator Library)'
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
     compile 'commons-io:commons-io:2.4'
@@ -6,4 +13,15 @@ dependencies {
     compile 'org.freemarker:freemarker:2.3.20'
     compile 'org.apache.logging.log4j:log4j-api:2.8'
     compile 'org.apache.logging.log4j:log4j-core:2.8'
+}
+
+// Use './gradlew publishToMavenLocal' to 'install' locally
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'libacpg'
+
+            from components.java
+        }
+    }
 }

@@ -48,7 +48,7 @@ public class Cli {
         try {
             new Generator(arguments.inputDir, arguments.outputDir).generate();
         } catch (GeneratorException e) {
-            LOG.error("Problem while generating.", e);
+            LOG.error("Problem while generating the ContentProvider.", e);
         }
     }
 

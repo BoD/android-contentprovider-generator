@@ -1,17 +1,18 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0-beta3'
+    }
+}
+
 allprojects {
     apply plugin: 'maven'
 
     group = 'org.jraf'
     version = '1.12.0'
-}
-
-subprojects {
-    apply plugin: 'java'
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-    tasks.withType(JavaCompile) {
-        options.encoding = 'UTF-8'
-    }
 
     repositories {
         mavenLocal()
