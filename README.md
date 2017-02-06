@@ -20,12 +20,12 @@ Usage
 
 There are two possible ways to generate the code:
 
-1. as part of the build script (with a gradle plugin)
+1. as part of the build script (with a Gradle plugin)
 2. as a one-time step (using a command line tool)
 
-The gradle plugin is perhaps the 'cleaner' way in the sense that the generated
+The Gradle plugin is perhaps the 'cleaner' way in the sense that the generated
 code won't be part of the source (not checked into VCS). The configuration is declared inside
-the gradle script which allows to update it easily.
+the Gradle script which allows to update it easily.
 
 Alternatively, a one-time generation can be done (typically at the beginning of the project.)
 The generated code is part of the source and checked into VCS: this allows you
@@ -330,9 +330,9 @@ Here is the table shema of the sample:
 Building
 --------
 
-This is a gradle project.
+This is a Gradle project.
 
-`./gradlew publishToMavenLocal` to 'install' the gradle plugin to your local maven repo
+`./gradlew publishToMavenLocal` to 'install' the Gradle plugin to your local maven repo
 
 `./gradlew shadowJar` to build the cli tool
 
