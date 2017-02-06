@@ -17,6 +17,7 @@ Usage
 -----
 
 There are two possible ways to generate the code:
+
 1. as part of the build script (with a gradle plugin)
 2. as a one-time step (using a command line tool)
 
