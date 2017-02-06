@@ -104,7 +104,7 @@ acpg {
 
 ### Option 2: Command line tool
 
-The configuration syntax is the same, except you declare it in a file named `_config.json`
+The configuration is the same, except you declare it in a file named `_config.json`
 in the same folder as the entity files.
 
 Here is an example:
