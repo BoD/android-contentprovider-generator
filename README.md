@@ -47,7 +47,7 @@ apply plugin: 'org.jraf.acpg.gradleplugin'
 
 // This is where you declare a few parameters used to generate the code
 acpg {
-    // Where to find the entity files (see below)
+    // Where to find the entity files (see 'Entity files' below)
     // Optional - default value: 'etc/acpg' in the root project
     entitiesDir file('etc/acpg-entities')
 
@@ -75,7 +75,7 @@ acpg {
     // Optional - this allows you to get called when the db is opened/created/upgraded
     sqliteOpenHelperCallbacksClassName 'ExampleSQLiteOpenHelperCallbacks'
 
-    // Whether to enable foreign keys support
+    // Whether to enable foreign keys support (see 'Advanced usage' below)
     // Optional - default value: false
     enableForeignKeys true
 
