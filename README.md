@@ -124,14 +124,12 @@ Here is an example:
 ```
 
 About `packageName`: this must be the same as the value of the `package` attribute in your manifest.
-Not to be confused with the applicationId (see https://developer.android.com/studio/build/application-id.html)
+Not to be confused with the `applicationId` (see https://developer.android.com/studio/build/application-id.html)
 
-#### Get the tool
+#### Get and run the tool
 
 Download the `acpg-cli-1.12.0.jar` file here:
 https://github.com/BoD/android-contentprovider-generator/releases/latest
-
-#### Run the tool
 
 `java -jar acpg-cli-1.12.0.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
@@ -211,9 +209,9 @@ Notes:
 - if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 - the `constraints` and `defaultOrder` sections are optional
 
-A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
+A more comprehensive sample is available in the [sample-app/etc/acpg](sample-app/etc/acpg) folder.
 
-You can also have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+You can have a look at the corresponding generated code in the [etc/sample-generated-code](etc/sample-generated-code) folder.
 
 By convention, you should name your entities and fields in lower case with words separated by '_', like in the example above.
 
@@ -323,7 +321,7 @@ A sample is available in the [sample-app](sample-app) folder, with the entities 
 You can have a look at the corresponding generated code in the [etc/sample-generated-code](etc/sample-generated-code) folder.
 
 Here is the table shema of the sample:
-![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
+![Table shema of the sample](etc/sample-schema.png?raw=true "The sample")
 
 
 Building

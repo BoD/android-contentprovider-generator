@@ -35,7 +35,7 @@ import android.os.Build;
 import android.util.Log;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.BaseSQLiteOpenHelperCallbacks;
-import org.jraf.androidcontentprovidergenerator.sample.provider.SampleSQLiteOpenHelperCallbacks
+import org.jraf.androidcontentprovidergenerator.sample.provider.SampleSQLiteOpenHelperCallbacks;
 import org.jraf.androidcontentprovidergenerator.sample.BuildConfig;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.CompanyColumns;
 import org.jraf.androidcontentprovidergenerator.sample.provider.manual.ManualColumns;
