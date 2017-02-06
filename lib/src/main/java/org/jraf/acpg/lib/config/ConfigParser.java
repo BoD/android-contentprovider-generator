@@ -57,7 +57,7 @@ public class ConfigParser {
         }
 
         // Ensure mandatory fields are present
-        ensureNotNull(config.applicationId, "applicationId");
+        ensureNotNull(config.packageName, "packageName");
         ensureNotNull(config.providerJavaPackage, "providerJavaPackage");
         ensureNotNull(config.providerClassName, "providerClassName");
         ensureNotNull(config.databaseFileName, "databaseFileName");
@@ -65,7 +65,7 @@ public class ConfigParser {
 
         // Default values
         if (config.authority == null) {
-            String defaultValue = config.applicationId;
+            String defaultValue = config.packageName;
             LOG.info("'authority' not set in configuration: assuming '" + defaultValue + "'.");
             config.authority = defaultValue;
         }

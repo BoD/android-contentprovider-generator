@@ -28,7 +28,7 @@ import java.io.Serializable;
 
 public class Config implements Serializable, Cloneable {
     public Integer syntaxVersion;
-    public String applicationId;
+    public String packageName;
     public String authority;
     public String providerJavaPackage;
     public String providerClassName;
@@ -54,7 +54,7 @@ public class Config implements Serializable, Cloneable {
         Config config = (Config) o;
 
         if (syntaxVersion != null ? !syntaxVersion.equals(config.syntaxVersion) : config.syntaxVersion != null) return false;
-        if (applicationId != null ? !applicationId.equals(config.applicationId) : config.applicationId != null) return false;
+        if (packageName != null ? !packageName.equals(config.packageName) : config.packageName != null) return false;
         if (authority != null ? !authority.equals(config.authority) : config.authority != null) return false;
         if (providerJavaPackage != null ? !providerJavaPackage.equals(config.providerJavaPackage) : config.providerJavaPackage != null) return false;
         if (providerClassName != null ? !providerClassName.equals(config.providerClassName) : config.providerClassName != null) return false;
@@ -73,7 +73,7 @@ public class Config implements Serializable, Cloneable {
     @Override
     public int hashCode() {
         int result = syntaxVersion != null ? syntaxVersion.hashCode() : 0;
-        result = 31 * result + (applicationId != null ? applicationId.hashCode() : 0);
+        result = 31 * result + (packageName != null ? packageName.hashCode() : 0);
         result = 31 * result + (authority != null ? authority.hashCode() : 0);
         result = 31 * result + (providerJavaPackage != null ? providerJavaPackage.hashCode() : 0);
         result = 31 * result + (providerClassName != null ? providerClassName.hashCode() : 0);

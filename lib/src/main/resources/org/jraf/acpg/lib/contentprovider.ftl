@@ -16,7 +16,7 @@ import android.support.annotation.NonNull;
 </#if>
 import android.util.Log;
 
-import ${config.applicationId}.BuildConfig;
+import ${config.packageName}.BuildConfig;
 import ${config.providerJavaPackage}.base.BaseContentProvider;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;

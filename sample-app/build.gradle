@@ -1,5 +1,6 @@
 buildscript {
     repositories {
+        jcenter()
         mavenLocal()
     }
 
@@ -24,13 +25,14 @@ android {
     }
 }
 
-acgp {
-    modelsDir file('etc/acpg')
+acpg {
+    entitiesDir file('etc/acpg')
     providerJavaPackage 'org.jraf.androidcontentprovidergenerator.sample.provider'
     authority '${applicationId}.provider'
     providerClassName 'SampleProvider'
     databaseFileName 'sample.db'
     databaseVersion 1
+    sqliteOpenHelperCallbacksClassName 'SampleSQLiteOpenHelperCallbacks'
     enableForeignKeys true
     useAnnotations true
     useSupportLibrary true

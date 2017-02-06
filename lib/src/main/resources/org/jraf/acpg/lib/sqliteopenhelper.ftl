@@ -15,9 +15,9 @@ import android.util.Log;
 
 import ${config.providerJavaPackage}.base.BaseSQLiteOpenHelperCallbacks;
 <#if (config.sqliteOpenHelperCallbacksClassName)??>
-import ${config.providerJavaPackage}.${config.sqliteOpenHelperCallbacksClassName}
+import ${config.providerJavaPackage}.${config.sqliteOpenHelperCallbacksClassName};
 </#if>
-import ${config.applicationId}.BuildConfig;
+import ${config.packageName}.BuildConfig;
 <#list model.entities as entity>
 import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>

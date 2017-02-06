@@ -25,6 +25,7 @@
 
 package org.jraf.acpg.gradleplugin
 
+import com.android.builder.core.DefaultManifestParser
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.ProjectConfigurationException
@@ -34,18 +35,20 @@ class AcpgPlugin implements Plugin<Project> {
     void apply(Project project) {
         ensurePluginDependencies(project)
 
-        def acgpExtension = project.extensions.create('acgp', AcpgPluginExtension, project)
+        def acpgExtension = project.extensions.create('acpg', AcpgPluginExtension, project)
 
         project.afterEvaluate {
+            // Get the packageName from the manifest
+            def manifestParser = new DefaultManifestParser(project.android.sourceSets.main.manifest.srcFile)
+            def packageName = manifestParser.getPackage()
+
             project.android[variants(project)].all { variant ->
-                File sourceFolder = project.file("${project.buildDir}/generated/source/acgp/${variant.dirName}")
-                // Get the variant's applicationId and pass it to the config
-                def applicationId = [variant.mergedFlavor.applicationId, variant.buildType.applicationIdSuffix].findAll().join()
-                acgpExtension.applicationId applicationId
+                File sourceFolder = project.file("${project.buildDir}/generated/source/acpg/${variant.dirName}")
+                acpgExtension.packageName packageName
                 def javaGenerationTask = project.tasks.create(name: "acpgGenerate${variant.name.capitalize()}ContentProvider", type: GenerateContentProviderTask) {
-                    modelsDir acgpExtension.modelsDir
+                    entitiesDir acpgExtension.entitiesDir
                     outputDir sourceFolder
-                    config acgpExtension.config
+                    config acpgExtension.config
                 }
                 variant.registerJavaGeneratingTask(javaGenerationTask, sourceFolder)
             }

@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import android.util.Log;
 
-import ${config.applicationId}.BuildConfig;
+import ${config.packageName}.BuildConfig;
 
 /**
  * Override this class to implement your custom database opening, creation or upgrade.

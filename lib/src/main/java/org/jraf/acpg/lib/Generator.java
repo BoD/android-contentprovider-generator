@@ -271,7 +271,7 @@ public class Generator {
         return new ConfigParser().parseConfig(configFile);
     }
 
-    public Generator(Config config, File modelsDir, File outputDir) throws GeneratorException {
+    public Generator(Config config, File entitiesDir, File outputDir) throws GeneratorException {
         // We modify the given config, so clone it first
         try {
             mConfig = (Config) config.clone();
@@ -279,6 +279,6 @@ public class Generator {
         new ConfigParser().validateConfig(mConfig);
         mProviderDir = new File(outputDir, mConfig.providerJavaPackage.replace('.', '/'));
         mProviderDir.mkdirs();
-        mModel = new ModelParser().parseModel(modelsDir);
+        mModel = new ModelParser().parseModel(entitiesDir);
     }
 }

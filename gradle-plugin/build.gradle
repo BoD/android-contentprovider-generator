@@ -19,3 +19,7 @@ publishing {
         }
     }
 }
+
+dependencies {
+    compile 'com.android.tools.build:gradle:2.2.0'
+}

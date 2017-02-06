@@ -40,7 +40,7 @@ class GenerateContentProviderTask extends DefaultTask {
     File outputDir
 
     @InputDirectory
-    File modelsDir
+    File entitiesDir
 
     @Input
     Config config
@@ -48,7 +48,7 @@ class GenerateContentProviderTask extends DefaultTask {
     @TaskAction
     void generate() {
         try {
-            new Generator(config, modelsDir, outputDir).generate()
+            new Generator(config, entitiesDir, outputDir).generate()
         } catch (GeneratorException e) {
             throw new GradleException("Problem while generating the ContentProvider: $e.message", e)
         }

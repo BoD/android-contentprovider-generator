@@ -37,14 +37,14 @@ class AcpgPluginExtension {
         config.syntaxVersion = 4
     }
 
-    def modelsDir = project.parent.file('etc/acpg')
+    def entitiesDir = project.parent.file('etc/acpg')
 
     def syntaxVersion(int syntaxVersion) {
         config.syntaxVersion = syntaxVersion
     }
 
-    def applicationId(String applicationId) {
-        config.applicationId = applicationId
+    def packageName(String packageName) {
+        config.packageName = packageName
     }
 
     def authority(String authority) {
