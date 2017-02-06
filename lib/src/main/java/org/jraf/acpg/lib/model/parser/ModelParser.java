@@ -25,6 +25,7 @@
 package org.jraf.acpg.lib.model.parser;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +54,12 @@ public class ModelParser {
         if (!entitiesDir.exists()) throw new GeneratorException("Could not find the directory at this location: '" + entitiesDir.getAbsolutePath() + "'.");
 
         Model model = new Model();
-        File[] entityFiles = entitiesDir.listFiles(pathname -> !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json"));
+        File[] entityFiles = entitiesDir.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return !pathname.getName().startsWith("_") && pathname.getName().endsWith(".json");
+            }
+        });
 
         // Sort the entity files (lexicographically) so they are always processed in the same order
         Arrays.sort(entityFiles);
