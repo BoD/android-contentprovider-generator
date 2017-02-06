@@ -5,7 +5,6 @@ A tool to generate an Android ContentProvider.
 It takes a set of entity (a.k.a "table") definitions as the input, and generates:
 - a `ContentProvider` class
 - an `SQLiteOpenHelper` class
-- an `SQLiteOpenHelperCallbacks` class
 - one `Columns` class per entity
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
