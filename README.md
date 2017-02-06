@@ -1,7 +1,9 @@
 Android ContentProvider Generator (acpg)
 ========================================
 
-A tool to generate an Android ContentProvider.
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20ContentProvider%20Generator-brightgreen.svg?style=plastic)](https://android-arsenal.com/details/1/111)
+
+A tool to generate Android ContentProviders.
 It takes a set of entity (a.k.a "table") definitions as the input, and generates:
 - a `ContentProvider` class
 - an `SQLiteOpenHelper` class
@@ -52,7 +54,7 @@ acpg {
     // Optional - default value: 'etc/acpg' in the root project
     entitiesDir file('etc/acpg-entities')
 
-    // Package in which all the code will be generated
+    // Java package in which all the code will be generated
     providerJavaPackage 'com.example.app.provider'
 
     // ContentProvider authority
