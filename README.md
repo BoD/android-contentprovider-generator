@@ -45,7 +45,7 @@ apply plugin: 'org.jraf.acpg.gradleplugin'
 
 (...)
 
-// This is where you declare a few parameters that will be used to generate the code
+// This is where you declare a few parameters used to generate the code
 acpg {
     // Where to find the entity files (see below)
     // Optional - default value: 'etc/acpg' in the root project
