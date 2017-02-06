@@ -17,8 +17,8 @@ Usage
 -----
 
 There are two possible ways to generate the code:
-- as part of the build script (with a gradle plugin)
-- as a one-time step (using a command line tool)
+1. as part of the build script (with a gradle plugin)
+2. as a one-time step (using a command line tool)
 
 The gradle plugin is perhaps the 'cleaner' way in the sense that the generated
 code won't be part of the source (not checked into VCS). The configuration is declared inside
@@ -31,7 +31,7 @@ to modify it if you need to.
 You can decide which option is the best for your project :)
 
 
-### Gradle plugin
+### Option 1: Gradle plugin
 
 Add this to your app's `build.gradle`:
 ```groovy
@@ -99,7 +99,7 @@ acpg {
 ```
 
 
-### Command line tool
+### Option 2: Command line tool
 
 The configuration syntax is the same, except you declare it in a file named `_config.json`
 in the same folder as the entity files.
