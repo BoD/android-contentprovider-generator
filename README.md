@@ -332,7 +332,7 @@ Building
 
 This is a Gradle project.
 
-`./gradlew publishToMavenLocal` to 'install' the Gradle plugin to your local maven repo
+`./gradlew install` to 'install' the Gradle plugin to your local maven repo
 
 `./gradlew shadowJar` to build the cli tool
 
