@@ -6,6 +6,23 @@ apply plugin: 'maven-publish'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+javadoc.failOnError = false
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
     compile 'commons-io:commons-io:2.4'
@@ -15,13 +32,4 @@ dependencies {
     compile 'org.apache.logging.log4j:log4j-core:2.8'
 }
 
-// Use './gradlew publishToMavenLocal' to 'install' locally
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId 'acpg-lib'
-
-            from components.java
-        }
-    }
-}
+// Use "./gradlew install" to deploy the artifacts to your local maven repository

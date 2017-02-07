@@ -19,7 +19,7 @@ targetCompatibility = 1.7
 mainClassName = "org.jraf.acpg.cli.Cli"
 
 dependencies {
-    compile project(':lib')
+    compile project(':acpg-lib')
     compile 'commons-lang:commons-lang:2.6'
     compile 'com.beust:jcommander:1.32'
     compile 'org.apache.logging.log4j:log4j-api:2.8'
@@ -31,3 +31,5 @@ shadowJar {
     classifier = null
     version = project.version
 }
+
+// Use "./gradlew shadowJar" to create the jar including dependencies
