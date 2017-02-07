@@ -404,9 +404,7 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
      * @param projection The projection to use.
      * @return The CursorLoader.
      */
-    public CursorLoader getCursorLoader(Context context, String[] projection) {
-        return new CursorLoader(context, uri(), projection, sel(), args(), order());
-    }
+    public abstract CursorLoader getCursorLoader(Context context, String[] projection);
 
     /**
      * Returns a {@code CursorLoader} based on this selection, with a {@code null} (all columns) selection.

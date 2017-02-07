@@ -10,6 +10,11 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+<#if config.useSupportLibrary>
+import android.support.v4.content.CursorLoader;
+<#else>
+import android.content.CursorLoader;
+</#if>
 
 import ${config.providerJavaPackage}.base.AbstractSelection;
 <#list entity.joinedEntities as joinedEntity>
@@ -64,6 +69,20 @@ public class ${entity.nameCamelCase}Selection extends AbstractSelection<${entity
      */
     public ${entity.nameCamelCase}Cursor query(Context context) {
         return query(context, null);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CursorLoader getCursorLoader(Context context, String[] projection) {
+        return new CursorLoader(context, uri(), projection, sel(), args(), order()) {
+            @Override
+            public Cursor loadInBackground() {
+                return new ${entity.nameCamelCase}Cursor(super.loadInBackground());
+            }
+        };
     }
 
 

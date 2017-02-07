@@ -172,19 +172,23 @@ public class SampleActivity extends AppCompatActivity {
                 TeamColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS TEAM_SN_PART1", // In this case we need to manually prefix and alias
                 TeamColumns.COMPANY_ID,
                 CompanyColumns.NAME,
-                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0", // In this case we need to manually prefix and alias
-                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1", // In this case we need to manually prefix and alias
+                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART0 + " AS COMPANY_SN_PART0",
+                // In this case we need to manually prefix and alias
+                CompanyColumns.PREFIX_SERIAL_NUMBER + "." + SerialNumberColumns.PART1 + " AS COMPANY_SN_PART1",
+                // In this case we need to manually prefix and alias
         };
         PersonTeamCursor c = personTeamSelection.query(this, projection);
         while (c.moveToNext()) {
             Log.d(TAG,
                     c.getPersonFirstName() + " " + c.getPersonLastName() + " (age: " + c.getPersonAge() + ", country code:" + c.getPersonCountryCode() + ")"
-                    + " - "
-                    + "team: "
-                    + c.getTeamId() + " " +  c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " + c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
-                    + " - "
-                    + "company: "
-                    + c.getTeamCompanyId() + " " + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" + c.getStringOrNull("COMPANY_SN_PART1") + ")");
+                            + " - "
+                            + "team: "
+                            + c.getTeamId() + " " + c.getTeamName() + " (country code: " + c.getTeamCountryCode() + ", S/N: " +
+                            c.getStringOrNull("TEAM_SN_PART0") + "/" + c.getStringOrNull("TEAM_SN_PART1") + ")"
+                            + " - "
+                            + "company: "
+                            + c.getTeamCompanyId() + " " + c.getTeamCompanyName() + " (S/N: " + c.getStringOrNull("COMPANY_SN_PART0") + "/" +
+                            c.getStringOrNull("COMPANY_SN_PART1") + ")");
         }
         c.close();
         // @formatter:on
@@ -231,7 +235,7 @@ public class SampleActivity extends AppCompatActivity {
 
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-                ProductCursor c = new ProductCursor(cursor);
+                ProductCursor c = (ProductCursor) cursor;
                 while (c.moveToNext()) {
                     Log.d(TAG, c.getId() + " " + c.getName() + " - manual title: " + c.getManualTitle());
                 }
