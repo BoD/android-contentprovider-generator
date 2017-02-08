@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.0-beta3'
+    }
+}
+
+allprojects {
+    apply plugin: 'maven'
+
+    group = 'org.jraf'
+    version = '1.12.0'
+
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+    distributionType = Wrapper.DistributionType.ALL
+}

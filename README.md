@@ -1,11 +1,12 @@
-Android ContentProvider Generator
-=================================
+Android ContentProvider Generator (acpg)
+========================================
 
-A tool to generate an Android ContentProvider.
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android%20ContentProvider%20Generator-brightgreen.svg?style=plastic)](https://android-arsenal.com/details/1/111)
+
+A tool to generate Android ContentProviders.
 It takes a set of entity (a.k.a "table") definitions as the input, and generates:
 - a `ContentProvider` class
-- a `SQLiteOpenHelper` class
-- a `SQLiteOpenHelperCallbacks` class
+- an `SQLiteOpenHelper` class
 - one `Columns` class per entity
 - one `Cursor` class per entity
 - one `ContentValues` class per entity
@@ -14,31 +15,129 @@ It takes a set of entity (a.k.a "table") definitions as the input, and generates
 - one `Bean` class per entity (optionally)
 
 
-How to use
-----------
+Usage
+-----
 
-### The `_config.json` file
+There are two possible ways to generate the code:
 
-This is where you declare a few parameters that will be used to generate the code.
+1. as part of the build script (with a Gradle plugin)
+2. as a one-time step (using a command line tool)
 
-These are self-explanatory so here is an example:
+The Gradle plugin is perhaps the 'cleaner' way in the sense that the generated
+code won't be part of the source (not checked into VCS). The configuration is declared inside
+the Gradle script which allows to update it easily.
+
+Alternatively, a one-time generation can be done (typically at the beginning of the project.)
+The generated code is part of the source and checked into VCS: this allows you
+to modify it if you need to.
+
+You can decide which option is the best for your project :)
+
+
+### Option 1: Gradle plugin
+
+Add this to your app's `build.gradle`:
+```groovy
+buildscript {
+    dependencies {
+        classpath "org.jraf:acpg-gradle-plugin:1.12.0"
+    }
+}
+
+apply plugin: 'org.jraf.acpg.gradleplugin'
+
+(...)
+
+// This is where you declare a few parameters used to generate the code
+acpg {
+    // Where to find the entity files (see 'Entity files' below)
+    // Optional - default value: 'etc/acpg' in the root project
+    entitiesDir file('etc/acpg-entities')
+
+    // Java package in which all the code will be generated
+    providerJavaPackage 'com.example.app.provider'
+
+    // ContentProvider authority
+    // "${applicationId}" will be substituted by BuildConfig.APPLICATION_ID in the generated code
+    authority '${applicationId}.provider'
+
+    // Name of the provider class
+    providerClassName 'ExampleProvider'
+
+    // Name of the db file
+    databaseFileName 'example.db'
+
+    // Version of the db
+    databaseVersion 1
+
+    // Name of the SQLiteOpenHelper class
+    // Optional - default value: providerClassName + "SQLiteOpenHelper"
+    sqliteOpenHelperClassName 'ExampleSQLiteOpenHelper'
+
+    // Name of a subclass of BaseSQLiteOpenHelperCallbacks
+    // Optional - this allows you to get called when the db is opened/created/upgraded
+    sqliteOpenHelperCallbacksClassName 'ExampleSQLiteOpenHelperCallbacks'
+
+    // Whether to enable foreign keys support (see 'Advanced usage' below)
+    // Optional - default value: false
+    enableForeignKeys true
+
+    // Whether @Nullable/@NonNull annotations will be used in the generated code
+    // Optional - default value: false
+    useAnnotations true
+
+    // Whether support library classes are used or the Android SDK ones (e.g. CursorLoader)
+    // Optional - default value: false
+    useSupportLibrary true
+
+    // Whether to generate a 'Beans' class for each entity
+    // Optional - default value: true
+    generateBeans true
+
+    // Version of the tool syntax (must be 4)
+    // The allows to break the build immediately if an incompatible version of the tool is used. Safety first!
+    // Optional - default value: 4
+    syntaxVersion 4
+}
+```
+
+
+### Option 2: Command line tool
+
+The configuration is the same, except you declare it in a file named `_config.json`
+in the same folder as the entity files.
+
+Here is an example:
 ```json
 {
-	"syntaxVersion": 3,
-	"projectPackageId": "com.example.app",
-	"authority": "com.example.app.provider",
+	"syntaxVersion": 4,
+	"packageName": "com.example.app",
 	"providerJavaPackage": "com.example.app.provider",
+	"authority": "${applicationId}.provider",
 	"providerClassName": "ExampleProvider",
-	"sqliteOpenHelperClassName": "ExampleSQLiteOpenHelper",
-	"sqliteOpenHelperCallbacksClassName": "ExampleSQLiteOpenHelperCallbacks",
 	"databaseFileName": "example.db",
 	"databaseVersion": 1,
+	"sqliteOpenHelperClassName": "ExampleSQLiteOpenHelper",
+	"sqliteOpenHelperCallbacksClassName": "ExampleSQLiteOpenHelperCallbacks",
 	"enableForeignKeys": true,
 	"useAnnotations": true,
 	"useSupportLibrary": true,
 	"generateBeans": true
 }
 ```
+
+About `packageName`: this must be the same as the value of the `package` attribute in your manifest.
+Not to be confused with the `applicationId` (see https://developer.android.com/studio/build/application-id.html)
+
+#### Get and run the tool
+
+Download the `acpg-cli-1.12.0.jar` file here:
+https://github.com/BoD/android-contentprovider-generator/releases/latest
+
+`java -jar acpg-cli-1.12.0.jar -i <input folder> -o <output folder>`
+- Input folder: where to find `_config.json` and your entity json files
+- Output folder: where the resulting files will be generated
+
 
 ### Entity files
 
@@ -113,9 +212,9 @@ Notes:
 - if `documentation` is present the value will be copied in Javadoc blocks in the generated code.
 - the `constraints` and `defaultOrder` sections are optional
 
-A more comprehensive sample is available in the [etc/sample](etc/sample) folder.
+A more comprehensive sample is available in the [sample-app/etc/acpg](sample-app/etc/acpg) folder.
 
-You can also have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+You can have a look at the corresponding generated code in the [etc/sample-generated-code](etc/sample-generated-code) folder.
 
 By convention, you should name your entities and fields in lower case with words separated by '_', like in the example above.
 
@@ -123,16 +222,6 @@ By convention, you should name your entities and fields in lower case with words
 
 If a `header.txt` file is present, its contents will be inserted at the top of every generated file.
 
-### Get the tool
-
-Download the jar from here:
-https://github.com/BoD/android-contentprovider-generator/releases/latest
-
-### Run the tool
-
-`java -jar android_contentprovider_generator-1.11.0-bundle.jar -i <input folder> -o <output folder>`
-- Input folder: where to find `_config.json` and your entity json files
-- Output folder: where the resulting files will be generated
 
 ### Use the generated files
 
@@ -230,22 +319,22 @@ with joins because you will get several columns named `_id` in the results!
 Sample
 ------
 
-A sample is available in the [etc/sample](etc/sample) folder.
+A sample is available in the [sample-app](sample-app) folder, with the entities in [sample-app/etc/acpg](sample-app/etc/acpg).
 
-You can have a look at the corresponding generated code in the [etc/sample/app](etc/sample/app/src/org/jraf/androidcontentprovidergenerator/sample/provider) folder.
+You can have a look at the corresponding generated code in the [etc/sample-generated-code](etc/sample-generated-code) folder.
 
 Here is the table shema of the sample:
-![Table shema of the sample](etc/sample/sample-schema.png?raw=true "The sample")
+![Table shema of the sample](etc/sample-schema.png?raw=true "The sample")
 
 
 Building
 --------
 
-You need maven to build this tool.
+This is a Gradle project.
 
-`mvn package`
+`./gradlew install` to 'install' the Gradle plugin to your local maven repo
 
-This will produce `android_contentprovider_generator-1.11.0-bundle.jar` in the `target` folder.
+`./gradlew shadowJar` to build the cli tool
 
 
 Similar tools

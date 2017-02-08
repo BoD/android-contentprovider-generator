@@ -1,0 +1,35 @@
+description = 'cli (Android ContentProvider Generator Command Line Interface)'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+mainClassName = "org.jraf.acpg.cli.Cli"
+
+dependencies {
+    compile project(':acpg-lib')
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'com.beust:jcommander:1.32'
+    compile 'org.apache.logging.log4j:log4j-api:2.8'
+    compile 'org.apache.logging.log4j:log4j-core:2.8'
+}
+
+shadowJar {
+    baseName = 'acpg-cli'
+    classifier = null
+    version = project.version
+}
+
+// Use "./gradlew shadowJar" to create the jar including dependencies

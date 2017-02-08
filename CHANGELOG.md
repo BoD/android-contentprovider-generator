@@ -1,6 +1,23 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.12.0 (2017-02-06)
+------
+This is a somewhat big update in the way the tool is used, and there are also a few syntax differences.
+
+- New **Gradle plugin**, and this is now the preferred way to generate the code.
+- The config `syntaxVersion` for this release is **4**.  This means you **must** update your `_config.json` file.
+- Syntax updates:
+    - `projectPackageId` is renamed to `packageName` to avoid confusion and match the term used here: https://developer.android.com/studio/build/application-id.html.
+    - `sqliteOpenHelperCallbacksClassName` is now optional. If omitted, `BaseSQLiteOpenHelperCallbacks` is used in the generated code. If present, it must reference an existing class in your project (it will not be generated), that extends `BaseSQLiteOpenHelperCallbacks`.
+    - `sqliteOpenHelperClassName`, `enableForeignKeys`, `useAnnotations`, `useSupportLibrary` and `generateBeans` are now optional and will assume default values if omitted.
+- The CLI tool still exists but its name has changed (now `acpg-cli-<version>.jar`).
+- Other internal changes that as a user, you needn't care about:
+    - Use of Gradle instead of Maven.
+    - Module separation (lib, cli, gradle-plugin).
+    - Use of Jackson to parse the json files.
+    - Use of Log4J to output logs.
+
 v1.11.0 (2016-11-12)
 ------
 - Beans generation (if new `generateBeans` boolean parameter in config is true) - fix for issue #43.

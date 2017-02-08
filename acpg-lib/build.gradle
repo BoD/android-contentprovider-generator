@@ -1,0 +1,35 @@
+description = 'lib (Android ContentProvider Generator Library)'
+
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+javadoc.failOnError = false
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+dependencies {
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+    compile 'commons-io:commons-io:2.4'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'org.freemarker:freemarker:2.3.20'
+    compile 'org.apache.logging.log4j:log4j-api:2.8'
+    compile 'org.apache.logging.log4j:log4j-core:2.8'
+}
+
+// Use "./gradlew install" to deploy the artifacts to your local maven repository

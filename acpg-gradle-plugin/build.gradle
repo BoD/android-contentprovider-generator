@@ -1,0 +1,30 @@
+description = 'gradle-plugin (Android ContentProvider Generator Gradle Plugin)'
+
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+javadoc.failOnError = false
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile project(':acpg-lib')
+    compile 'com.android.tools.build:gradle:2.2.0'
+}
+
+// Use "./gradlew install" to deploy the artifacts to your local maven repository

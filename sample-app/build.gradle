@@ -1,0 +1,45 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath "org.jraf:acpg-gradle-plugin:${project.version}"
+    }
+}
+
+apply plugin: 'com.android.application'
+apply plugin: 'org.jraf.acpg.gradleplugin'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.0'
+
+    defaultConfig {
+        applicationId 'org.jraf.androidcontentprovidergenerator.sample'
+        minSdkVersion 9
+        targetSdkVersion 25
+        versionCode 1
+        versionName '1.0'
+    }
+}
+
+acpg {
+    entitiesDir file('etc/acpg')
+    providerJavaPackage 'org.jraf.androidcontentprovidergenerator.sample.provider'
+    authority '${applicationId}.provider'
+    providerClassName 'SampleProvider'
+    databaseFileName 'sample.db'
+    databaseVersion 1
+    sqliteOpenHelperCallbacksClassName 'SampleSQLiteOpenHelperCallbacks'
+    enableForeignKeys true
+    useAnnotations true
+    useSupportLibrary true
+}
+
+dependencies {
+    compile 'com.android.support:support-compat:25.0.0'
+    compile 'com.android.support:support-core-utils:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+}

@@ -1,0 +1,15 @@
+{
+	"syntaxVersion": "4",
+	"packageName": "org.jraf.androidcontentprovidergenerator.sample",
+	"providerJavaPackage": "org.jraf.androidcontentprovidergenerator.sample.provider",
+	"authority": "org.jraf.androidcontentprovidergenerator.sample.provider",
+	"providerClassName": "SampleProvider",
+	"databaseFileName": "sample.db",
+	"databaseVersion": 1,
+	"sqliteOpenHelperClassName": "SampleSQLiteOpenHelper",
+	"sqliteOpenHelperCallbacksClassName": "SampleSQLiteOpenHelperCallbacks",
+	"enableForeignKeys": true,
+	"useAnnotations": true,
+	"useSupportLibrary": true,
+	"generateBeans": true
+}
