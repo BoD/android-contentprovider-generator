@@ -20,9 +20,9 @@ import ${config.providerJavaPackage}.base.AbstractContentValues;
  * Content values wrapper for the {@code ${entity.nameLowerCase}} table.
  */
 @SuppressWarnings({"ConstantConditions", "unused"})
-public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues {
+public class ${entity.nameCamelCase}ContentValues extends AbstractContentValues<${entity.nameCamelCase}ContentValues> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return ${entity.nameCamelCase}Columns.CONTENT_URI;
     }
 
