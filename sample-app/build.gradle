@@ -1,7 +1,7 @@
 buildscript {
     repositories {
-        jcenter()
         mavenLocal()
+        jcenter()
     }
 
     dependencies {
@@ -22,6 +22,8 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName '1.0'
+
+        buildConfigField 'boolean', 'LOG_DEBUG_PROVIDER', "true"
     }
 }
 
@@ -36,6 +38,7 @@ acpg {
     enableForeignKeys true
     useAnnotations true
     useSupportLibrary true
+    debugLogsFieldName 'LOG_DEBUG_PROVIDER'
 }
 
 dependencies {

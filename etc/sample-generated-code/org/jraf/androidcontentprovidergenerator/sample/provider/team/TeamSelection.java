@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v4.content.CursorLoader;
 
 import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractSelection;
 import org.jraf.androidcontentprovidergenerator.sample.provider.company.*;
@@ -85,6 +86,20 @@ public class TeamSelection extends AbstractSelection<TeamSelection> {
      */
     public TeamCursor query(Context context) {
         return query(context, null);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CursorLoader getCursorLoader(Context context, String[] projection) {
+        return new CursorLoader(context, uri(), projection, sel(), args(), order()) {
+            @Override
+            public Cursor loadInBackground() {
+                return new TeamCursor(super.loadInBackground());
+            }
+        };
     }
 
 

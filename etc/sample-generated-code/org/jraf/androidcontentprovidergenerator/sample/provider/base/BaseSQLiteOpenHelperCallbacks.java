@@ -43,7 +43,7 @@ public class BaseSQLiteOpenHelperCallbacks {
      * @see android.database.sqlite.SQLiteOpenHelper#onOpen(SQLiteDatabase) onOpen
      */
     public void onOpen(Context context, SQLiteDatabase db) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onOpen");
+        if (BuildConfig.LOG_DEBUG_PROVIDER) Log.d(TAG, "onOpen");
     }
 
     /**
@@ -51,7 +51,7 @@ public class BaseSQLiteOpenHelperCallbacks {
      * @see android.database.sqlite.SQLiteOpenHelper#onCreate(SQLiteDatabase) onCreate
      */
     public void onPreCreate(Context context, SQLiteDatabase db) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onPreCreate");
+        if (BuildConfig.LOG_DEBUG_PROVIDER) Log.d(TAG, "onPreCreate");
     }
 
     /**
@@ -59,7 +59,7 @@ public class BaseSQLiteOpenHelperCallbacks {
      * @see android.database.sqlite.SQLiteOpenHelper#onCreate(SQLiteDatabase) onCreate
      */
     public void onPostCreate(Context context, SQLiteDatabase db) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onPostCreate");
+        if (BuildConfig.LOG_DEBUG_PROVIDER) Log.d(TAG, "onPostCreate");
     }
 
     /**
@@ -67,6 +67,6 @@ public class BaseSQLiteOpenHelperCallbacks {
      * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(Context, SQLiteDatabase, int, int) onUpgrade
      */
     public void onUpgrade(final Context context, final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
+        if (BuildConfig.LOG_DEBUG_PROVIDER) Log.d(TAG, "Upgrading database from version " + oldVersion + " to " + newVersion);
     }
 }

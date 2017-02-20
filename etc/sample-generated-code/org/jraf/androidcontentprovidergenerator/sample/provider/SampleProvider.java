@@ -48,7 +48,7 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.team.TeamColumns
 public class SampleProvider extends BaseContentProvider {
     private static final String TAG = SampleProvider.class.getSimpleName();
 
-    private static final boolean DEBUG = BuildConfig.DEBUG;
+    private static final boolean DEBUG = BuildConfig.LOG_DEBUG_PROVIDER;
 
     private static final String TYPE_CURSOR_ITEM = "vnd.android.cursor.item/";
     private static final String TYPE_CURSOR_DIR = "vnd.android.cursor.dir/";

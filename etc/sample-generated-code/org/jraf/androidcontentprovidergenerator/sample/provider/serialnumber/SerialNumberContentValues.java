@@ -39,9 +39,9 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCon
  * Content values wrapper for the {@code serial_number} table.
  */
 @SuppressWarnings({"ConstantConditions", "unused"})
-public class SerialNumberContentValues extends AbstractContentValues {
+public class SerialNumberContentValues extends AbstractContentValues<SerialNumberContentValues> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return SerialNumberColumns.CONTENT_URI;
     }
 

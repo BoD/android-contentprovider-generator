@@ -40,7 +40,7 @@ Add this to your app's `build.gradle`:
 ```groovy
 buildscript {
     dependencies {
-        classpath "org.jraf:acpg-gradle-plugin:1.12.0"
+        classpath "org.jraf:acpg-gradle-plugin:1.13.0"
     }
 }
 
@@ -94,6 +94,10 @@ acpg {
     // Optional - default value: true
     generateBeans true
 
+    // Name of a boolean field in BuildConfig to enable/disable debug logging in the generated code
+    // Optional - default value: "DEBUG"
+    debugLogsFieldName LOG_DEBUG_PROVIDER
+
     // Version of the tool syntax (must be 4)
     // The allows to break the build immediately if an incompatible version of the tool is used. Safety first!
     // Optional - default value: 4
@@ -122,7 +126,8 @@ Here is an example:
 	"enableForeignKeys": true,
 	"useAnnotations": true,
 	"useSupportLibrary": true,
-	"generateBeans": true
+	"generateBeans": true,
+    "debugLogsFieldName": "LOG_DEBUG_PROVIDER"
 }
 ```
 
@@ -131,10 +136,10 @@ Not to be confused with the `applicationId` (see https://developer.android.com/s
 
 #### Get and run the tool
 
-Download the `acpg-cli-1.12.0.jar` file here:
+Download the `acpg-cli-1.13.0.jar` file here:
 https://github.com/BoD/android-contentprovider-generator/releases/latest
 
-`java -jar acpg-cli-1.12.0.jar -i <input folder> -o <output folder>`
+`java -jar acpg-cli-1.13.0.jar -i <input folder> -o <output folder>`
 - Input folder: where to find `_config.json` and your entity json files
 - Output folder: where the resulting files will be generated
 

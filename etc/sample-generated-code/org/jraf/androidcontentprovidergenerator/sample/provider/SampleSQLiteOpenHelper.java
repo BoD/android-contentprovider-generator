@@ -181,7 +181,7 @@ public class SampleSQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "onCreate");
+        if (BuildConfig.LOG_DEBUG_PROVIDER) Log.d(TAG, "onCreate");
         mOpenHelperCallbacks.onPreCreate(mContext, db);
         db.execSQL(SQL_CREATE_TABLE_COMPANY);
         db.execSQL(SQL_CREATE_INDEX_COMPANY_NAME);

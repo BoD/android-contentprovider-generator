@@ -90,4 +90,8 @@ class AcpgPluginExtension {
     def generateBeans(boolean generateBeans) {
         config.generateBeans = generateBeans
     }
+
+    def debugLogsFieldName(String debugLogsFieldName) {
+        config.debugLogsFieldName = debugLogsFieldName
+    }
 }

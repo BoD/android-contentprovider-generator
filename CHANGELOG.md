@@ -1,6 +1,12 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.13.0 (2017-02-20)
+------
+- `XyzSelection.getCursorLoader()` now returns loaders of wrapped cursors.
+- New `XyzContentValues.notify(boolean)` method to enable/disable notifications.
+- New `debugLogsFieldName` attribute to enable/disable debug logging in the generated code.
+
 v1.12.0 (2017-02-06)
 ------
 This is a somewhat big update in the way the tool is used, and there are also a few syntax differences.

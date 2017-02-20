@@ -40,6 +40,7 @@ public class Config implements Serializable, Cloneable {
     public Boolean useAnnotations;
     public Boolean useSupportLibrary;
     public Boolean generateBeans;
+    public String debugLogsFieldName;
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -67,7 +68,8 @@ public class Config implements Serializable, Cloneable {
         if (enableForeignKeys != null ? !enableForeignKeys.equals(config.enableForeignKeys) : config.enableForeignKeys != null) return false;
         if (useAnnotations != null ? !useAnnotations.equals(config.useAnnotations) : config.useAnnotations != null) return false;
         if (useSupportLibrary != null ? !useSupportLibrary.equals(config.useSupportLibrary) : config.useSupportLibrary != null) return false;
-        return generateBeans != null ? generateBeans.equals(config.generateBeans) : config.generateBeans == null;
+        if (generateBeans != null ? !generateBeans.equals(config.generateBeans) : config.generateBeans != null) return false;
+        return debugLogsFieldName != null ? debugLogsFieldName.equals(config.debugLogsFieldName) : config.debugLogsFieldName == null;
     }
 
     @Override
@@ -85,6 +87,7 @@ public class Config implements Serializable, Cloneable {
         result = 31 * result + (useAnnotations != null ? useAnnotations.hashCode() : 0);
         result = 31 * result + (useSupportLibrary != null ? useSupportLibrary.hashCode() : 0);
         result = 31 * result + (generateBeans != null ? generateBeans.hashCode() : 0);
+        result = 31 * result + (debugLogsFieldName != null ? debugLogsFieldName.hashCode() : 0);
         return result;
     }
 }

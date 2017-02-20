@@ -93,6 +93,10 @@ public class ConfigParser {
             LOG.info("'generateBeans' not set in configuration: assuming true.");
             config.generateBeans = true;
         }
+        if (config.debugLogsFieldName == null) {
+            LOG.info("'debugLogsFieldName' not set in configuration: assuming 'DEBUG'.");
+            config.debugLogsFieldName = "DEBUG";
+        }
     }
 
     private void ensureNotNull(Object value, String fieldName) throws GeneratorException {

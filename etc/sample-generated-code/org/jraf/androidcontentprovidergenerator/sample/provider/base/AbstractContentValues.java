@@ -31,13 +31,29 @@ import android.content.ContentValues;
 import android.net.Uri;
 
 @SuppressWarnings("unused")
-public abstract class AbstractContentValues {
+public abstract class AbstractContentValues<T extends AbstractContentValues<?>> {
     protected final ContentValues mContentValues = new ContentValues();
+    private Boolean mNotify;
 
     /**
      * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
      */
-    public abstract Uri uri();
+    protected abstract Uri baseUri();
+
+    /**
+     * Returns the {@code uri} argument to pass to the {@code ContentResolver} methods.
+     */
+    public Uri uri() {
+        Uri uri = baseUri();
+        if (mNotify != null) uri = BaseContentProvider.notify(uri, mNotify);
+        return uri;
+    }
+
+    @SuppressWarnings("unchecked")
+    public T notify(boolean notify) {
+        mNotify = notify;
+        return (T) this;
+    }
 
     /**
      * Returns the {@code ContentValues} wrapped by this object.

@@ -11,5 +11,6 @@
 	"enableForeignKeys": true,
 	"useAnnotations": true,
 	"useSupportLibrary": true,
-	"generateBeans": true
+	"generateBeans": true,
+	"debugLogsFieldName": "LOG_DEBUG_PROVIDER"
 }

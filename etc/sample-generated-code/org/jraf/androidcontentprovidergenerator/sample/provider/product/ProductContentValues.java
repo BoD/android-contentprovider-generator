@@ -39,9 +39,9 @@ import org.jraf.androidcontentprovidergenerator.sample.provider.base.AbstractCon
  * Content values wrapper for the {@code product} table.
  */
 @SuppressWarnings({"ConstantConditions", "unused"})
-public class ProductContentValues extends AbstractContentValues {
+public class ProductContentValues extends AbstractContentValues<ProductContentValues> {
     @Override
-    public Uri uri() {
+    protected Uri baseUri() {
         return ProductColumns.CONTENT_URI;
     }
 
