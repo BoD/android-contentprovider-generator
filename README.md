@@ -96,7 +96,7 @@ acpg {
 
     // Name of a boolean field in BuildConfig to enable/disable debug logging in the generated code
     // Optional - default value: "DEBUG"
-    debugLogsFieldName LOG_DEBUG_PROVIDER
+    debugLogsFieldName 'LOG_DEBUG_PROVIDER'
 
     // Version of the tool syntax (must be 4)
     // The allows to break the build immediately if an incompatible version of the tool is used. Safety first!
@@ -127,7 +127,7 @@ Here is an example:
 	"useAnnotations": true,
 	"useSupportLibrary": true,
 	"generateBeans": true,
-    "debugLogsFieldName": "LOG_DEBUG_PROVIDER"
+	"debugLogsFieldName": "LOG_DEBUG_PROVIDER"
 }
 ```
 
