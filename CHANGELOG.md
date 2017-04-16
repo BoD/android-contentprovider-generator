@@ -1,6 +1,10 @@
 Android ContentProvider Generator Changelog
 ===========================================
 
+v1.13.1 (2017-04-16)
+------
+- `XyzSelection.addRaw()` now returns `this` to allow chaining.
+
 v1.13.0 (2017-02-20)
 ------
 - `XyzSelection.getCursorLoader()` now returns loaders of wrapped cursors.

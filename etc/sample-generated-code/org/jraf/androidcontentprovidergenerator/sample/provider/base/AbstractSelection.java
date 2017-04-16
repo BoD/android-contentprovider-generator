@@ -205,13 +205,15 @@ public abstract class AbstractSelection<T extends AbstractSelection<?>> {
         mSelectionArgs.add(valueOf(value));
     }
 
-    public void addRaw(String raw, Object... args) {
+    @SuppressWarnings("unchecked")
+    public T addRaw(String raw, Object... args) {
         mSelection.append(" ");
         mSelection.append(raw);
         mSelection.append(" ");
         for (Object arg : args) {
             mSelectionArgs.add(valueOf(arg));
         }
+        return (T) this;
     }
 
     private String valueOf(Object obj) {

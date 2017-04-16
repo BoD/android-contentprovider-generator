@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-beta3'
+        classpath 'com.android.tools.build:gradle:2.4.0-alpha6'
     }
 }
 
@@ -12,7 +12,7 @@ allprojects {
     apply plugin: 'maven'
 
     group = 'org.jraf'
-    version = '1.13.0'
+    version = '1.13.1'
 
     repositories {
         mavenLocal()
@@ -21,6 +21,6 @@ allprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '3.5'
     distributionType = Wrapper.DistributionType.ALL
 }
