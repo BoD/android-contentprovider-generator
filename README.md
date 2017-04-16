@@ -40,7 +40,7 @@ Add this to your app's `build.gradle`:
 ```groovy
 buildscript {
     dependencies {
-        classpath "org.jraf:acpg-gradle-plugin:1.13.1"
+        classpath 'org.jraf:acpg-gradle-plugin:1.13.1'
     }
 }
 
