@@ -1,13 +1,28 @@
 {
+	"documentation": "A commercial business.",
 	"fields": [
 		{
+			"documentation": "The commercial name of this company.",
 			"name": "name",
-			"type": "String"
+			"type": "String",
+			"nullable": false,
+			"index": true,
 		},
 		{
+			"documentation": "The full address of this company.",
 			"name": "address",
 			"type": "String",
-			"index": true
-		}
+			"nullable": true,
+		},
+		{
+			"documentation": "The serial number of this company.",
+			"name": "serial_number_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "serial_number",
+				"onDelete": "CASCADE"
+			}
+		},
 	]
 }

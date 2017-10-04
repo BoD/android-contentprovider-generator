@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear DB" />
+
+    <Button
+        android:id="@+id/btnPopulate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Populate DB" />
+
+    <Button
+        android:id="@+id/btnQueryPeople"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query people" />
+
+    <Button
+        android:id="@+id/btnQueryPeopleWithTeam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query people with team" />
+
+    <Button
+        android:id="@+id/btnQueryPeopleWithTeamAndCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query people with team and company" />
+
+    <Button
+        android:id="@+id/btnQueryTeamsWithCompany"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query teams with company" />
+
+    <Button
+        android:id="@+id/btnQueryProductsWithManual"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Query products with manual" />
+
+</LinearLayout>

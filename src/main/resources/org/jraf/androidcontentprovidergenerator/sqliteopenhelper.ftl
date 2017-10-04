@@ -7,15 +7,19 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.DatabaseErrorHandler;
 import android.database.DefaultDatabaseErrorHandler;
+<#if config.useEncryptedDatabase>
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
+<#else>
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+</#if>
 import android.os.Build;
 import android.util.Log;
 
 import ${config.projectPackageId}.BuildConfig;
 <#list model.entities as entity>
-import ${config.providerJavaPackage}.${entity.nameLowerCase}.${entity.nameCamelCase}Columns;
+import ${config.providerJavaPackage}.${entity.packageName}.${entity.nameCamelCase}Columns;
 </#list>
 
 public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
@@ -23,81 +27,98 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
 
     public static final String DATABASE_FILE_NAME = "${config.databaseFileName}";
     private static final int DATABASE_VERSION = ${config.databaseVersion};
+    private static ${config.sqliteOpenHelperClassName} sInstance;
     private final Context mContext;
     private final ${config.sqliteOpenHelperCallbacksClassName} mOpenHelperCallbacks;
 
     // @formatter:off
     <#list model.entities as entity>
-    private static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
+    public static final String SQL_CREATE_TABLE_${entity.nameUpperCase} = "CREATE TABLE IF NOT EXISTS "
             + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( "
-            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
             <#list entity.fields as field>
-                <#if field.isNullable>
-                    <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if field_has_next>,</#if> "
-                    </#if>
+                <#if field.isId>
+            + ${entity.nameCamelCase}Columns._ID + " INTEGER PRIMARY KEY<#if field.isAutoIncrement> AUTOINCREMENT</#if>, "
                 <#else>
-                    <#if field.hasDefaultValue>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL DEFAULT '${field.defaultValue}'<#if field_has_next>,</#if> "
-                    <#else>
-            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType} NOT NULL<#if field_has_next>,</#if> "
-                    </#if>
+            + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " ${field.type.sqlType}<#if !field.isNullable> NOT NULL</#if><#if field.hasDefaultValue> DEFAULT ${field.defaultValue}</#if><#if field_has_next>,</#if> "
                 </#if>
             </#list>
+            <#if config.enableForeignKeys >
+                <#list entity.fields as field>
+                    <#if field.foreignKey??>
+            + ", CONSTRAINT fk_${field.nameLowerCase} FOREIGN KEY (" + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + ") REFERENCES ${field.foreignKey.entity.nameLowerCase} (${field.foreignKey.field.nameLowerCase}) ON DELETE ${field.foreignKey.onDeleteAction.toSql()}"
+                    </#if>
+                </#list>
+            </#if>
             <#list entity.constraints as constraint>
-            + ", CONSTRAINT ${constraint.nameUpperCase} ${constraint.definitionUpperCase}"
+            + ", CONSTRAINT ${constraint.name} ${constraint.definition}"
             </#list>
             + " );";
 
     <#list entity.fields as field>
     <#if field.isIndex>
-    private static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
+    public static final String SQL_CREATE_INDEX_${entity.nameUpperCase}_${field.nameUpperCase} = "CREATE INDEX IDX_${entity.nameUpperCase}_${field.nameUpperCase} "
             + " ON " + ${entity.nameCamelCase}Columns.TABLE_NAME + " ( " + ${entity.nameCamelCase}Columns.${field.nameUpperCase} + " );";
+
     </#if>
     </#list>
     </#list>
     // @formatter:on
 
-    public static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+    public static ${config.sqliteOpenHelperClassName} getInstance(Context context) {
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = newInstance(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private static ${config.sqliteOpenHelperClassName} newInstance(Context context) {
+
+        <#if config.useEncryptedDatabase>
+         return new ${config.sqliteOpenHelperClassName}(context);
+        <#else>
+          if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             return newInstancePreHoneycomb(context);
         }
         return newInstancePostHoneycomb(context);
+        </#if>
+      
     }
 
 
+    <#if config.useEncryptedDatabase == false>
     /*
      * Pre Honeycomb.
      */
-
     private static ${config.sqliteOpenHelperClassName} newInstancePreHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
+        return new ${config.sqliteOpenHelperClassName}(context);
     }
+    </#if>
 
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version) {
-        super(context, name, factory, version);
+    private ${config.sqliteOpenHelperClassName}(Context context) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
 
-
+    <#if config.useEncryptedDatabase == false>
     /*
      * Post Honeycomb.
      */
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static ${config.sqliteOpenHelperClassName} newInstancePostHoneycomb(Context context) {
-        return new ${config.sqliteOpenHelperClassName}(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, new DefaultDatabaseErrorHandler());
+        return new ${config.sqliteOpenHelperClassName}(context, new DefaultDatabaseErrorHandler());
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ${config.sqliteOpenHelperClassName}(Context context, String name, CursorFactory factory, int version, DatabaseErrorHandler errorHandler) {
-        super(context, name, factory, version, errorHandler);
+    private ${config.sqliteOpenHelperClassName}(Context context, DatabaseErrorHandler errorHandler) {
+        super(context, DATABASE_FILE_NAME, null, DATABASE_VERSION, errorHandler);
         mContext = context;
         mOpenHelperCallbacks = new ${config.sqliteOpenHelperCallbacksClassName}();
     }
+    </#if>
 
 
     @Override
@@ -115,19 +136,47 @@ public class ${config.sqliteOpenHelperClassName} extends SQLiteOpenHelper {
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 
-    <#if config.enableForeignKeys >
     @Override
     public void onOpen(SQLiteDatabase db) {
         super.onOpen(db);
+        <#if config.enableForeignKeys >
         if (!db.isReadOnly()) {
-            db.execSQL("PRAGMA foreign_keys=ON;");
+            setForeignKeyConstraintsEnabled(db);
         }
+        </#if>
         mOpenHelperCallbacks.onOpen(mContext, db);
+    }
+
+    <#if config.enableForeignKeys >
+    private void setForeignKeyConstraintsEnabled(SQLiteDatabase db) {       
+        <#if config.useEncryptedDatabase>
+        db.execSQL("PRAGMA foreign_keys=ON;");
+        <#else>
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            setForeignKeyConstraintsEnabledPreJellyBean(db);
+        } else {
+            setForeignKeyConstraintsEnabledPostJellyBean(db);
+        }
+        </#if>
+    }
+
+
+    <#if config.useEncryptedDatabase == false>
+    private void setForeignKeyConstraintsEnabledPreJellyBean(SQLiteDatabase db) {
+        db.execSQL("PRAGMA foreign_keys=ON;");
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void setForeignKeyConstraintsEnabledPostJellyBean(SQLiteDatabase db) {
+        db.setForeignKeyConstraintsEnabled(true);
     }
     </#if>
 
+    </#if>
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         mOpenHelperCallbacks.onUpgrade(mContext, db, oldVersion, newVersion);
     }
+
+
 }

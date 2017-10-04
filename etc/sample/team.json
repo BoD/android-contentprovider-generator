@@ -1,0 +1,42 @@
+{
+	"documentation": "A group of people who work together.",
+	"fields": [
+		{
+			"name": "company_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "company",
+				"onDelete": "CASCADE",
+			},
+		},
+		{
+			"name": "name",
+			"type": "String",
+			"nullable": false,
+		},
+		{
+			"documentation": "2 letter country code where this team operates.",
+			"name": "country_code",
+			"type": "String",
+			"nullable": false,
+		},
+		{
+			"documentation": "The serial number of this team.",
+			"name": "serial_number_id",
+			"type": "Long",
+			"nullable": false,
+			"foreignKey": {
+				"table": "serial_number",
+				"onDelete": "CASCADE"
+			}
+		},
+	],
+
+	"constraints": [
+		{
+			"name": "unique_name",
+			"definition": "UNIQUE (team__name) ON CONFLICT REPLACE"
+		},
+	],
+}
